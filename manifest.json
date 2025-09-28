@@ -1,7 +1,7 @@
 {
   "name": "Plan de Lectura y Razonamiento Matemático",
   "short_name": "Plan Lect y RM",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3f51b5",
