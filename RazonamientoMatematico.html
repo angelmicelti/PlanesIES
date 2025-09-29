@@ -6,6 +6,8 @@
     <title>Plan de Razonamiento Matemático - IES Virgen de Villadiego</title>
     <!-- Incluyendo Tailwind CSS para un diseño moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluyendo Font Awesome para el icono del botón -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8ZgA8+95Q3P+RzF/h0rY5C9g8rE/sF/X2O+j14+LpYn34W53j44G5/4n1TzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Estilos adicionales para asegurar que el contenido principal ocupe la pantalla */
         body, html {
@@ -24,7 +26,7 @@
     <!-- Contenedor Principal Adaptado al Centro -->
     <div class="w-full mx-auto p-6 sm:p-8 lg:p-10 bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl text-center max-w-5xl">
         
-        <!-- Encabezado con Flexbox para alinear título y logo -->
+        <!-- Encabezado con Flexbox para alinear título, logo y botón de recursos -->
         <div class="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center w-full mb-10 gap-6">
             
             <!-- Títulos - Alineados a la izquierda en móvil, centrados en general para el contenido -->
@@ -40,9 +42,9 @@
                 </p>
             </header>
             
-            <!-- Logo - Parte superior derecha -->
-            <div class="flex-shrink-0 self-end sm:self-center">
-                <!-- Ya tiene target="_blank" -->
+            <!-- Contenedor del Logo y Botón de Recursos (Parte superior derecha) -->
+            <div class="flex-shrink-0 self-end sm:self-center flex flex-col items-center gap-3">
+                <!-- Logo -->
                 <a href="https://blogsaverroes.juntadeandalucia.es/iesvirgendevilladiego/" target="_blank" 
                    title="Clic para ir a la web del IES" 
                    class="cursor-pointer block transition-transform duration-200 hover:scale-110">
@@ -50,6 +52,14 @@
                     <img src="logoIES.png" alt="Logo IES Virgen de Villadiego" 
                          class="h-24 w-24 sm:h-32 sm:w-32 object-contain rounded-xl shadow-lg" 
                          onerror="this.onerror=null;this.src='https://placehold.co/128x128/9CA3AF/FFFFFF?text=IES+LOGO';">
+                </a>
+                
+                <!-- Nuevo Botón de Recursos (Añadido) -->
+                <a href="recursos.html"
+                   class="flex items-center justify-center space-x-2 px-4 py-2 text-sm sm:text-base font-semibold rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-[1.05] active:scale-[1.0]
+                          bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50">
+                    <i class="fas fa-book-open"></i> <!-- Icono alusivo a recursos/lectura/conocimiento -->
+                    <span>Recursos</span>
                 </a>
             </div>
         </div>
