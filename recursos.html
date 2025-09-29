@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos para el Razonamiento Matemático - IES Ben Gabirol</title>
+    <!-- Incluyendo Tailwind CSS para un diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluyendo Font Awesome para el icono del botón -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Estilos adicionales */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            /* Aplicando un gradiente sutil al fondo del cuerpo */
+            background: linear-gradient(to bottom right, #f3f4f6, #eef2ff); /* gray-100 a indigo-50 */
+        }
+        
+        /* Clase para el efecto de hover y colores modernos */
+        .modern-button {
+            /* Sombra y transición base */
+            transition: all 0.3s ease-in-out;
+            /* Sombra profunda y color más oscuro para mejor contraste */
+            box-shadow: 0 15px 30px -5px rgba(49, 46, 129, 0.4), 0 5px 10px -5px rgba(0, 0, 0, 0.1);
+            /* Fondo de gradiente */
+            background-image: linear-gradient(to right bottom, var(--tw-gradient-stops));
+            
+            /* Gradiente de Índigo a Violeta más claro para buen contraste con texto oscuro */
+            --tw-gradient-from: #a5b4fc; /* indigo-300 */
+            --tw-gradient-to: #c4b5fd;   /* violet-300 */
+        }
+        /* Efecto de Hover: Cambia el gradiente, eleva y expande la sombra */
+        .modern-button:hover {
+            /* Colores de hover más oscuros */
+            --tw-gradient-from: #818cf8; /* indigo-400 */
+            --tw-gradient-to: #a78bfa;   /* violet-400 */
+            transform: translateY(-5px) scale(1.01); /* Elevación más notable */
+            /* Sombra de hover muy expandida */
+            box-shadow: 0 35px 50px -5px rgba(49, 46, 129, 0.5), 0 15px 15px -5px rgba(0, 0, 0, 0.1);
+        }
+        /* Efecto de Click: Vuelve a bajar */
+        .modern-button:active {
+            transform: translateY(0);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Estilo para el botón de Placeholder */
+        .placeholder-button {
+            background-color: #f3f4f6; /* gray-100 */
+            border: 2px dashed #a5b4fc; /* indigo-300 dashed border */
+            color: #9ca3af; /* gray-400 text color */
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);
+        }
+        .placeholder-button:hover {
+            background-color: #e5e7eb; /* gray-200 */
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Estilo para el contenedor con efecto moderno de "carta" */
+        .modern-container {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            /* Sombra interior sutil para darle profundidad */
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex items-start justify-center p-4 sm:p-8">
+
+    <!-- Contenedor Principal con fondo blanco y efecto de elevación -->
+    <div class="modern-container w-full max-w-4xl mx-auto mt-10 p-6 sm:p-10 bg-white rounded-3xl backdrop-blur-sm">
+        
+        <!-- Título de la Página -->
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-10 border-b-4 border-indigo-400 pb-3">
+            Recursos para el Razonamiento Matemático
+        </h1>
+
+        <!-- Contenedor para los botones con espacio entre ellos -->
+        <div class="space-y-6 sm:space-y-8">
+            
+            <!-- Botón 1: Actividades (Visualización mejorada y fuente reducida) -->
+            <a href="https://gemini.google.com/share/13b0850202aa" target="_blank"
+               role="button"
+               class="modern-button block w-full text-gray-900 rounded-3xl p-6 sm:p-10 text-center cursor-pointer transition-all duration-300">
+                
+                <!-- Contenido del botón con icono y estructura de texto -->
+                <div class="flex flex-col items-center justify-center">
+                    
+                    <!-- Icono -->
+                    <i class="fas fa-brain text-4xl sm:text-6xl mb-3 opacity-95 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);"></i>
+
+                    <!-- Contenido principal (fuente más pequeña) -->
+                    <div class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-1 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+                        Actividades para trabajar el Razonamiento Matemático
+                    </div>
+                    
+                    <!-- Contenido secundario (fuente más pequeña) -->
+                    <div class="text-lg sm:text-xl font-light opacity-80 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+                        IES Ben Gabirol
+                    </div>
+                </div>
+
+            </a>
+            
+            <!-- Botón 2: Placeholder (Mismo tamaño, estilo diferente para indicar que está vacío) -->
+            <!-- Usamos un div en lugar de 'a' ya que no tiene enlace aún -->
+            <div role="button"
+                 class="placeholder-button block w-full rounded-3xl p-6 sm:p-10 text-center cursor-default transition-all duration-300">
+                
+                <div class="flex flex-col items-center justify-center opacity-70">
+                    
+                    <!-- Icono de marcador de posición -->
+                    <i class="fas fa-plus-circle text-4xl sm:text-6xl mb-3"></i>
+
+                    <!-- Contenido principal (Placeholder) -->
+                    <div class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-1">
+                        Añadir Contenido Aquí
+                    </div>
+                    
+                    <!-- Contenido secundario (Placeholder) -->
+                    <div class="text-lg sm:text-xl font-light">
+                        Próximamente...
+                    </div>
+                </div>
+
+            </div>
+
+        </div> <!-- Fin del contenedor de botones -->
+        
+        <!-- Pie de página simple dentro del contenedor principal -->
+        <footer class="mt-8 pt-4 border-t border-gray-100 text-center text-gray-500 text-sm">
+            <p>IES Virgen de Villadiego. Plan de razonamiento matemático.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
