@@ -1,0 +1,15 @@
+Título: "Cómo usar esta sección"
+Elige el curso con el que vas a trabajar el razonamiento matemático haciendo clic sobre el correspondiente botón.
+Verás que la aplicación está organizada en tres evaluaciones, que contienen 14, 11 y 11 semanas.
+La primera evaluación aparece desplegada por defecto.
+Puedes ocultar una evaluación haciendo clic sobre el "-" en la parte superior derecha del desplegable, y mostrar otra diferente (o la misma) haciendo clic sobre el "+" de cada evaluación
+Cada semana contiene tres sesiones de trabajo del razonamiento matemático, asignadas a tres materias.
+Bajo cada materia, y relacionada con los criterios de evaluación de las diferentes materias, aparece una sugerencia de actividad. No es prescriptiva.
+Para registrar la evidencia de que has hecho una actividad con tu alumando, elige el botón del grupo que hay bajo la actividad, y te llevará a la hoja de registro, a la celda concreta en la que tienes que poner:
+1) Tu nombre.
+2) En la celda de al lado, la actividad realizada.
+3) Alguna observación (si procede)
+
+Ya habrás terminado.
+Ten cuidado si hay algo registrado.
+Si el botón no ha funcionado correctamente (no apunta a la celda que tú crees), comprueba que no te has equivocado y, si es así, comunica con el Equipo Directivo.
