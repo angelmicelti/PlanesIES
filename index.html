@@ -24,8 +24,9 @@
     </style>
 </head>
 <body class="font-sans bg-gradient-to-br from-gray-50 to-slate-200 relative"> 
+    
+    <!-- Botón de ayuda (permanece en la esquina superior izquierda de la pantalla) -->
     <div class="absolute top-4 left-4 z-10">
-        <!-- Botón de ayuda. El SVG usa el color de fondo como parte del diseño. -->
         <button id="help-button" class="flex items-center space-x-2 bg-gray-700 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:bg-gray-600 transition duration-150 ease-in-out transform hover:scale-105">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <!-- Icono de ayuda (información) -->
@@ -42,41 +43,53 @@
     </div>
 
 
-    <div class="container mx-auto p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl text-center max-w-4xl">
+    <div class="container mx-auto p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl text-center max-w-4xl relative">
         
-        <div class="flex flex-col sm:flex-row justify-between items-center w-full mb-12 gap-6">
-            <header class="flex-grow text-center">
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-2 text-shadow">
-                    PLANES LECTOR Y DE RAZONAMIENTO MATEMÁTICO
-                </h1>
-                <h2 class="text-xl sm:text-2xl text-gray-600 text-shadow">
-                    IES Virgen de Villadiego
-                </h2>
-                <p class="text-lg text-gray-500 mt-4 text-shadow">Curso 25-26</p>
-            </header>
+        <!-- LOGO IES RECUPERADO (posición superior derecha del contenedor principal) -->
+        <!-- ATRIBUTO title añadido para el tooltip al pasar el puntero. -->
+        <a href="https://blogsaverroes.juntadeandalucia.es/iesvirgendevilladiego/" target="_blank" 
+           class="absolute top-6 right-6 z-20" 
+           aria-label="Ir a la web del IES Virgen de Villadiego"
+           title="Ir a la web del IES"> 
+            <img src="logoIES.png" alt="Logo del IES" 
+                 class="h-16 w-16 object-contain transition-transform duration-300 hover:scale-110" 
+                 onerror="this.onerror=null;this.src='https://placehold.co/64x64/FFFFFF/374151?text=IES';">
+        </a>
+        
+        <!-- INICIO: Bloque Central (Imagen + Título) -->
+        <div class="flex flex-col items-center justify-center w-full mb-10 mt-6">
             
-            <div class="flex-shrink-0">
-                <a href="https://blogsaverroes.juntadeandalucia.es/iesvirgendevilladiego/" target="_blank" 
-                   title="Clic para ir a la web del IES" 
-                   class="cursor-pointer block transition-transform duration-200 hover:scale-105">
-                    <!-- Imagen de logo con fallback para accesibilidad y manejo de error -->
-                    <img src="logoIES.png" alt="Logo IES Virgen de Villadiego" class="h-20 w-20 sm:h-28 sm:w-28 object-contain mx-auto rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/112x112/E2E8F0/4A5568?text=Logo';">
-                </a>
-            </div>
+            <!-- Imagen Central: ÑMasPi.png (Símbolo de los planes) -->
+            <!-- Clases de sombra eliminadas. Solo queda el efecto de "sube y baja" (hover:scale-105) -->
+            <img src="ÑMasPi.png" alt="Símbolo Ñ + Pi - Logotipo de los planes educativos" 
+                 class="h-40 w-40 sm:h-56 sm:w-56 object-contain mb-6 transition-transform duration-300 hover:scale-105"
+                 onerror="this.onerror=null;this.src='https://placehold.co/224x224/374151/FFFFFF?text=Ñ+Pi';">
+            
+            <!-- Título principal con fuente más pequeña (cambio de md:text-4xl a lg:text-3xl) -->
+            <h1 class="text-2xl sm:text-3xl lg:text-3xl font-bold text-gray-800 text-shadow text-center px-4">
+                PLANES LECTOR Y DE RAZONAMIENTO MATEMÁTICO
+            </h1>
         </div>
+        <!-- FIN: Bloque Central -->
 
         <!-- SECCIÓN DE ACCESO A LOS PLANES -->
         <nav class="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <a href="PlanLector.html" target="_blank" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl hover:shadow-cyan-500/50 transform hover:scale-105 active:scale-100 transition-all duration-300 ease-in-out">
+            <!-- Botón Plan Lector con title -->
+            <a href="PlanLector.html" target="_blank" 
+               class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl hover:shadow-cyan-500/50 transform hover:scale-105 active:scale-100 transition-all duration-300 ease-in-out"
+               title="Pulsa para ir al Plan Lector">
                 PLAN LECTOR
             </a>
 
-            <a href="RazonamientoMatematico.html" target="_blank" class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl hover:shadow-emerald-500/50 transform hover:scale-105 active:scale-100 transition-all duration-300 ease-in-out">
+            <!-- Botón Plan de Razonamiento Matemático con title -->
+            <a href="RazonamientoMatematico.html" target="_blank" 
+               class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-green-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl hover:shadow-emerald-500/50 transform hover:scale-105 active:scale-100 transition-all duration-300 ease-in-out"
+               title="Pulsa para ir al portal de Razonamiento Matemático">
                 PLAN DE RAZONAMIENTO MATEMÁTICO
             </a>
         </nav>
         
-        <!-- INICIO DE LA NUEVA SECCIÓN: NORMATIVA -->
+        <!-- INICIO DE LA SECCIÓN: NORMATIVA -->
         <div class="mt-12 pt-6 border-t-2 border-gray-200">
             <h3 class="text-2xl font-semibold text-gray-700 mb-6 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -88,7 +101,6 @@
                 </svg>
             </h3>
             
-            <!-- CAMBIO AQUÍ: Se añade 'sm:flex-row' para que en pantallas medianas y grandes se muestren en fila -->
             <div class="flex flex-col sm:flex-row gap-4 text-left justify-center max-w-4xl mx-auto">
                 
                 <a href="https://www.juntadeandalucia.es/educacion/portals/delegate/content/c4db4837-05ea-4458-8b80-f8c12804cb3d/Instrucciones%20lectura%20diaria%20planificada" target="_blank" 
@@ -110,9 +122,18 @@
 
             </div>
         </div>
-        <!-- FIN DE LA NUEVA SECCIÓN: NORMATIVA -->
+        <!-- FIN DE LA SECCIÓN: NORMATIVA -->
+        
+        <!-- INFORMACIÓN DEL CENTRO Y CURSO (MOVILIZADA DENTRO DEL MARCO BLANCO) -->
+        <div class="mt-8 pt-4 border-t border-gray-300 flex justify-between text-xs sm:text-sm text-gray-600">
+            <p class="font-semibold">IES Virgen de Villadiego</p>
+            <p class="font-semibold">Curso 25-26</p>
+        </div>
         
     </div>
+
+    <!-- EL FOOTER ABSOLUTO FUE ELIMINADO SEGÚN SOLICITUD -->
+    
     <script src="./regist_serviceWorker.js"></script>
 
     <script>
