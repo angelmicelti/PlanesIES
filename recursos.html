@@ -66,6 +66,27 @@
             /* Sombra interior sutil para darle profundidad */
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
+
+        /* Estilo base para los botones pequeños */
+        .small-action-button {
+            color: white;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .small-action-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        /* Colores específicos para cada botón */
+        .button-aar { background-color: #5b3f86; }
+        .button-aar:hover { background-color: #4a326b; } /* Tono más oscuro */
+
+        .button-act { background-color: #356854; }
+        .button-act:hover { background-color: #2a5343; } /* Tono más oscuro */
+
+        .button-asl { background-color: #9b3642; }
+        .button-asl:hover { background-color: #7c2b35; } /* Tono más oscuro */
     </style>
 </head>
 <body class="font-sans min-h-screen flex items-start justify-center p-4 sm:p-8">
@@ -81,57 +102,60 @@
             <a href="https://gemini.google.com/share/13b0850202aa" target="_blank"
                role="button"
                class="modern-button block w-full text-gray-900 rounded-3xl p-6 sm:p-10 text-center cursor-pointer transition-all duration-300">
-                
                 <div class="flex flex-col items-center justify-center">
-                    
                     <i class="fas fa-brain text-4xl sm:text-6xl mb-3 opacity-95 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);"></i>
-
                     <div class="text-2xl sm:text-3xl font-bold tracking-tight mb-1 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
                         Actividades para trabajar el <br> Razonamiento Matemático
                     </div>
-                    
                     <div class="text-lg sm:text-xl font-normal opacity-90 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
                         IES Ben Gabirol
                     </div>
                 </div>
-
-            </a>
-            
-            <a href="https://docs.google.com/spreadsheets/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?usp=sharing" target="_blank"
-               role="button"
-               class="modern-button block w-full text-gray-900 rounded-3xl p-6 sm:p-10 text-center cursor-pointer transition-all duration-300">
-                
-                <div class="flex flex-col items-center justify-center">
-                    
-                    <i class="fas fa-users text-4xl sm:text-6xl mb-3 opacity-95 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);"></i>
-
-                    <div class="text-2xl sm:text-3xl font-bold tracking-tight mb-1 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
-                        Feedback entre compañer@s
-                    </div>
-                    
-                    <div class="text-lg sm:text-xl font-normal opacity-90 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
-                        IES Virgen de Villadiego
-                    </div>
-                </div>
-
             </a>
             
             <div role="button"
-                 class="placeholder-button block w-full rounded-3xl p-6 sm:p-10 text-center cursor-default transition-all duration-300">
-                
-                <div class="flex flex-col items-center justify-center opacity-80">
+                 title="Comparte con tus compañeros tus actividades sobre razonamiento matemático"
+                 class="modern-button block w-full text-gray-900 rounded-3xl p-6 sm:p-10 transition-all duration-300">
+                <div class="flex items-center justify-between w-full">
                     
-                    <i class="fas fa-plus-circle text-4xl sm:text-6xl mb-3"></i>
+                    <div class="flex flex-col items-center justify-center text-center mx-auto">
+                        <i class="fas fa-users text-4xl sm:text-6xl mb-3 opacity-95 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);"></i>
+                        <div class="text-2xl sm:text-3xl font-bold tracking-tight mb-1 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+                            Feedback entre compañer@s
+                        </div>
+                        <div class="text-lg sm:text-xl font-normal opacity-90 text-shadow-lg" style="text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+                            IES Virgen de Villadiego
+                        </div>
+                    </div>
 
+                    <div class="flex flex-col space-y-2">
+                        <a href="https://docs.google.com/spreadsheets/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=205459971#gid=205459971" target="_blank" title="Área Artística"
+                           class="small-action-button button-aar font-bold py-2 px-4 rounded-full text-sm">
+                           AAR
+                        </a>
+                        <a href="https://docs.google.com/spreadsheets/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=0#gid=0" target="_blank" title="Área Científico-Tecnológica"
+                           class="small-action-button button-act font-bold py-2 px-4 rounded-full text-sm">
+                           ACT
+                        </a>
+                        <a href="https://docs.google.com/spreadsheets/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=1234000189#gid=1234000189" target="_blank" title="Área Socio-Lingüística"
+                           class="small-action-button button-asl font-bold py-2 px-4 rounded-full text-sm">
+                           ASL
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div role="button"
+                 class="placeholder-button block w-full rounded-3xl p-6 sm:p-10 text-center cursor-default transition-all duration-300">
+                <div class="flex flex-col items-center justify-center opacity-80">
+                    <i class="fas fa-plus-circle text-4xl sm:text-6xl mb-3"></i>
                     <div class="text-2xl sm:text-3xl font-semibold tracking-tight mb-1">
                         Añadir Contenido Aquí
                     </div>
-                    
                     <div class="text-lg sm:text-xl font-normal">
                         Próximamente...
                     </div>
                 </div>
-
             </div>
 
         </div> <footer class="mt-8 pt-4 border-t border-gray-100 text-center text-gray-500 text-sm">
