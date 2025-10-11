@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+	<link rel="manifest" href="./manifest.json" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Favicon añadido -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <title>Plan Interactivo de Razonamiento Matemático - 4º ESO</title>
+    <title>Plan de Razonamiento Matemático - 4º ESO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,30 +81,30 @@
             <section id="schedule">
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Cronograma del Curso Escolar Completo</h2>
                 <div id="evaluations-container" class="space-y-6">
-                    <!-- Primera Evaluación: del 15 de septiembre de 2025 al 19 de diciembre (15 semanas) -->
+                    <!-- Primera Evaluación: del 15 de septiembre de 2025 al 12 de diciembre (14 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(1)">
-                            <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-15)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-14)</h3>
                             <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">-</span>
                         </button>
                         <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6">
                             <!-- Las semanas se renderizarán aquí -->
                         </div>
                     </div>
-                    <!-- Segunda Evaluación: del 12 de enero de 2026 al 27 de marzo (11 semanas) -->
+                    <!-- Segunda Evaluación: del 12 de enero de 2026 al 28 de marzo (11 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(2)">
-                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 16-26)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-25)</h3>
                             <span id="toggle-icon-2" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
                         <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden">
                             <!-- Las semanas se renderizarán aquí -->
                         </div>
                     </div>
-                    <!-- Tercera Evaluación: del 6 de abril al 19 de junio (10 semanas) -->
+                    <!-- Tercera Evaluación: del 6 de abril al 19 de junio (11 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(3)">
-                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 27-36)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 26-36)</h3>
                             <span id="toggle-icon-3" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
                         <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden">
@@ -119,9 +120,9 @@
         // --- Configuraciones ajustadas a 36 semanas ---
         const TOTAL_WEEKS = 36;
         const EVALUATION_WEEKS = {
-            1: { start: 1, end: 15 }, // 15 semanas: 15/sept al 19/dic
-            2: { start: 16, end: 26 }, // 11 semanas: 12/ene al 27/mar
-            3: { start: 27, end: TOTAL_WEEKS } // 10 semanas: 6/abr al 19/jun
+            1: { start: 1, end: 14 }, // 14 semanas: 15/sep al 12/dic
+            2: { start: 15, end: 25 }, // 11 semanas: 12/ene al 28/mar
+            3: { start: 26, end: TOTAL_WEEKS } // 11 semanas: 6/abr al 19/jun
         };
 
         // Datos del CSV con enlaces de evidencia
@@ -362,10 +363,10 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 currentDay.setDate(currentDay.getDate() + 7);
 
                 // Verificamos si acabamos de terminar la última semana de una evaluación
-                if (weekCount === EVALUATION_WEEKS[1].end - 1) { // Final de la semana 15 (índice 14)
+                if (weekCount === EVALUATION_WEEKS[1].end - 1) { // Final de la semana 14 (índice 13)
                     // Saltamos al inicio de la segunda evaluación
                     currentDay = INICIO_SEGUNDA;
-                } else if (weekCount === EVALUATION_WEEKS[2].end - 1) { // Final de la semana 26 (índice 25)
+                } else if (weekCount === EVALUATION_WEEKS[2].end - 1) { // Final de la semana 25 (índice 24)
                     // Saltamos al inicio de la tercera evaluación
                     currentDay = INICIO_TERCERA;
                 }
