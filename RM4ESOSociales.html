@@ -94,20 +94,20 @@
                             <!-- Las semanas se renderizarán aquí -->
                         </div>
                     </div>
-                    <!-- Segunda Evaluación: 12 semanas (S. 15 a S. 26) -->
+                    <!-- Segunda Evaluación: 11 semanas (S. 15 a S. 25) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(2)">
-                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-26)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-25)</h3>
                             <span id="toggle-icon-2" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
                         <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
                             <!-- Las semanas se renderizarán aquí -->
                         </div>
                     </div>
-                    <!-- Tercera Evaluación: 10 semanas (S. 27 a S. 36) -->
+                    <!-- Tercera Evaluación: 11 semanas (S. 26 a S. 36) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(3)">
-                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 27-36)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 26-36)</h3>
                             <span id="toggle-icon-3" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
                         <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
@@ -456,35 +456,28 @@
         let sequenceIndex = 0;
         const weekDates = [];
         
-        // Fecha de inicio ajustada al 15 de septiembre de 2025 (Lunes)
+        // PRIMERA EVALUACIÓN: 14 semanas desde el 15 de septiembre de 2025
         let currentDay = new Date('2025-09-15T00:00:00'); 
-        
-        for (let i = 0; i < NUM_WEEKS; i++) {
+        for (let i = 0; i < 14; i++) {
             const start = new Date(currentDay);
-            // El fin de semana lectiva es el viernes (4 días después del lunes)
             const end = new Date(currentDay);
             end.setDate(currentDay.getDate() + 4); 
             weekDates.push({ start, end });
             
-            // Avanzamos 7 días (para el lunes de la siguiente semana)
             currentDay.setDate(currentDay.getDate() + 7);
 
-            // Session 1: Fija de Matemáticas (4h)
             const mathActivities = activitiesBySubject['Matemáticas'];
             const mathActivity = mathActivities[Math.floor(Math.random() * mathActivities.length)];
             
-            // Sessions 2 & 3: Extraídas de la secuencia proporcional (que ahora incluye Matemáticas 2h)
             const session2Subject = sessionSequence[sequenceIndex++];
             const session3Subject = sessionSequence[sequenceIndex++];
 
-            // Usamos las actividades de la materia asignada.
             const session2Activities = activitiesBySubject[session2Subject];
             const session3Activities = activitiesBySubject[session3Subject];
 
             const session2Activity = session2Activities[Math.floor(Math.random() * session2Activities.length)];
             const session3Activity = session3Activities[Math.floor(Math.random() * session3Activities.length)];
             
-
             scheduleData.push({
                 week: i + 1,
                 session1: {
@@ -495,7 +488,96 @@
                 },
                 session2: {
                     subject: session2Subject,
-                    // Si el sujeto es Matemáticas, usamos 'CT' para el ámbito. Si no, usamos el ámbito de la materia.
+                    ambito: subjects[session2Subject].ambito === 'CT' ? 'CT' : subjects[session2Subject].ambito,
+                    activity: session2Activity.activity,
+                    ce: session2Activity.ce
+                },
+                session3: {
+                    subject: session3Subject,
+                    ambito: subjects[session3Subject].ambito === 'CT' ? 'CT' : subjects[session3Subject].ambito,
+                    activity: session3Activity.activity,
+                    ce: session3Activity.ce
+                }
+            });
+        }
+        
+        // SEGUNDA EVALUACIÓN: 11 semanas desde el 12 de enero de 2026
+        currentDay = new Date('2026-01-12T00:00:00');
+        for (let i = 0; i < 11; i++) {
+            const start = new Date(currentDay);
+            const end = new Date(currentDay);
+            end.setDate(currentDay.getDate() + 4); 
+            weekDates.push({ start, end });
+            
+            currentDay.setDate(currentDay.getDate() + 7);
+
+            const mathActivities = activitiesBySubject['Matemáticas'];
+            const mathActivity = mathActivities[Math.floor(Math.random() * mathActivities.length)];
+            
+            const session2Subject = sessionSequence[sequenceIndex++];
+            const session3Subject = sessionSequence[sequenceIndex++];
+
+            const session2Activities = activitiesBySubject[session2Subject];
+            const session3Activities = activitiesBySubject[session3Subject];
+
+            const session2Activity = session2Activities[Math.floor(Math.random() * session2Activities.length)];
+            const session3Activity = session3Activities[Math.floor(Math.random() * session3Activities.length)];
+            
+            scheduleData.push({
+                week: i + 15, // Semanas 15-25
+                session1: {
+                    subject: 'Matemáticas',
+                    ambito: 'CT',
+                    activity: mathActivity.activity,
+                    ce: mathActivity.ce
+                },
+                session2: {
+                    subject: session2Subject,
+                    ambito: subjects[session2Subject].ambito === 'CT' ? 'CT' : subjects[session2Subject].ambito,
+                    activity: session2Activity.activity,
+                    ce: session2Activity.ce
+                },
+                session3: {
+                    subject: session3Subject,
+                    ambito: subjects[session3Subject].ambito === 'CT' ? 'CT' : subjects[session3Subject].ambito,
+                    activity: session3Activity.activity,
+                    ce: session3Activity.ce
+                }
+            });
+        }
+        
+        // TERCERA EVALUACIÓN: 11 semanas desde el 6 de abril de 2026
+        currentDay = new Date('2026-04-06T00:00:00');
+        for (let i = 0; i < 11; i++) {
+            const start = new Date(currentDay);
+            const end = new Date(currentDay);
+            end.setDate(currentDay.getDate() + 4); 
+            weekDates.push({ start, end });
+            
+            currentDay.setDate(currentDay.getDate() + 7);
+
+            const mathActivities = activitiesBySubject['Matemáticas'];
+            const mathActivity = mathActivities[Math.floor(Math.random() * mathActivities.length)];
+            
+            const session2Subject = sessionSequence[sequenceIndex++];
+            const session3Subject = sessionSequence[sequenceIndex++];
+
+            const session2Activities = activitiesBySubject[session2Subject];
+            const session3Activities = activitiesBySubject[session3Subject];
+
+            const session2Activity = session2Activities[Math.floor(Math.random() * session2Activities.length)];
+            const session3Activity = session3Activities[Math.floor(Math.random() * session3Activities.length)];
+            
+            scheduleData.push({
+                week: i + 26, // Semanas 26-36
+                session1: {
+                    subject: 'Matemáticas',
+                    ambito: 'CT',
+                    activity: mathActivity.activity,
+                    ce: mathActivity.ce
+                },
+                session2: {
+                    subject: session2Subject,
                     ambito: subjects[session2Subject].ambito === 'CT' ? 'CT' : subjects[session2Subject].ambito,
                     activity: session2Activity.activity,
                     ce: session2Activity.ce
@@ -695,14 +777,14 @@
             createFilterButtons(subjectFiltersContainer, allSubjects, 'subject');
             createFilterButtons(ambitoFiltersContainer, allAmbitos, 'ambito');
             
-            // --- AJUSTE DE RANGOS DE EVALUACIÓN PARA 36 SEMANAS ---
-            // 1ª Eval: Semanas 1-14 (14 semanas)
-            // 2ª Eval: Semanas 15-26 (12 semanas)
-            // 3ª Eval: Semanas 27-36 (10 semanas)
+            // --- NUEVOS RANGOS DE EVALUACIÓN CON FECHAS ESPECÍFICAS ---
+            // 1ª Eval: Semanas 1-14 (15 septiembre)
+            // 2ª Eval: Semanas 15-25 (12 enero) 
+            // 3ª Eval: Semanas 26-36 (6 abril)
 
             renderSchedule(scheduleData.slice(0, 14), 'evaluation-content-1');
-            renderSchedule(scheduleData.slice(14, 26), 'evaluation-content-2');
-            renderSchedule(scheduleData.slice(26, 36), 'evaluation-content-3');
+            renderSchedule(scheduleData.slice(14, 25), 'evaluation-content-2');
+            renderSchedule(scheduleData.slice(25, 36), 'evaluation-content-3');
 
             renderChart();
             
