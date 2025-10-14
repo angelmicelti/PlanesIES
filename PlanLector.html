@@ -4,10 +4,11 @@
 	<link rel="manifest" href="./manifest.json" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 	<title>Plan de Refuerzo de la Competencia Lingüística - IES Virgen de Villadiego</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8ZgA8+95Q3P+RzF/h0rY5C9g8rE/sF/X2O+j14+LpYn34W53j44G5/4n1TzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8ZgA8+95Q3P+RzF/h0rY5C9g8rE/sF/X2O+j14+LpYn34W53j44G5/4n1TzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Estilos adicionales para asegurar que el contenido principal ocupe la pantalla */
         body, html {
@@ -23,69 +24,57 @@
 </head>
 <body class="font-sans bg-gradient-to-br from-blue-100 to-green-200 min-h-screen flex items-center justify-center p-4">
 
-    <div class="w-full mx-auto p-6 sm:p-8 lg:p-10 bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl text-center max-w-5xl">
+    <div class="w-full mx-auto p-6 sm:p-8 lg:p-10 bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl max-w-5xl">
         
-        <header class="w-full mb-10 text-center">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-blue-800 mb-2 text-shadow">
-                <br>PLAN PARA EL REFUERZO DE LA COMPETENCIA LINGÜÍSTICA
-            </h1>
-            <h2 class="text-xl sm:text-3xl font-semibold text-green-600 text-shadow mt-1">
-                IES Virgen de Villadiego
-            </h2>
-            <p class="text-lg sm:text-xl text-gray-500 mt-2 text-shadow">
-                Curso 2025-2026
-            </p>
-        </header>
-        
-        <main class="w-full mt-8">
-            <div class="mb-8">
-                <a href="CronogramaLector.html" target="_blank"
-                   class="flex items-center justify-center w-full text-gray-800 font-bold p-4 lg:p-6 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] active:scale-[1.0] 
-                          bg-yellow-400 hover:bg-yellow-500">
-                    <i class="fas fa-calendar-alt fa-lg mr-4 text-gray-700"></i>
-                    <span class="text-xl">CRONOGRAMA DEL PLAN</span>
+        <div class="flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center w-full mb-10 gap-6">
+            
+            <header class="flex-grow text-center">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-blue-800 mb-2 text-shadow">
+                    PLAN PARA EL REFUERZO DE LA COMPETENCIA LINGÜÍSTICA
+                </h1>
+                <h2 class="text-xl sm:text-3xl font-semibold text-green-600 text-shadow mt-1">
+                    IES Virgen de Villadiego
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-500 mt-2 text-shadow">
+                    Curso 2025-2026
+                </p>
+            </header>
+            
+            <div class="flex-shrink-0 self-end sm:self-center">
+                <a href="https://blogsaverroes.juntadeandalucia.es/iesvirgendevilladiego/" target="_blank" 
+                   title="Clic para ir a la web del IES" 
+                   class="cursor-pointer block transition-transform duration-200 hover:scale-110">
+                    <img src="logoIES.png" alt="Logo IES Virgen de Villadiego" 
+                         class="h-24 w-24 sm:h-32 sm:w-32 object-contain rounded-xl shadow-lg" 
+                         onerror="this.onerror=null;this.src='https://placehold.co/128x128/9CA3AF/FFFFFF?text=IES+LOGO';">
                 </a>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </div>
+        
+        <main class="w-full mt-8">
+            <!-- Fila de botones principal -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-                <a href="https://drive.google.com/file/d/15SOLbWlYXnIsCcCOnFB_2xhkZFgWQdB8/view?usp=sharing" target="_blank"
+                <!-- Botón Cronograma del Plan -->
+                <a href="CronogramaLector.html" target="_blank"
                    class="flex flex-col items-center justify-center text-white font-bold p-6 lg:p-8 rounded-xl shadow-xl transition-all duration-300 ease-in-out transform hover:scale-[1.03] active:scale-[1.0] 
-                          bg-gradient-to-r from-teal-500 to-cyan-600 hover:shadow-2xl hover:shadow-teal-500/50">
-                    <i class="fas fa-book-open fa-2x mb-3"></i>
-                    <span class="text-center">PLAN LECTOR EN EL PLAN DE CENTRO</span>
+                          bg-gradient-to-r from-yellow-500 to-orange-500 hover:shadow-2xl hover:shadow-yellow-500/50">
+                    <i class="fas fa-calendar-alt fa-2x mb-3"></i>
+                    <span class="text-center text-lg">CRONOGRAMA DEL PLAN</span>
                 </a>
-
-                <div class="flex flex-col items-center justify-center text-white font-bold p-6 lg:p-8 rounded-xl shadow-xl bg-gradient-to-r from-orange-500 to-amber-600 hover:shadow-2xl hover:shadow-orange-500/50">
-                    <i class="fas fa-comments fa-2x mb-3"></i>
-                    <span class="text-center mb-4 text-lg">FEEDBACK ENTRE COMPAÑEROS</span>
-                    <div class="flex space-x-3 sm:space-x-4">
-                        <a href="https://docs.google.com/spreadsheets/d/1Ugge_isBJyWPpj7gJ1dUe_kaPnP3s0UH4VKZkqfIW_E/edit?gid=205459971#gid=205459971" target="_blank"
-                           class="bg-purple-200 hover:bg-purple-300 text-purple-800 font-bold py-2 px-4 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-100">
-                            AAR
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1Ugge_isBJyWPpj7gJ1dUe_kaPnP3s0UH4VKZkqfIW_E/edit?gid=0#gid=0" target="_blank"
-                           class="bg-green-200 hover:bg-green-300 text-green-800 font-bold py-2 px-4 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-100">
-                            ACT
-                        </a>
-                        <a href="https://docs.google.com/spreadsheets/d/1Ugge_isBJyWPpj7gJ1dUe_kaPnP3s0UH4VKZkqfIW_E/edit?gid=1234000189#gid=1234000189" target="_blank"
-                           class="bg-red-200 hover:bg-red-300 text-red-800 font-bold py-2 px-4 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-100">
-                            ASL
-                        </a>
-                    </div>
-                </div>
                 
+                <!-- Botón Recursos con icono -->
                 <a href="recursoscl.html" target="_blank"
                    class="flex flex-col items-center justify-center text-white font-bold p-6 lg:p-8 rounded-xl shadow-xl transition-all duration-300 ease-in-out transform hover:scale-[1.03] active:scale-[1.0] 
                           bg-gradient-to-r from-purple-500 to-indigo-600 hover:shadow-2xl hover:shadow-purple-500/50">
                     <i class="fas fa-book-reader fa-2x mb-3"></i>
-                    <span class="text-center">RECURSOS</span>
+                    <span class="text-center text-lg">RECURSOS</span>
                 </a>
             </div>
             
         </main>
         
-        <footer class="mt-12 text-gray-400 text-sm">
+        <footer class="mt-12 text-gray-400 text-sm text-center">
             <p>
                 Este portal forma parte del Plan para el Refuerzo de la Competencia Lingüística del IES Virgen de Villadiego (Peñaflor, Sevilla)
             </p>
@@ -95,3 +84,4 @@
 
 </body>
 </html>
+
