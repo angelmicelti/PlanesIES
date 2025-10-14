@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<link rel="manifest" href="./manifest.json" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon añadido -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Plan Interactivo de Razonamiento Matemático - 3º ESO DIVERSIFICACIÓN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+            color: #343A40;
+        }
+        .filter-btn {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .filter-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .week-card {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            transform: scale(1);
+        }
+        .week-card.filtered-out {
+            opacity: 0.15;
+            transform: scale(0.98);
+        }
+        .session-card.highlight {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 2px #10B981;
+        }
+        .class-btn {
+            @apply px-2 py-1 text-xs font-semibold rounded-full border border-blue-600 bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow-md;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Plan de Razonamiento Matemático (3º de ESO Diversificación)</h1>
+            <p class="mt-2 text-lg text-gray-600">Cronograma interactivo para 3º de ESO DIVER (36 semanas)</p>
+        </header>
+
+        <main>
+            <section id="controls" class="mb-12 p-6 bg-white rounded-2xl shadow-sm">
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Asignatura</h3>
+                    <div id="subject-filters" class="flex flex-wrap gap-2"></div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Ámbito</h3>
+                    <div id="ambito-filters" class="flex flex-wrap gap-2"></div>
+                </div>
+                 <div class="mt-6 text-center">
+                    <button id="reset-filters" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75 transition">Mostrar Todo</button>
+                </div>
+            </section>
+            
+            <section id="summary" class="mb-12">
+                 <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Distribución Proporcional de Sesiones</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">
+                        Este gráfico ilustra la distribución de las sesiones (Sesión 2 y 3) a lo largo del ciclo completo de 36 semanas. La asignación es directamente proporcional a la carga horaria semanal de cada materia, garantizando un reparto equitativo del trabajo interdisciplinar de razonamiento matemático.
+                    </p>
+                    <div class="chart-container relative w-full max-w-lg mx-auto h-80 md:h-96">
+                        <canvas id="proportionalityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="schedule">
+                <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Cronograma del Curso Escolar Completo</h2>
+                <div id="evaluations-container" class="space-y-6">
+                    <!-- Primera Evaluación -->
+                    <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(1)">
+                            <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-14)</h3>
+                            <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">-</span>
+                        </button>
+                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
+                    </div>
+                    <!-- Segunda Evaluación -->
+                    <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(2)">
+                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-25)</h3>
+                            <span id="toggle-icon-2" class="text-2xl font-bold transform transition-transform duration-300">+</span>
+                        </button>
+                        <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
+                    </div>
+                    <!-- Tercera Evaluación -->
+                    <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(3)">
+                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 26-36)</h3>
+                            <span id="toggle-icon-3" class="text-2xl font-bold transform transition-transform duration-300">+</span>
+                        </button>
+                        <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Datos del CSV con los enlaces
+        const csvLinks = {
+            1: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B5",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E5",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H5"
+            },
+            2: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B9",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E9",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H9"
+            },
+            3: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B15",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E15",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H15"
+            },
+            4: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B19",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E19",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H19"
+            },
+            5: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B23",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E23",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H23"
+            },
+            6: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B27",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E27",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H27"
+            },
+            7: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B31",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E31",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H31"
+            },
+            8: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B37",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E37",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H37"
+            },
+            9: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B41",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E41",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H41"
+            },
+            10: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B45",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E45",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H45"
+            },
+            11: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B49",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E49",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H49"
+            },
+            12: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B55",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E55",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H55"
+            },
+            13: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B59",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E59",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H59"
+            },
+            14: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B63",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E63",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H63"
+            },
+            15: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B69",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E69",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H69"
+            },
+            16: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B73",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E73",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H73"
+            },
+            17: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B77",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E77",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H77"
+            },
+            18: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B83",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E83",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H83"
+            },
+            19: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B87",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E87",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H87"
+            },
+            20: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B91",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E91",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H91"
+            },
+            21: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B95",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E95",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H95"
+            },
+            22: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B101",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E101",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H101"
+            },
+            23: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B105",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E105",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H105"
+            },
+            24: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B109",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E109",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H109"
+            },
+            25: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B113",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E113",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H113"
+            },
+            26: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B119",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E119",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H119"
+            },
+            27: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B123",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E123",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H123"
+            },
+            28: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B127",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E127",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H127"
+            },
+            29: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B131",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E131",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H131"
+            },
+            30: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B137",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E137",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H137"
+            },
+            31: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B141",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E141",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H141"
+            },
+            32: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B145",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E145",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H145"
+            },
+            33: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B149",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E149",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H149"
+            },
+            34: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B155",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E155",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H155"
+            },
+            35: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B159",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E159",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H159"
+            },
+            36: {
+                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B163",
+                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E163",
+                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H163"
+            }
+        };
+
+        // Fechas de inicio y fin del curso escolar
+        const startDate = new Date(2025, 8, 15);
+        const midDate = new Date(2026, 0, 12);
+        const thirdDate = new Date(2026, 3, 6);
+        const endDate = new Date(2026, 5, 19);
+        const totalWeeks = 36;
+        const eval1Weeks = 14;
+        const eval2Weeks = 11;
+        const eval3Weeks = 11;
+
+        // Función para calcular las fechas de una semana dada
+        function getDatesForWeek(weekNumber) {
+            let startOfWeek = new Date(startDate);
+            if (weekNumber > eval1Weeks) {
+                startOfWeek = new Date(midDate);
+                let weeksSinceMid = weekNumber - eval1Weeks;
+                startOfWeek.setDate(startOfWeek.getDate() + (weeksSinceMid - 1) * 7);
+            } else {
+                startOfWeek.setDate(startOfWeek.getDate() + (weekNumber - 1) * 7);
+            }
+
+            if (weekNumber > eval1Weeks + eval2Weeks) {
+                startOfWeek = new Date(thirdDate);
+                let weeksSinceThird = weekNumber - (eval1Weeks + eval2Weeks);
+                startOfWeek.setDate(startOfWeek.getDate() + (weeksSinceThird - 1) * 7);
+            } else if (weekNumber > eval1Weeks) {
+                startOfWeek = new Date(midDate);
+                let weeksSinceMid = weekNumber - eval1Weeks;
+                startOfWeek.setDate(startOfWeek.getDate() + (weeksSinceMid - 1) * 7);
+            } else {
+                startOfWeek = new Date(startDate);
+                startOfWeek.setDate(startOfWeek.getDate() + (weekNumber - 1) * 7);
+            }
+
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(endOfWeek.getDate() + 4);
+            
+            return {
+                start: startOfWeek.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }),
+                end: endOfWeek.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })
+            };
+        }
+
+        // Definición de las asignaturas, ámbitos y carga horaria
+        const subjects = [
+            { name: 'Ámbito SocioLingüístico', hours: 9, ambito: 'SL' },
+            { name: 'Religión', hours: 1, ambito: 'SL' },
+            { name: 'Ámbito Científico-Tecnológico', hours: 8, ambito: 'CT' },
+            { name: 'Tecnología y Digitalización', hours: 2, ambito: 'CT' },
+            { name: 'Computación y Robótica', hours: 2, ambito: 'CT' },
+            { name: 'Cultura del Flamenco', hours: 2, ambito: 'AR' },
+            { name: 'Educación Plástica', hours: 2, ambito: 'AR' },
+            { name: 'Educación Física', hours: 2, ambito: 'AR' }
+        ];
+
+        const totalHours = subjects.reduce((sum, s) => sum + s.hours, 0);
+
+        const ambitoCT = subjects.filter(s => s.ambito === 'CT');
+        const ambitoARSL = subjects.filter(s => s.ambito === 'AR' || s.ambito === 'SL');
+        
+        const totalHoursSession2 = ambitoCT.reduce((sum, s) => s.name === 'Ámbito Científico-Tecnológico' ? sum + 4 : sum + s.hours, 0);
+        const totalHoursSession3 = ambitoARSL.reduce((sum, s) => sum + s.hours, 0);
+
+        const ctScheduleSequence = [];
+        ambitoCT.forEach(s => {
+            const hours = s.name === 'Ámbito Científico-Tecnológico' ? 4 : s.hours;
+            const count = Math.round((hours / totalHoursSession2) * totalWeeks);
+            for (let i = 0; i < count; i++) {
+                ctScheduleSequence.push(s.name);
+            }
+        });
+
+        const arslScheduleSequence = [];
+        ambitoARSL.forEach(s => {
+            const count = Math.round((s.hours / totalHoursSession3) * totalWeeks);
+            for (let i = 0; i < count; i++) {
+                arslScheduleSequence.push(s.name);
+            }
+        });
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        while (ctScheduleSequence.length < totalWeeks) ctScheduleSequence.push(ctScheduleSequence[Math.floor(Math.random() * ctScheduleSequence.length)]);
+        while (ctScheduleSequence.length > totalWeeks) ctScheduleSequence.pop();
+        while (arslScheduleSequence.length < totalWeeks) arslScheduleSequence.push(arslScheduleSequence[Math.floor(Math.random() * arslScheduleSequence.length)]);
+        while (arslScheduleSequence.length > totalWeeks) arslScheduleSequence.pop();
+
+        shuffleArray(ctScheduleSequence);
+        shuffleArray(arslScheduleSequence);
+        
+        const subjectDetails = {};
+        const subjectColors = {};
+        subjects.forEach(s => {
+            subjectDetails[s.name] = s.ambito;
+            subjectColors[s.name] = `hsl(${Math.random() * 360}, 60%, 50%)`;
+        });
+        subjectColors['Ámbito Científico-Tecnológico'] = '#10B981';
+        subjectDetails['Matemáticas'] = 'CT';
+        subjectColors['Matemáticas'] = '#10B981';
+
+        const ces = {
+            'Ámbito SocioLingüístico': {
+                'SL.C.E.1.2': 'Planificar y desarrollar textos escritos atendiendo a la coherencia y cohesión.',
+                'SL.C.E.4.3': 'Reconocer el poder del lenguaje para la construcción de identidades y la creación de consensos y disensos.'
+            },
+            'Religión': {
+                'RE.C.E.1.1': 'Analizar los elementos constitutivos de la experiencia religiosa, para descubrir su significado y su sentido personal y social.'
+            },
+            'Ámbito Científico-Tecnológico': {
+                'MA.C.E.1.3': 'Desarrollar destrezas para la resolución de problemas a partir de la práctica de la reflexión, el análisis y la conexión entre diferentes conceptos.',
+                'FQ.C.E.1.1': 'Analizar la realidad a través de la observación, el análisis de datos y la interpretación de gráficos y tablas, para comprender el método científico.',
+                'BG.C.E.1.4': 'Interpretar y elaborar gráficos, tablas y mapas para comunicar información científica de manera rigurosa.'
+            },
+            'Tecnología y Digitalización': {
+                'TD.C.E.1.1': 'Identificar y explicar las fases del proceso de resolución de problemas, y aplicarlas a la gestión de proyectos sencillos.'
+            },
+            'Computación y Robótica': {
+                'CR.C.E.1.1': 'Aplicar las habilidades de pensamiento computacional para la resolución de problemas de la vida cotidiana.'
+            },
+            'Cultura del Flamenco': {
+                'FL.C.E.1.3': 'Reconocer y analizar la estructura y la forma de las manifestaciones artísticas del flamenco, valorando su contribución al patrimonio cultural.'
+            },
+            'Educación Plástica': {
+                'VP.C.E.1.4': 'Aplicar los principios de la composición visual, el color y la proporción en la creación artística y visual.'
+            },
+            'Educación Física': {
+                'EF.C.E.1.3': 'Evaluar y mejorar el rendimiento deportivo, a partir del análisis de la condición física y las habilidades motrices.'
+            }
+        };
+
+        const activityExamples = {
+            'Ámbito SocioLingüístico': {
+                'SL.C.E.1.2': 'Organización de un texto argumentativo sobre un tema de actualidad, analizando su estructura lógica.',
+                'SL.C.E.4.3': 'Análisis de un discurso público para identificar falacias lógicas y razonamientos sesgados.'
+            },
+            'Religión': {
+                'RE.C.E.1.1': 'Análisis de un texto religioso para identificar la lógica de sus enseñanzas y cómo se interrelacionan.'
+            },
+            'Ámbito Científico-Tecnológico': {
+                'MA.C.E.1.3': 'Resolución de un problema de la vida cotidiana que implique ecuaciones, proporciones o geometría.',
+                'FQ.C.E.1.1': 'Interpretación de un gráfico de temperatura y tiempo para identificar los cambios de estado de una sustancia.',
+                'BG.C.E.1.4': 'Creación de un gráfico de barras a partir de datos de un ecosistema, analizando las relaciones entre especies.'
+            },
+            'Tecnología y Digitalización': {
+                'TD.C.E.1.1': 'Planificación de un proyecto de diseño, desde la identificación del problema hasta la solución final, usando un diagrama de flujo.',
+            },
+            'Computación y Robótica': {
+                'CR.C.E.1.1': 'Programación de un algoritmo para resolver un problema lógico, como un laberinto, en un simulador de robótica.'
+            },
+            'Cultura del Flamenco': {
+                'FL.C.E.1.3': 'Análisis de la estructura rítmica de una sevillana o bulería y su representación con un diagrama matemático o un esquema.'
+            },
+            'Educación Plástica': {
+                'VP.C.E.1.4': 'Estudio de la proporción áurea en obras de arte renacentista y su aplicación en un dibujo o diseño propio.',
+            },
+            'Educación Física': {
+                'EF.C.E.1.3': 'Análisis del rendimiento en una carrera, calculando velocidad media y aceleración en diferentes tramos, y representándolo en un gráfico.',
+            }
+        };
+
+        function getRandomCE(subject) {
+            const ceMap = ces[subject];
+            if (!ceMap) return { key: 'CE_EJEMPLO', value: 'Criterio de Evaluación no especificado.' };
+            const keys = Object.keys(ceMap);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            return { key: randomKey, value: ceMap[randomKey] };
+        }
+        
+        const scheduleData = [];
+        for (let i = 0; i < totalWeeks; i++) {
+            const ce1 = getRandomCE('Ámbito Científico-Tecnológico');
+            const ce2 = getRandomCE(ctScheduleSequence[i]);
+            const ce3 = getRandomCE(arslScheduleSequence[i]);
+            
+            scheduleData.push({
+                week: i + 1,
+                session1: {
+                    subject: 'Ámbito Científico-Tecnológico',
+                    ambito: 'CT',
+                    activity: activityExamples['Ámbito Científico-Tecnológico'][ce1.key],
+                    ce: ce1.key
+                },
+                session2: {
+                    subject: ctScheduleSequence[i],
+                    ambito: subjectDetails[ctScheduleSequence[i]],
+                    activity: activityExamples[ctScheduleSequence[i]][ce2.key],
+                    ce: ce2.key
+                },
+                session3: {
+                    subject: arslScheduleSequence[i],
+                    ambito: subjectDetails[arslScheduleSequence[i]],
+                    activity: activityExamples[arslScheduleSequence[i]][ce3.key],
+                    ce: ce3.key
+                }
+            });
+        }
+
+        function toggleEvaluation(evaluationNumber) {
+            const content = document.getElementById(`evaluation-content-${evaluationNumber}`);
+            const icon = document.getElementById(`toggle-icon-${evaluationNumber}`);
+            content.classList.toggle('hidden');
+            if (content.classList.contains('hidden')) {
+                icon.textContent = '+';
+            } else {
+                icon.textContent = '-';
+            }
+        }
+        window.toggleEvaluation = toggleEvaluation;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const subjectFiltersContainer = document.getElementById('subject-filters');
+            const ambitoFiltersContainer = document.getElementById('ambito-filters');
+            const resetBtn = document.getElementById('reset-filters');
+            
+            const allSubjects = [...new Set(scheduleData.flatMap(w => [w.session1.subject, w.session2.subject, w.session3.subject]))].sort();
+            const allAmbitos = [...new Set(subjects.map(s => s.ambito))].sort();
+
+            function createFilterButtons(container, items, type) {
+                items.forEach(item => {
+                    const button = document.createElement('button');
+                    button.textContent = item;
+                    button.dataset.filter = item;
+                    button.dataset.type = type;
+                    button.className = 'filter-btn px-4 py-1.5 text-sm font-medium text-blue-800 bg-blue-100 rounded-full hover:bg-blue-200 border border-blue-200';
+                    container.appendChild(button);
+                });
+            }
+
+            function renderSchedule(data, containerId) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                data.forEach(weekData => {
+                    const weekCard = document.createElement('div');
+                    weekCard.className = 'week-card bg-white rounded-2xl shadow-sm p-5';
+                    weekCard.dataset.week = weekData.week;
+
+                    const dates = getDatesForWeek(weekData.week);
+                    const dateRange = `del ${dates.start} al ${dates.end}`;
+
+                    weekCard.innerHTML = `
+                        <h3 class="text-xl font-bold text-green-700 mb-2">Semana ${weekData.week}</h3>
+                        <p class="text-sm text-gray-500 mb-4">${dateRange}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            ${createSessionCard(weekData.session1, 1, weekData.week)}
+                            ${createSessionCard(weekData.session2, 2, weekData.week)}
+                            ${createSessionCard(weekData.session3, 3, weekData.week)}
+                        </div>
+                    `;
+                    container.appendChild(weekCard);
+                });
+            }
+
+            function createSessionCard(session, sessionNumber, weekNumber) {
+                const link = csvLinks[weekNumber] ? csvLinks[weekNumber][`session${sessionNumber}`] : '#';
+                return `
+                    <div class="session-card rounded-xl p-4 border border-gray-200 transition-all duration-300" 
+                         data-subject="${session.subject}" data-ambito="${session.ambito}"
+                         style="border-left: 5px solid ${subjectColors[session.subject] || '#6B7280'};">
+                        <p class="font-semibold text-sm text-gray-500">Sesión ${sessionNumber}</p>
+                        <p class="font-bold text-gray-800">${session.subject}</p>
+                        <p class="text-sm text-gray-600 mt-2">${session.activity}</p>
+                        <p class="text-xs text-gray-400 mt-3 font-mono">${session.ce}</p>
+                        <div class="mt-4 flex gap-2">
+                           <a href="${link}" target="_blank" class="class-btn">Registrar evidencia 3º Diver</a>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            function applyFilter(filterValue, filterType) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-blue-600', 'text-white', 'hover:bg-blue-700'));
+                const activeButton = document.querySelector(`.filter-btn[data-filter="${filterValue}"][data-type="${filterType}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('active', 'bg-blue-600', 'text-white', 'hover:bg-blue-700');
+                }
+
+                document.querySelectorAll('.week-card').forEach(weekCard => {
+                    let weekHasMatch = false;
+                    weekCard.querySelectorAll('.session-card').forEach(sessionCard => {
+                        const isMatch = sessionCard.dataset[filterType] === filterValue;
+                        if (isMatch) {
+                            sessionCard.classList.remove('opacity-40');
+                            sessionCard.classList.add('highlight');
+                            weekHasMatch = true;
+                        } else {
+                            sessionCard.classList.add('opacity-40');
+                            sessionCard.classList.remove('highlight');
+                        }
+                    });
+                    
+                    if (weekHasMatch) {
+                        weekCard.classList.remove('filtered-out');
+                    } else {
+                        weekCard.classList.add('filtered-out');
+                    }
+                });
+            }
+
+            function resetFilters() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-blue-600', 'text-white', 'hover:bg-blue-700'));
+                document.querySelectorAll('.week-card').forEach(card => card.classList.remove('filtered-out'));
+                document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
+            }
+
+            function renderChart() {
+                const ctx = document.getElementById('proportionalityChart').getContext('2d');
+                const sessionCounts = {};
+
+                scheduleData.forEach(week => {
+                    if (week.session2.subject !== 'Ámbito Científico-Tecnológico' || week.session2.subject === 'Ámbito Científico-Tecnológico' && week.session1.subject !== week.session2.subject) {
+                        sessionCounts[week.session2.subject] = (sessionCounts[week.session2.subject] || 0) + 1;
+                    }
+                    sessionCounts[week.session3.subject] = (sessionCounts[week.session3.subject] || 0) + 1;
+                });
+                
+                const sortedSubjects = Object.keys(sessionCounts).sort((a, b) => sessionCounts[b] - sessionCounts[a]);
+                const labels = sortedSubjects;
+                const data = sortedSubjects.map(subject => sessionCounts[subject]);
+                const backgroundColors = sortedSubjects.map(subject => subjectColors[subject] || '#6B7280');
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Nº de Sesiones',
+                            data: data,
+                            backgroundColor: backgroundColors,
+                            borderColor: '#F8F9FA',
+                            borderWidth: 3,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: 'Inter',
+                                        size: 12
+                                    },
+                                    boxWidth: 15,
+                                    padding: 15
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' sesiones';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createFilterButtons(subjectFiltersContainer, allSubjects, 'subject');
+            createFilterButtons(ambitoFiltersContainer, allAmbitos, 'ambito');
+            
+            renderSchedule(scheduleData.slice(0, eval1Weeks), 'evaluation-content-1');
+            renderSchedule(scheduleData.slice(eval1Weeks, eval1Weeks + eval2Weeks), 'evaluation-content-2');
+            renderSchedule(scheduleData.slice(eval1Weeks + eval2Weeks, totalWeeks), 'evaluation-content-3');
+
+            renderChart();
+            
+            document.getElementById('controls').addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    const { filter, type } = e.target.dataset;
+                    applyFilter(filter, type);
+                }
+            });
+
+            resetBtn.addEventListener('click', resetFilters);
+        });
+    </script>
+</body>
+</html>
