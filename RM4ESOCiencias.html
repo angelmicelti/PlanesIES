@@ -4,7 +4,6 @@
 	<link rel="manifest" href="./manifest.json" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon añadido -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>Plan Interactivo de Razonamiento Matemático - 4º ESO</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -97,18 +96,15 @@
             <section id="schedule">
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Cronograma del Curso Escolar Completo</h2>
                 <div id="evaluations-container" class="space-y-6">
-                    <!-- Primera Evaluación (14 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(1)">
                             <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-14)</h3>
                             <span class="text-sm text-gray-500 hidden sm:inline-block">(15/sep - 19/dic)</span>
-                            <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">-</span>
+                            <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6">
-                            <!-- Las semanas se renderizarán aquí -->
-                        </div>
+                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden">
+                            </div>
                     </div>
-                    <!-- Segunda Evaluación (11 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(2)">
                             <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-25)</h3>
@@ -116,10 +112,8 @@
                             <span id="toggle-icon-2" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
                         <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden">
-                            <!-- Las semanas se renderizarán aquí -->
-                        </div>
+                            </div>
                     </div>
-                    <!-- Tercera Evaluación (11 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(3)">
                             <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 26-36)</h3>
@@ -127,8 +121,7 @@
                             <span id="toggle-icon-3" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
                         <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden">
-                            <!-- Las semanas se renderizarán aquí -->
-                        </div>
+                            </div>
                     </div>
                 </div>
             </section>
@@ -321,89 +314,73 @@
         };
 
         // --- PARÁMETROS GLOBALES DEL PLAN ---
-        // Carga horaria semanal de cada materia (se mantiene igual)
-        const materiasHoras = {
-            'Lengua': 4, 'Geografía': 3, 'Inglés': 4, 'Religión': 1,
-            'Biología y Geología': 3, 'Física y Química': 3, 'Tecnología': 3, 'Cultura Científica': 2,
-            'Dibujo Técnico': 2, 'Ed. Física': 2
-        };
-        const totalHorasSinMatematicas = Object.values(materiasHoras).reduce((sum, hours) => sum + hours, 0);
-        
-        // El nuevo total de semanas es 36
         const totalSemanas = 36;
-        
-        // Total de sesiones: 2 sesiones de razonamiento por semana * 36 semanas = 72 sesiones (Sesión 2 y 3)
-        const totalSesiones = totalSemanas * 2; 
-
-        // Coeficiente de sesiones por hora para mantener la proporcionalidad
-        const sesionPorHora = totalSesiones / totalHorasSinMatematicas;
-
-        // Distribución de Sesiones por Materia (proporcional a la carga horaria, se ajusta al nuevo total)
-        const sesionesPorMateria = Object.keys(materiasHoras).reduce((acc, materia) => {
-            // Utilizamos Math.round para asegurar que el total sume 72
-            acc[materia] = Math.round(materiasHoras[materia] * sesionPorHora);
-            return acc;
-        }, {});
-        
-        // Ajuste fino para asegurar que el total sea exactamente 72, si el redondeo lo alteró.
-        const sumOfCalculatedSessions = Object.values(sesionesPorMateria).reduce((a, b) => a + b, 0);
-        if (sumOfCalculatedSessions !== totalSesiones) {
-             // Si el total no es 72, ajustamos la materia con más sesiones.
-             const subjectToAdjust = Object.keys(sesionesPorMateria).sort((a, b) => sesionesPorMateria[b] - sesionesPorMateria[a])[0];
-             sesionesPorMateria[subjectToAdjust] += (totalSesiones - sumOfCalculatedSessions);
-        }
-
-        let materiasParaPlanificar = Object.keys(sesionesPorMateria).flatMap(materia => 
-            Array(sesionesPorMateria[materia]).fill(materia)
-        );
-        materiasParaPlanificar = shuffleArray(materiasParaPlanificar);
-
         const ambitosMaterias = {
             'SL': ['Lengua', 'Geografía', 'Inglés', 'Religión'],
             'CT': ['Biología y Geología', 'Física y Química', 'Tecnología', 'Cultura Científica'],
             'AR': ['Dibujo Técnico', 'Ed. Física']
         };
 
+        // Carga horaria semanal
+        const materiasHoras = {
+            'Lengua': 4, 'Geografía': 3, 'Inglés': 4, 'Religión': 1,
+            'Biología y Geología': 3, 'Física y Química': 3, 'Tecnología': 3, 'Cultura Científica': 2,
+            'Dibujo Técnico': 2, 'Ed. Física': 2
+        };
+
         function getAmbito(materia) {
             for (const ambito in ambitosMaterias) {
-                if (ambitosMaterias[ambito].includes(materia)) {
-                    return ambito;
-                }
+                if (ambitosMaterias[ambito].includes(materia)) return ambito;
             }
             return 'Desconocido';
         }
 
+        // ---> LÓGICA DE DISTRIBUCIÓN CORREGIDA <---
+        // Función para calcular sesiones proporcionalmente y ajustar el total.
+        function calcularSesiones(materias, totalSesiones) {
+            const horasTotales = Object.values(materias).reduce((sum, h) => sum + h, 0);
+            const sesionPorHora = totalSesiones / horasTotales;
+            let sesionesCalculadas = Object.keys(materias).reduce((acc, materia) => {
+                acc[materia] = Math.round(materias[materia] * sesionPorHora);
+                return acc;
+            }, {});
+
+            // Ajuste fino para que la suma sea exactamente totalSesiones
+            let sumaActual = Object.values(sesionesCalculadas).reduce((a, b) => a + b, 0);
+            while (sumaActual !== totalSesiones) {
+                const materiaAjuste = Object.keys(materias).sort((a, b) => materias[b] - materias[a])[Math.abs(totalSesiones - sumaActual) - 1];
+                sesionesCalculadas[materiaAjuste] += (totalSesiones > sumaActual ? 1 : -1);
+                sumaActual = Object.values(sesionesCalculadas).reduce((a, b) => a + b, 0);
+            }
+            return sesionesCalculadas;
+        }
+
+        // Separar materias por tipo de sesión
+        const materiasCT = Object.keys(materiasHoras).filter(m => getAmbito(m) === 'CT').reduce((obj, key) => ({ ...obj, [key]: materiasHoras[key] }), {});
+        const materiasARSL = Object.keys(materiasHoras).filter(m => ['AR', 'SL'].includes(getAmbito(m))).reduce((obj, key) => ({ ...obj, [key]: materiasHoras[key] }), {});
+
+        // Calcular sesiones para cada grupo de forma independiente
+        const sesionesCT = calcularSesiones(materiasCT, totalSemanas); // 36 sesiones para CT
+        const sesionesARSL = calcularSesiones(materiasARSL, totalSemanas); // 36 sesiones para AR/SL
+
+        // Crear los listados de materias para planificar
+        let ctMateriasParaPlanificar = Object.keys(sesionesCT).flatMap(m => Array(sesionesCT[m]).fill(m));
+        let arSlMateriasParaPlanificar = Object.keys(sesionesARSL).flatMap(m => Array(sesionesARSL[m]).fill(m));
+
+        // Barajar cada listado una sola vez para asegurar aleatoriedad pero respetando la proporción
+        shuffleArray(ctMateriasParaPlanificar);
+        shuffleArray(arSlMateriasParaPlanificar);
+
         // --- Generación del Cronograma (36 semanas) ---
         const scheduleData = [];
         for (let i = 1; i <= totalSemanas; i++) {
-            const semanaData = { week: i, session1: { subject: 'Matemáticas', ambito: 'CT', activity: '', ce: '' } };
-
-            // Sesión 2: Ámbito CT
-            // Filtramos las materias CT disponibles y usamos la primera
-            const ctMaterias = materiasParaPlanificar.filter(m => getAmbito(m) === 'CT');
-            let sesion2Materia;
-            if (ctMaterias.length > 0) {
-                sesion2Materia = ctMaterias.shift();
-                // Eliminamos la materia usada de la lista de pendientes
-                materiasParaPlanificar.splice(materiasParaPlanificar.indexOf(sesion2Materia), 1);
-            } else {
-                sesion2Materia = 'Sin asignar';
-            }
-            semanaData.session2 = { subject: sesion2Materia, ambito: 'CT', activity: '', ce: '' };
-
-            // Sesión 3: Ámbitos AR o SL
-            // Filtramos las materias AR/SL disponibles y usamos la primera
-            const arSlMaterias = materiasParaPlanificar.filter(m => ['AR', 'SL'].includes(getAmbito(m)));
-            let sesion3Materia;
-            if (arSlMaterias.length > 0) {
-                sesion3Materia = arSlMaterias.shift();
-                // Eliminamos la materia usada de la lista de pendientes
-                materiasParaPlanificar.splice(materiasParaPlanificar.indexOf(sesion3Materia), 1);
-            } else {
-                sesion3Materia = 'Sin asignar';
-            }
-            semanaData.session3 = { subject: sesion3Materia, ambito: getAmbito(sesion3Materia), activity: '', ce: '' };
-            
+            const semanaData = {
+                week: i,
+                session1: { subject: 'Matemáticas', ambito: 'CT', activity: '', ce: '' },
+                session2: { subject: ctMateriasParaPlanificar.pop() || 'Error CT', ambito: 'CT', activity: '', ce: '' },
+                session3: { subject: arSlMateriasParaPlanificar.pop() || 'Error AR/SL', ambito: '', activity: '', ce: '' }
+            };
+            semanaData.session3.ambito = getAmbito(semanaData.session3.subject);
             scheduleData.push(semanaData);
         }
 
@@ -594,7 +571,6 @@
                         <p class="text-xs text-gray-400 mt-3 font-mono">${session.ce}</p>
                     </div>
 
-                    <!-- Botón "Registrar evidencia" con enlace del CSV -->
                     <a href="${link}" target="_blank" class="evidence-btn">
                         Registrar evidencia
                     </a>
@@ -711,8 +687,7 @@
             const ambitoFiltersContainer = document.getElementById('ambito-filters');
             const resetBtn = document.getElementById('reset-filters');
     
-            // Se filtran las materias para los botones (Matemáticas no se filtra porque es fija en Sesión 1)
-            const subjects = [...new Set(scheduleData.flatMap(w => [w.session2.subject, w.session3.subject]))].filter(s => s !== 'Sin asignar').sort();
+            const subjects = [...new Set(scheduleData.flatMap(w => [w.session1.subject, w.session2.subject, w.session3.subject]))].filter(s => s !== 'Sin asignar').sort();
             const ambitos = [...new Set(scheduleData.flatMap(w => [w.session1.ambito, w.session2.ambito, w.session3.ambito]))].filter(a => a !== 'Desconocido').sort();
     
             function createFilterButtons(container, items, type) {
