@@ -1,0 +1,77 @@
+¡Claro que sí\! Es un problema bastante común y frustrante. La diferencia de comportamiento que describes entre Android/escritorio y los dispositivos de Apple (iOS/iPadOS) casi siempre se debe a cómo iOS gestiona los enlaces y las aplicaciones nativas.
+
+La causa más probable es que **si el usuario tiene la aplicación nativa de Hojas de Cálculo (Google Sheets) instalada en su iPhone o iPad, iOS intercepta el enlace e intenta abrirlo en la app nativa en lugar de en el navegador**. La app nativa no siempre interpreta los parámetros de la URL (como el rango de la celda) de la misma manera que la versión web.
+
+-----
+
+### \#\# El problema de fondo: Universal Links en iOS
+
+Apple utiliza un sistema llamado **Universal Links** para conectar sitios web con sus aplicaciones nativas correspondientes. Cuando haces clic en un enlace `docs.google.com/spreadsheets/...`, iOS comprueba si la app de Google Sheets está instalada.
+
+  * **Si la app está instalada:** iOS le pasa el enlace a la app. La app de Sheets puede que ignore el fragmento de la URL que especifica la celda (`#gid=...&range=...`) o que requiera un formato de enlace completamente diferente (como `googlesheets://`).
+  * **Si la app no está instalada:** El enlace se abre en Safari (o en la vista web de tu PWA) y funciona como esperas, porque el navegador sí sabe cómo interpretar esos parámetros.
+
+Android también tiene un sistema similar (App Links), pero es generalmente más flexible y la versión web de Sheets en Chrome para Android maneja estos enlaces de forma más consistente.
+
+-----
+
+### \#\# Cómo solucionarlo
+
+Tienes varias estrategias para forzar el comportamiento correcto en dispositivos Apple. La más efectiva suele ser modificar la URL para que iOS no la reconozca como un "Universal Link" de la app de Sheets.
+
+#### **Solución Principal: Modificar la URL para forzar la apertura en el navegador**
+
+La idea es usar una URL que, aunque lleve a la misma hoja de cálculo, no esté registrada por la app nativa como un enlace universal.
+
+Prueba a construir tu URL de la siguiente manera:
+
+```
+https://docs.google.com/spreadsheets/d/e/{ID_DE_TU_HOJA}/pubhtml
+```
+
+O, para una vista de edición más directa que a menudo evita la app, puedes probar añadiendo `/u/0/` (o el número de cuenta de Google) al enlace:
+
+```
+https://docs.google.com/spreadsheets/u/0/d/{ID_DE_TU_HOJA}/edit#gid={ID_DE_LA_PESTAÑA}&range={CELDA}
+```
+
+**Ejemplo práctico:**
+
+Supongamos que tu enlace actual es:
+`https://docs.google.com/spreadsheets/d/ABC123XYZ/edit#gid=0&range=B4`
+
+Intenta cambiarlo a:
+`https://docs.google.com/spreadsheets/u/0/d/ABC123XYZ/edit#gid=0&range=B4`
+
+Este pequeño cambio (`/u/0/`) a menudo es suficiente para que iOS lo considere un enlace web normal y lo abra en el navegador, donde tu PWA puede controlarlo correctamente.
+
+-----
+
+### \#\# Otras comprobaciones y buenas prácticas
+
+Si la solución anterior no funciona, aquí tienes un plan de acción para depurar el problema:
+
+1.  **Verifica la Codificación de la URL:** Asegúrate de que los valores de los parámetros en la URL estén correctamente codificados. Si el nombre de una pestaña o una celda contiene espacios o caracteres especiales, debes usar `encodeURIComponent()` en JavaScript para codificarlo.
+
+      * **Incorrecto:** `...&range=Mi Celda!A1`
+      * **Correcto:** `...&range=Mi%20Celda!A1`
+
+2.  **Usa un Enlace Directo con `target="_blank"`:** La forma en que abres el enlace importa. En lugar de usar una redirección con `window.location.href`, es más robusto usar un enlace `<a>` real que el usuario pueda pulsar.
+
+    ```html
+    <a id="spreadsheet-link" href="..." target="_blank" rel="noopener noreferrer">Abrir en celda</a>
+    ```
+
+    El `target="_blank"` le indica al navegador que abra el enlace en una nueva pestaña, lo cual en el contexto de una PWA en iOS suele funcionar de manera más predecible. Tu código JavaScript se encargaría de actualizar dinámicamente el atributo `href` de este enlace.
+
+3.  **Prueba de Aislamiento:** Para confirmar al 100% que el problema es la app nativa, desinstala temporalmente la aplicación Google Sheets de un dispositivo iOS y prueba tu PWA. Si funciona perfectamente sin la app, ya tienes la certeza de que la interferencia de la app nativa es la causa.
+
+### \#\# Resumen del plan de acción
+
+Para resumir, te recomiendo seguir estos pasos:
+
+1.  **Modifica tu URL** para que incluya `/u/0/` justo después del dominio: `https://docs.google.com/spreadsheets/u/0/d/...`.
+2.  **Asegúrate** de que todos los parámetros de la URL (nombres de hojas, etc.) estén codificados con `encodeURIComponent()`.
+3.  **Implementa la apertura** a través de un enlace `<a>` con `target="_blank"`.
+
+Con estas acciones, es muy probable que soluciones el problema y tu PWA funcione de manera consistente en todas las plataformas. ¡Mucha suerte\!
