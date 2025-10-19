@@ -80,7 +80,7 @@
 
             <section id="schedule">
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Cronograma del Curso Escolar Completo</h2>
-                <div id="evaluations-container" class="space-y-6">
+                <div id="evaluaciones-container" class="space-y-6">
                     <!-- Primera Evaluación: del 15 de septiembre al 19 de diciembre (Semanas 1-14) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(1)">
@@ -367,15 +367,37 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
         
         function generateDates(totalWeeks = 36) {
             const dates = [];
-            // Inicio: Lunes 15 de Septiembre de 2025
-            let currentDay = new Date('2025-09-15T00:00:00Z'); 
-            for (let i = 0; i < totalWeeks; i++) {
+            
+            // Primera evaluación: 15 de septiembre - 19 de diciembre (14 semanas)
+            let currentDay = new Date('2025-09-15T00:00:00Z');
+            for (let i = 0; i < 14; i++) {
                 const start = new Date(currentDay);
                 const end = new Date(currentDay);
-                end.setDate(currentDay.getDate() + 6);
+                end.setDate(currentDay.getDate() + 4); // Viernes
                 dates.push({ start, end });
-                currentDay.setDate(currentDay.getDate() + 7);
+                currentDay.setDate(currentDay.getDate() + 7); // Siguiente lunes
             }
+            
+            // Segunda evaluación: 12 de enero - 27 de marzo (11 semanas)
+            currentDay = new Date('2026-01-12T00:00:00Z');
+            for (let i = 0; i < 11; i++) {
+                const start = new Date(currentDay);
+                const end = new Date(currentDay);
+                end.setDate(currentDay.getDate() + 4); // Viernes
+                dates.push({ start, end });
+                currentDay.setDate(currentDay.getDate() + 7); // Siguiente lunes
+            }
+            
+            // Tercera evaluación: 6 de abril - 19 de junio (11 semanas)
+            currentDay = new Date('2026-04-06T00:00:00Z');
+            for (let i = 0; i < 11; i++) {
+                const start = new Date(currentDay);
+                const end = new Date(currentDay);
+                end.setDate(currentDay.getDate() + 4); // Viernes
+                dates.push({ start, end });
+                currentDay.setDate(currentDay.getDate() + 7); // Siguiente lunes
+            }
+            
             return dates;
         }
 
