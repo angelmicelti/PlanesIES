@@ -1,0 +1,1520 @@
+* commit 25f1d6503240f4fe66b0cb28c87dd52e4a8ac762
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 15:00:36 2025 +0200
+| 
+|     Update RM4ESOCiencias.html
+| 
+|  RM4ESOCiencias.html | 63 +++++++++++++++++++++++++++++++--------------------
+|  1 file changed, 39 insertions(+), 24 deletions(-)
+| 
+* commit caf81ee13978ecce6ea4b2aa935a3cec3c1176b5
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:31:13 2025 +0200
+| 
+|     Delete RM4ESODiver - copia.html
+| 
+|  RM4ESODiver - copia.html | 608 ---------------------------------------------
+|  1 file changed, 608 deletions(-)
+| 
+* commit 35f43f13a9a3cfee1d29720b808dc892074aa263
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:31:10 2025 +0200
+| 
+|     Delete RM4ESOSociales - copia.html
+| 
+|  RM4ESOSociales - copia.html | 803 ------------------------------------------
+|  1 file changed, 803 deletions(-)
+| 
+* commit 596a2385852b6da0e38efaee3de8b3b96dc07be0
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:31:06 2025 +0200
+| 
+|     Delete RM4ESOCiencias - copia.html
+| 
+|  RM4ESOCiencias - copia.html | 540 ------------------------------------------
+|  1 file changed, 540 deletions(-)
+| 
+* commit 10462c91dc4d4eab485200fed42dd4d39d90d6c2
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:31:04 2025 +0200
+| 
+|     Delete RM4ESOCiclos - copia.html
+| 
+|  RM4ESOCiclos - copia.html | 767 --------------------------------------------
+|  1 file changed, 767 deletions(-)
+| 
+* commit 1782a13f1ddd94f77eb1735dfa9844d4bf1ce3d4
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:31:01 2025 +0200
+| 
+|     Delete RM3ESODiver - copia.html
+| 
+|  RM3ESODiver - copia.html | 695 ---------------------------------------------
+|  1 file changed, 695 deletions(-)
+| 
+* commit dc0f2d553bf35125d43a3ad7b5cc25b43642b910
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:30:59 2025 +0200
+| 
+|     Delete RM3ESO - copia.html
+| 
+|  RM3ESO - copia.html | 660 --------------------------------------------------
+|  1 file changed, 660 deletions(-)
+| 
+* commit babe92154c2889f9cbcc5fa311430974f5a6a802
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:30:56 2025 +0200
+| 
+|     Delete recursosrm - copia.html
+| 
+|  recursosrm - copia.html | 192 ----------------------------------------------
+|  1 file changed, 192 deletions(-)
+| 
+* commit f6e1280f16f59851090acc74fb85c0e9d3e1130d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:30:54 2025 +0200
+| 
+|     Delete RM2ESO - copia.html
+| 
+|  RM2ESO - copia.html | 497 --------------------------------------------------
+|  1 file changed, 497 deletions(-)
+| 
+* commit bae216fde59b4bf434cce40471a2e06fff3bf810
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:30:51 2025 +0200
+| 
+|     Delete RM1ESO - copia.html
+| 
+|  RM1ESO - copia.html | 624 --------------------------------------------------
+|  1 file changed, 624 deletions(-)
+| 
+* commit 9f90c2e3ad6d4f7b19a5159609a72628a32158da
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:30:48 2025 +0200
+| 
+|     Delete PlanLector_old.html
+| 
+|  PlanLector_old.html | 93 ---------------------------------------------------
+|  1 file changed, 93 deletions(-)
+| 
+* commit 66135573ce2b06c9bba0664ef241a8d96679f8aa
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:30:43 2025 +0200
+| 
+|     Delete recursoscl - copia.html
+| 
+|  recursoscl - copia.html | 192 ----------------------------------------------
+|  1 file changed, 192 deletions(-)
+| 
+* commit afa3e694008d6e764abba154ba651d0c3915728e
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:30:40 2025 +0200
+| 
+|     Delete CronogramaLector - copia.html
+| 
+|  CronogramaLector - copia.html | 1006 ---------------------------------------
+|  1 file changed, 1006 deletions(-)
+| 
+* commit 79295eea77eaa57659f856c18c77ef051cd0aee6
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:29:50 2025 +0200
+| 
+|     Update RM1ESO - copia.html
+| 
+|  RM1ESO - copia.html | 40 +++++++++++++++++++++++++++++++---------
+|  1 file changed, 31 insertions(+), 9 deletions(-)
+| 
+* commit eca304601cdc94f5bb70d282e35596ce5f829204
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 19 14:28:59 2025 +0200
+| 
+|     Update RM1ESO.html
+| 
+|  RM1ESO.html | 34 ++++++++++++++++++++++++++++------
+|  1 file changed, 28 insertions(+), 6 deletions(-)
+| 
+* commit 26412e3d7f7c27dfe60a4494c66b6b8bef7f9916
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 20:14:12 2025 +0200
+| 
+|     Create SolucionProblemaIoS.txt
+| 
+|  SolucionProblemaIoS.txt | 77 +++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 77 insertions(+)
+| 
+* commit e27b4fa857ae11019e8b2d52a7ace0b53eea76ed
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 20:07:18 2025 +0200
+| 
+|     Update RM4ESOSociales.html
+| 
+|  RM4ESOSociales.html | 30 +++++++++++++++---------------
+|  1 file changed, 15 insertions(+), 15 deletions(-)
+| 
+* commit 705661dc5f0c0a0a6354f7509838d82ab84beb78
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 14:43:53 2025 +0200
+| 
+|     Update RM4ESOCiencias.html
+| 
+|  RM4ESOCiencias.html | 1024 ++++++++++++++++++++-----------------------------
+|  1 file changed, 418 insertions(+), 606 deletions(-)
+| 
+* commit ec5c169eddd560ba267a615e42636e09174b02c7
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 14:43:51 2025 +0200
+| 
+|     Update RM4ESOCiencias - copia.html
+| 
+|  RM4ESOCiencias - copia.html | 1039 ++++++++++++++++-------------------------
+|  1 file changed, 413 insertions(+), 626 deletions(-)
+| 
+* commit b64cbe645b10145574bd02836ba1c8f423c93108
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:44:24 2025 +0200
+| 
+|     Update RM4ESOSociales.html
+| 
+|  RM4ESOSociales.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 1f66c9cc89a61917052c493cd774d6b9627552e5
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:44:21 2025 +0200
+| 
+|     Update RM4ESODiver.html
+| 
+|  RM4ESODiver.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 6ac4429b276017e072f89cf8988344ca45cff4fa
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:44:18 2025 +0200
+| 
+|     Update RM4ESOCiclos.html
+| 
+|  RM4ESOCiclos.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit b817c31e39051fb70dc3ede6f14268847cd6e436
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:44:16 2025 +0200
+| 
+|     Update RM3ESODiver.html
+| 
+|  RM3ESODiver.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit dc10697342bf9565b1378b4b208008fd09d8ede9
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:44:13 2025 +0200
+| 
+|     Update RM3ESO.html
+| 
+|  RM3ESO.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 1963447cf249232c96c567cb4f52b74f93819712
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:44:04 2025 +0200
+| 
+|     Create RM4ESOSociales - copia.html
+| 
+|  RM4ESOSociales - copia.html | 803 ++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 803 insertions(+)
+| 
+* commit e41238ab8586241df9051d412fe21249a9f50db2
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:44:01 2025 +0200
+| 
+|     Create RM4ESODiver - copia.html
+| 
+|  RM4ESODiver - copia.html | 608 +++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 608 insertions(+)
+| 
+* commit 44210ba0b2c54d2e8b02a37686002e882e32b97b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:43:58 2025 +0200
+| 
+|     Create RM4ESOCiclos - copia.html
+| 
+|  RM4ESOCiclos - copia.html | 767 ++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 767 insertions(+)
+| 
+* commit bfc489145904f29f8a88e6cde5496329ca191037
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:43:55 2025 +0200
+| 
+|     Create RM3ESODiver - copia.html
+| 
+|  RM3ESODiver - copia.html | 695 +++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 695 insertions(+)
+| 
+* commit f5fab0109c2be974770566e991ef1ebb0ccfe766
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:43:51 2025 +0200
+| 
+|     Create RM3ESO - copia.html
+| 
+|  RM3ESO - copia.html | 660 ++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 660 insertions(+)
+| 
+* commit 9bf106e5dbd7732f307f845d83521a483768ac20
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:36:39 2025 +0200
+| 
+|     Create RM2ESO - copia.html
+| 
+|  RM2ESO - copia.html | 497 ++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 497 insertions(+)
+| 
+* commit aadcdaee76b1f65cba56d0ee57be24feda82e22d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:36:37 2025 +0200
+| 
+|     Update RM2ESO.html
+| 
+|  RM2ESO.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 09ceccd16ad435ba4ffa6525e7da635cdc41c2d2
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:33:29 2025 +0200
+| 
+|     Create RM1ESO - copia.html
+| 
+|  RM1ESO - copia.html | 602 ++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 602 insertions(+)
+| 
+* commit 8782735c4c6fe22460dc5077c47508374a3f001d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:33:26 2025 +0200
+| 
+|     Update RM1ESO.html
+| 
+|  RM1ESO.html | 6 +++---
+|  1 file changed, 3 insertions(+), 3 deletions(-)
+| 
+* commit 98d400896ed690a9f6fa596335c2ff576a93cd2a
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 15 00:04:00 2025 +0200
+| 
+|     Update RM4ESOCiencias.html
+| 
+|  RM4ESOCiencias.html | 141 +++++++++++++++++++++-----------------------------
+|  1 file changed, 58 insertions(+), 83 deletions(-)
+| 
+* commit 4cd5f166ffb6d5482e9b4ca783bdd5faa556d7e6
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 23:30:15 2025 +0200
+| 
+|     Create RM4ESOCiencias - copia.html
+| 
+|  RM4ESOCiencias - copia.html | 753 ++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 753 insertions(+)
+| 
+* commit 126f70fc39570eff0774186b4202243cd047e951
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 22:01:31 2025 +0200
+| 
+|     Update CronogramaLector.html
+| 
+|  CronogramaLector.html | 1008 +++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 1008 insertions(+)
+| 
+* commit bf8484602e255572b394a3ecf3f96891939d3737
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 20:28:14 2025 +0200
+| 
+|     Update CronogramaLector.html
+| 
+|  CronogramaLector.html | 1006 -----------------------------------------------
+|  1 file changed, 1006 deletions(-)
+| 
+* commit d53b058ea35750ded97cee8ac4f86428ae1f0d8c
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 19:54:46 2025 +0200
+| 
+|     Create CronogramaLector - copia.html
+| 
+|  CronogramaLector - copia.html | 1006 +++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 1006 insertions(+)
+| 
+* commit c399d3e0ed43ec509c5e955558b6cbfc41616ff7
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 18:30:42 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 122 +++++++++++++++++++++++++++++++++++++++--------------------
+|  1 file changed, 80 insertions(+), 42 deletions(-)
+| 
+* commit 9df94b5ff4e96cdf8dfa36f1891a6008c1a89948
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 18:30:37 2025 +0200
+| 
+|     Create index - copia.html
+| 
+|  index - copia.html | 150 +++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 150 insertions(+)
+| 
+* commit a5e0c219eda9a896a9ff0e5b395a5f86a78b1e37
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 18:07:25 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 39ab14cffd0208623b0cd40ba8381848546fcd3b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 18:03:13 2025 +0200
+| 
+|     Update recursosrm.html
+| 
+|  recursosrm.html | 28 ++++++++++++++++++++++++++++
+|  1 file changed, 28 insertions(+)
+| 
+* commit 4c0382abb69dfdafbe75d93a2f38adaacdc25ba8
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:58:23 2025 +0200
+| 
+|     Create recursosrm - copia.html
+| 
+|  recursosrm - copia.html | 192 ++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 192 insertions(+)
+| 
+* commit e46719b772896975dae506da61cde08bce7886c7
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:58:20 2025 +0200
+| 
+|     Update recursoscl.html
+| 
+|  recursoscl.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit d4fd8aef685232ddb72346c32d48e01265928f2e
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:53:17 2025 +0200
+| 
+|     Update recursoscl.html
+| 
+|  recursoscl.html | 57 ++++++++++++++++++++++---------------------------------
+|  1 file changed, 23 insertions(+), 34 deletions(-)
+| 
+* commit 134bea475cf6d853e85e49491db04a620acaa634
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:43:19 2025 +0200
+| 
+|     Create recursoscl - copia.html
+| 
+|  recursoscl - copia.html | 192 ++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 192 insertions(+)
+| 
+* commit a57f64146dfd8a77de0ed5c17dece42e1408dcae
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:43:04 2025 +0200
+| 
+|     Update recursoscl.html
+| 
+|  recursoscl.html | 12 ++++++------
+|  1 file changed, 6 insertions(+), 6 deletions(-)
+| 
+* commit c66f9da41cf2e9e618d0a5a6e2ba2c59e274aca9
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:43:01 2025 +0200
+| 
+|     Create Apartado T.- Tratamiento de la lectura en el IES - 2024-11.pdf
+| 
+|  ...Tratamiento de la lectura en el IES - 2024-11.pdf | Bin 0 -> 529904 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit 4d8cec5c91977965bce5e319c495041e6d9a3129
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:01:23 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 88 ++++++++++++++++++++++++-------------------------------
+|  1 file changed, 39 insertions(+), 49 deletions(-)
+| 
+* commit 18386d555ab8d1bb831117e80fb80bab3850990d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 17:01:20 2025 +0200
+| 
+|     Create recursoscl.html
+| 
+|  recursoscl.html | 192 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 192 insertions(+)
+| 
+* commit cd82e5aded1afd287a00410b289710a0878ef62b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 16:34:41 2025 +0200
+| 
+|     Create PlanLector.html
+| 
+|  PlanLector.html | 97 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 97 insertions(+)
+| 
+* commit 907a647534d8f57713a0598e865d23457d489aa0
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 16:33:32 2025 +0200
+| 
+|     Create PlanLector_old.html
+| 
+|  PlanLector_old.html | 93 +++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 93 insertions(+)
+| 
+* commit a6d659751dbffe87ca37bb827104f4f4ff8bad34
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 16:33:29 2025 +0200
+| 
+|     Delete PlanLector.html
+| 
+|  PlanLector.html | 93 -------------------------------------------------------
+|  1 file changed, 93 deletions(-)
+| 
+* commit 02e6bf067119cfbd724ec8343afba81d31da200e
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 16:27:51 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 6e054db5fddc8904ee608b503cc69f63be59c18b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 16:27:48 2025 +0200
+| 
+|     Create recursosrm.html
+| 
+|  recursosrm.html | 192 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 192 insertions(+)
+| 
+* commit ae75b977d10eafc88c606514e89f3df1e3ab56d8
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 14 16:27:45 2025 +0200
+| 
+|     Delete recursos.html
+| 
+|  recursos.html | 192 --------------------------------------------------------
+|  1 file changed, 192 deletions(-)
+| 
+* commit 36ef681da4bdb426eeea234d2f6447a859aa1679
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:22:33 2025 +0200
+| 
+|     Update RM4ESOCiclos.html
+| 
+|  RM4ESOCiclos.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 9f9bda2d7e93df0d953b915aa149c8bfcff87d62
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:18:21 2025 +0200
+| 
+|     Update RM4ESOCiclos.html
+| 
+|  RM4ESOCiclos.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit 0f4e31c0f91f778847b21933b84054386bbf8569
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:18:16 2025 +0200
+| 
+|     Update RM2ESO.html
+| 
+|  RM2ESO.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit 33de2ac622ad5af8ab8ad9bb2d072e4cce4a000d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:18:12 2025 +0200
+| 
+|     Update RM4ESOCiencias.html
+| 
+|  RM4ESOCiencias.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit b23fa648b836b6d6b6f43c9819dc355dd9cfbbae
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:18:05 2025 +0200
+| 
+|     Update RM4ESOSociales.html
+| 
+|  RM4ESOSociales.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit 99355f3d0b56c2206ec9ddda0cfe96a6c8132347
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:18:00 2025 +0200
+| 
+|     Update RM4ESODiver.html
+| 
+|  RM4ESODiver.html | 25 +++++++++++++------------
+|  1 file changed, 13 insertions(+), 12 deletions(-)
+| 
+* commit 13463fc4f628acd62353ea9e7efe080195480fdb
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:17:57 2025 +0200
+| 
+|     Update RM3ESODiver.html
+| 
+|  RM3ESODiver.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit ea13226b4e0d9660f536e40d88d97d84c15b8554
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:17:54 2025 +0200
+| 
+|     Update RM3ESO.html
+| 
+|  RM3ESO.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit e24917d13f537669707ac84e8a1cda3ad9ce4012
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:17:51 2025 +0200
+| 
+|     Update RM1ESO.html
+| 
+|  RM1ESO.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit a2893998b385f59c79039df65676ac7beb4b4cc9
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Oct 12 01:17:33 2025 +0200
+| 
+|     Delete RM4ESOSociales - copia.html
+| 
+|  RM4ESOSociales - copia.html | 720 ------------------------------------------
+|  1 file changed, 720 deletions(-)
+| 
+* commit 64fa208d94e214bba11253f9c6e895846a422028
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 11:04:36 2025 +0200
+| 
+|     Create RM4ESOSociales - copia.html
+| 
+|  RM4ESOSociales - copia.html | 720 ++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 720 insertions(+)
+| 
+* commit 9e228242d28f7168af8180af4b566c34f5270789
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 11:04:33 2025 +0200
+| 
+|     Update RM4ESOSociales.html
+| 
+|  RM4ESOSociales.html | 122 +++++++++++++++++++++++++++++++++++++++++---------
+|  1 file changed, 102 insertions(+), 20 deletions(-)
+| 
+* commit 30b9eff115ef1d8e8383c77bc70ec36194aa2ef8
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 01:45:35 2025 +0200
+| 
+|     Update RM4ESOSociales.html
+| 
+|  RM4ESOSociales.html | 188 +++++++++++++++++++++++++-------------------------
+|  1 file changed, 94 insertions(+), 94 deletions(-)
+| 
+* commit 76bd54e4a99f07d770c665844c1c4c3cf06b64b6
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 01:23:49 2025 +0200
+| 
+|     Rename RMl4ESOCiencias.html to RM4ESOCiencias.html
+| 
+|  RMl4ESOCiencias.html => RM4ESOCiencias.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit f9def1d75d4facbf8fa905b6287c56d5b9ffc9e5
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 00:30:08 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit d85f53000c03dbfae5adb26ec58ee5ae66df9883
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 00:30:06 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 542a14488e126a1e08049236207b6751db274122
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 00:30:04 2025 +0200
+| 
+|     Update CronogramaLector.html
+| 
+|  CronogramaLector.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 6e8922f2d65edea8385a2db443a74da159dbe1f0
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sat Oct 11 00:27:48 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 3 ++-
+|  1 file changed, 2 insertions(+), 1 deletion(-)
+|   
+*   commit 01c270122f894fe1cea1e3aba951e6c5da03e16c
+|\  Merge: 5c1ccf3 baa84bc
+| | Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| | Date:   Sat Oct 11 00:25:53 2025 +0200
+| | 
+| |     Merge branch 'main' of https://github.com/angelmicelti/PlanesIES
+| | 
+| * commit baa84bc33954d97334630e4fd54d14d08c7b7b39
+| | Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| | Date:   Fri Oct 10 17:11:48 2025 +0200
+| | 
+| |     Update PlanLector.html
+| | 
+| |  PlanLector.html | 6 +++---
+| |  1 file changed, 3 insertions(+), 3 deletions(-)
+| | 
+| * commit 3eb88f3d55db6cccdffc55b9e7b6485e14bd3a54
+| | Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| | Date:   Fri Oct 10 16:46:46 2025 +0200
+| | 
+| |     Update PlanLector.html
+| | 
+| |  PlanLector.html | 2 +-
+| |  1 file changed, 1 insertion(+), 1 deletion(-)
+| | 
+| * commit 867a08ac2b4267aac15a98b5ee7e39ce89f89a7e
+| | Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| | Date:   Fri Oct 10 16:36:22 2025 +0200
+| | 
+| |     Update PlanLector.html
+| | 
+| |  PlanLector.html | 33 ++++++++++++++++++++++-----------
+| |  1 file changed, 22 insertions(+), 11 deletions(-)
+| | 
+| * commit ad38c3c344eac57e537c010ccec86682e6c03725
+| | Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| | Date:   Fri Oct 10 16:21:16 2025 +0200
+| | 
+| |     Update PlanLector.html
+| | 
+| |  PlanLector.html | 1 +
+| |  1 file changed, 1 insertion(+)
+| | 
+* | commit 5c1ccf33851acdc71799a74a3f70f1c7ac04306c
+|/  Author: angelmicelti <angelmicelti@users.noreply.github.com>
+|   Date:   Sat Oct 11 00:25:50 2025 +0200
+|   
+|       Delete PlanLector - copia.html
+|   
+|    PlanLector - copia.html | 1006 -------------------------------------------
+|    1 file changed, 1006 deletions(-)
+| 
+* commit da2b2782c0d411955d6481b5362f56eca4260dd6
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 10 14:31:06 2025 +0200
+| 
+|     Create PlanLector.html
+| 
+|  PlanLector.html | 80 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 80 insertions(+)
+| 
+* commit 14b35dc9238e97393eebc1fad63bc81d9b141fab
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 10 13:25:29 2025 +0200
+| 
+|     Create CronogramaLector.html
+| 
+|  CronogramaLector.html | 1006 +++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 1006 insertions(+)
+| 
+* commit 96e74439782a2d5203fa47b32727894609d689dd
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 10 13:25:26 2025 +0200
+| 
+|     Create PlanLector - copia.html
+| 
+|  PlanLector - copia.html | 1006 +++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 1006 insertions(+)
+| 
+* commit 49f6d7f643a7d1ebe5afb11701cf2a47dca7a00b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 10 13:25:24 2025 +0200
+| 
+|     Delete PlanLector.html
+| 
+|  PlanLector.html | 1006 -----------------------------------------------------
+|  1 file changed, 1006 deletions(-)
+| 
+* commit 2220464f85cd55e6fb57c84ccc545864ea4d0184
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Thu Oct 9 23:19:07 2025 +0200
+| 
+|     Update recursos.html
+| 
+|  recursos.html | 35 ++++++++++++++++++++++-------------
+|  1 file changed, 22 insertions(+), 13 deletions(-)
+| 
+* commit e78f6981e963d21962a981dd833d25f9c3614c08
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Thu Oct 9 17:58:36 2025 +0200
+| 
+|     Update recursos.html
+| 
+|  recursos.html | 17 ++++++++++++++++-
+|  1 file changed, 16 insertions(+), 1 deletion(-)
+| 
+* commit a9b8d6e2288f217da6bd28fa3e8b603ecc5ea55f
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 8 21:28:01 2025 +0200
+| 
+|     Update recursos.html
+| 
+|  recursos.html | 72 ++++++++++++++++++++++++++++++++++++++-------------------
+|  1 file changed, 48 insertions(+), 24 deletions(-)
+| 
+* commit 93dcadca5afdb1a5c86f7caa01ce888329805150
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 8 20:50:11 2025 +0200
+| 
+|     Create recursos.html
+| 
+|  recursos.html | 144 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 144 insertions(+)
+| 
+* commit 5c79e8d5737938f96fa8bb62e7c2a8436d5ed1b7
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 8 20:49:48 2025 +0200
+| 
+|     Delete recursos.html
+| 
+|  recursos.html | 144 --------------------------------------------------------
+|  1 file changed, 144 deletions(-)
+| 
+* commit 9560dda52fcd4cf1435e6d38f98a30a412067c4c
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Oct 7 18:58:13 2025 +0200
+| 
+|     Update manifest.json
+| 
+|  manifest.json | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 56c02f39c33455e946e5b96a8fc569daa75f9ad2
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 3 13:43:44 2025 +0200
+| 
+|     Delete nuevo.txt
+| 
+|  nuevo.txt | 16 ----------------
+|  1 file changed, 16 deletions(-)
+| 
+* commit 3d2a9e26e8de8ecf10305e84af557349bc1fe054
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 3 13:43:41 2025 +0200
+| 
+|     Update manifest.json
+| 
+|  manifest.json | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit c9979e53f2fb30d1ecc15289b33f593e42c92b35
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 3 13:38:28 2025 +0200
+| 
+|     Update manifest.json
+| 
+|  manifest.json | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit b8456371280b0b4d3b9ba3cf009fc398a58cab02
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Fri Oct 3 13:34:11 2025 +0200
+| 
+|     Update manifest.json
+| 
+|  manifest.json | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 625bd75bf2122092ab5f06a4e75e4210ef3c45db
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 21:08:12 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 658839b07f07b441cb9a052c637ebcf861c92302
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 21:04:30 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 16 ++++++++--------
+|  1 file changed, 8 insertions(+), 8 deletions(-)
+| 
+* commit 26f25c37f9ff18997757fc420f0df08ec871c7b5
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 21:03:34 2025 +0200
+| 
+|     Revert "Update index.html"
+|     
+|     This reverts commit 0c302268def95a5ff6e87a782d24770943ce1388.
+| 
+|  index.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit e9faeaed59f84e8959c6386421ffab6a4f8b4621
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:51:15 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 16 ++++++++--------
+|  1 file changed, 8 insertions(+), 8 deletions(-)
+| 
+* commit 0c302268def95a5ff6e87a782d24770943ce1388
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:49:45 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 933f2ee3119e9f41e5e8df3d61755119fe2c84b1
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:20 2025 +0200
+| 
+|     Update RM1ESO.html
+| 
+|  RM1ESO.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 6c1dffd3d6d698ba9cb0b57df0fb5e4509334968
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:18 2025 +0200
+| 
+|     Update RM2ESO.html
+| 
+|  RM2ESO.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit b6badd035154c834b200e87a1329d37a74793418
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:14 2025 +0200
+| 
+|     Update RM3ESO.html
+| 
+|  RM3ESO.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 75bb1c318bf3e8c4b25419dac7ea590404e353e1
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:12 2025 +0200
+| 
+|     Update RM3ESODiver.html
+| 
+|  RM3ESODiver.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit d5217ecd02cdb1134196a1d46b8b30cd6d49204e
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:10 2025 +0200
+| 
+|     Update RM4ESOCiclos.html
+| 
+|  RM4ESOCiclos.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 9412daa54f7fa2cb375e52ba33a54c4bffdce99b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:08 2025 +0200
+| 
+|     Update RM4ESODiver.html
+| 
+|  RM4ESODiver.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit fffe91c4b63a614845fa56e9af0dde196af3010b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:06 2025 +0200
+| 
+|     Update RM4ESOSociales.html
+| 
+|  RM4ESOSociales.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 8eb12dad9d47ee9afb5a94ef0d9c416804181c06
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:04 2025 +0200
+| 
+|     Update RMl4ESOCiencias.html
+| 
+|  RMl4ESOCiencias.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 0284864f009b3f919d6f6cf6cb37edf13e6462c6
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:35:02 2025 +0200
+| 
+|     Update ÑMasPi.png
+| 
+|  "\303\221MasPi.png" | Bin 877204 -> 550475 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit a8f13cd235cc54050f4ba9459750aa2070e19f55
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:58 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 4 +++-
+|  1 file changed, 3 insertions(+), 1 deletion(-)
+| 
+* commit 364accc45bcfa355c00ee1d6153ff7e35a00cc28
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:53 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 1ec6264b66094bc61177c7a5356e12eed54c7acf
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:51 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit fd2c280b3d4b81fa90b931c3c91914b6fbef233c
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:49 2025 +0200
+| 
+|     Create icon-512x512_old.png
+| 
+|  icon-512x512_old.png | Bin 0 -> 137251 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit 6c2e9a41dbf72584cca9660de9fddcce6677d5f6
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:47 2025 +0200
+| 
+|     Update icon-512x512.png
+| 
+|  icon-512x512.png | Bin 137251 -> 219944 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit a4e86d7f3a97a350c5fcae1c1c2ea134d4af7171
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:41 2025 +0200
+| 
+|     Create icon-192x192_old.png
+| 
+|  icon-192x192_old.png | Bin 0 -> 30665 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit 7182b19c2580b8601f38460238278a8de99f921b
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:39 2025 +0200
+| 
+|     Update icon-192x192.png
+| 
+|  icon-192x192.png | Bin 30665 -> 29192 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit 3dd820e7a7c39513661be996b584c42a44444ba4
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:34:34 2025 +0200
+| 
+|     Create favicon.ico
+| 
+|  favicon.ico | Bin 0 -> 2238 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit ed3b67d889c989c14ce3ef24f13a7db9aeca67c3
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 20:16:10 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 71 +++++++++++++++++++++++++++++++++++++++---------------------
+|  1 file changed, 46 insertions(+), 25 deletions(-)
+| 
+* commit 5782ab36826bdbe25b72d5543490b33d1e6b085e
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 19:48:15 2025 +0200
+| 
+|     Create ÑMasPi.png
+| 
+|  "\303\221MasPi.png" | Bin 0 -> 877204 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit 0d1ee22ee719ed06d0a1add8e9af477a1247c6ba
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 13:57:53 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 10 +++++-----
+|  1 file changed, 5 insertions(+), 5 deletions(-)
+| 
+* commit 710f80341c318110ee9837232dfa9278478a00f7
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 11:32:13 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit cbc8f60118734a3d94e6d490d68a6206ee0fef7d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 11:30:12 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 5ecec88366f1cee4c423323f6c63df41b091b9da
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 11:23:15 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit e5a55b3552336f754c835b20284ded72f7ce9341
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 11:19:10 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit da5c3c3be6dea7ac5bb086131b6f30e89c1e7e35
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 11:11:23 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 11 ++++++-----
+|  1 file changed, 6 insertions(+), 5 deletions(-)
+| 
+* commit accdc7535ea7fd907ae1fa1ee623fb9e73021dd1
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 11:04:35 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 42 +++++++++++++++++++++++++++++++++++++++++-
+|  1 file changed, 41 insertions(+), 1 deletion(-)
+| 
+* commit bb9f84a331df80b5355a06f1a7dbe250606c3dfb
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 00:19:31 2025 +0200
+| 
+|     Update recursos.html
+| 
+|  recursos.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit b2cf0e8abd3bffd820ab0a9789515c4ece068a6f
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 00:19:28 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 65db20bb011cf9065db35ef257ae08d15c1f1efb
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 00:19:25 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit 976384a5172e9c9641a245e401cc33746ca43b4a
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 00:16:42 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 132 ++++++++++++++++++++++++++++--------------
+|  1 file changed, 87 insertions(+), 45 deletions(-)
+| 
+* commit 74486962e5b50a6aa7aae0db1da36ebb4aa471da
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Wed Oct 1 00:05:00 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 407fce151bfa8fef4c35310d5f4f60834d8dff5c
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 23:59:17 2025 +0200
+| 
+|     Create RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 169 ++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 169 insertions(+)
+| 
+* commit 98e2d3ef180100a6de97d464304e507e22590856
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 23:59:14 2025 +0200
+| 
+|     Delete RazonamientoMatematico2.html
+| 
+|  RazonamientoMatematico2.html | 169 -----------------------------------------
+|  1 file changed, 169 deletions(-)
+| 
+* commit 996be318c1766251cf98290a900cc14d1bc9b482
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 23:58:59 2025 +0200
+| 
+|     Create RazonamientoMatematico2.html
+| 
+|  RazonamientoMatematico2.html | 169 +++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 169 insertions(+)
+| 
+* commit bf64e6f3547f9e4d7e25eabb6da6a581ab79531f
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 23:58:55 2025 +0200
+| 
+|     Delete RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 149 ------------------------------------------
+|  1 file changed, 149 deletions(-)
+| 
+* commit 004929147eb9ec257165623411dfc914d469de6f
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 23:58:51 2025 +0200
+| 
+|     Update nuevo.txt
+| 
+|  nuevo.txt | 1 +
+|  1 file changed, 1 insertion(+)
+| 
+* commit 8088df8271f11bdcc749a87020b0dbfde5942f46
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 22:29:47 2025 +0200
+| 
+|     Create nuevo.txt
+| 
+|  nuevo.txt | 15 +++++++++++++++
+|  1 file changed, 15 insertions(+)
+| 
+* commit 82bf341439b9f5198c2061706b6260817d728aec
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 22:15:54 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit a9101f225b42cf56f827e5ee133664a7cf4731fd
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 22:14:54 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 50eed80c011ab66c3de9623b53542c32d3d4b0ea
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 22:13:46 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 4 +++-
+|  1 file changed, 3 insertions(+), 1 deletion(-)
+| 
+* commit 7c79aed6db95b7c445c1e46dc2c99c8e6762a303
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 22:08:04 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 11 ++++++-----
+|  1 file changed, 6 insertions(+), 5 deletions(-)
+| 
+* commit 82369777269a4d0ea1b839de1cc28c021c3ee0d8
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 21:56:37 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 266186cc3ad4778b2f2bf15a3c0f83036f8b902d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 21:55:48 2025 +0200
+| 
+|     Update PlanLector.html
+| 
+|  PlanLector.html | 38 +++++++++++++++++++++++++++++++++++++-
+|  1 file changed, 37 insertions(+), 1 deletion(-)
+| 
+* commit d6c7926edc51770dea2b8bdc6d1f3e650172e4e7
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Tue Sep 30 20:55:45 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 35 +++++++++++++++++++++++++----------
+|  1 file changed, 25 insertions(+), 10 deletions(-)
+| 
+* commit cbea90c175511c39a00915c1b4b9c363cab1c07a
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Mon Sep 29 23:31:15 2025 +0200
+| 
+|     Update recursos.html
+| 
+|  recursos.html | 17 +++++++++--------
+|  1 file changed, 9 insertions(+), 8 deletions(-)
+| 
+* commit 44d19aafa93dd75e58567f1d24995f2b696c4241
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Mon Sep 29 23:22:15 2025 +0200
+| 
+|     Update recursos.html
+| 
+|  recursos.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit f8e6687ba4b63678c777f43f8aef45de4bd326ce
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Mon Sep 29 23:21:19 2025 +0200
+| 
+|     Update recursos.html
+| 
+|  recursos.html | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 527717ca6bb6a9b25caa2ee3882c4f9a327fe9f4
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Mon Sep 29 23:18:26 2025 +0200
+| 
+|     Create recursos.html
+| 
+|  recursos.html | 141 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 141 insertions(+)
+| 
+* commit 30f0c718331dfe078ace35251c5dc8dc3efcd11a
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Mon Sep 29 23:01:09 2025 +0200
+| 
+|     Update RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 18 ++++++++++++++----
+|  1 file changed, 14 insertions(+), 4 deletions(-)
+| 
+* commit c49e300b5d19421b0269eca91b2d911b884b82cc
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 22:54:22 2025 +0200
+| 
+|     Update service-worker.js
+| 
+|  service-worker.js | 71 ++++++++++++++++++++++++++++++++++++++---------------
+|  1 file changed, 51 insertions(+), 20 deletions(-)
+| 
+* commit 9951228b75d19a7036f6215fe50b3bfc5ff491f4
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 22:52:34 2025 +0200
+| 
+|     Update manifest.json
+| 
+|  manifest.json | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 3fe33e2fffbc514bbb65b5bcfce428d41706d871
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 22:37:51 2025 +0200
+| 
+|     Update index.html
+| 
+|  index.html | 2 ++
+|  1 file changed, 2 insertions(+)
+| 
+* commit 9ef089e1c3062c083750d3386293e71f3f79a3df
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 22:35:17 2025 +0200
+| 
+|     Create regist_serviceWorker.js
+| 
+|  regist_serviceWorker.js | 9 +++++++++
+|  1 file changed, 9 insertions(+)
+| 
+* commit ad05694df494bb326af0214319ecfa8ff7a6aef6
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 22:31:56 2025 +0200
+| 
+|     Update manifest.json
+| 
+|  manifest.json | 4 ++--
+|  1 file changed, 2 insertions(+), 2 deletions(-)
+| 
+* commit 9afa099eda306136f001b84bb99d719a783e8c72
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 22:02:45 2025 +0200
+| 
+|     Create icon-192x192.png
+| 
+|  icon-192x192.png | Bin 0 -> 30665 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit f5135879e7e9a2797188c4c48682952f63006e1a
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 22:02:41 2025 +0200
+| 
+|     Create icon-512x512.png
+| 
+|  icon-512x512.png | Bin 0 -> 137251 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit 1e9e0b7c45d15bfd08e19f0f5733586d3393aef5
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:19 2025 +0200
+| 
+|     Create PlanLector.html
+| 
+|  PlanLector.html | 964 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 964 insertions(+)
+| 
+* commit ffa0be907f1505bafcb5a7407884af0f8ee6e21a
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:17 2025 +0200
+| 
+|     Create RM1ESO.html
+| 
+|  RM1ESO.html | 599 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 599 insertions(+)
+| 
+* commit 157b1311e6c8f6e01d336035265419923314dc9f
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:14 2025 +0200
+| 
+|     Create RM3ESO.html
+| 
+|  RM3ESO.html | 657 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 657 insertions(+)
+| 
+* commit c69b6100016c39442ec4a089bb76dc41f8d64c6a
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:12 2025 +0200
+| 
+|     Create RM4ESOCiclos.html
+| 
+|  RM4ESOCiclos.html | 764 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 764 insertions(+)
+| 
+* commit 44db1f42af74459061a36e2aed3cb2571eff709e
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:09 2025 +0200
+| 
+|     Create RM4ESOSociales.html
+| 
+|  RM4ESOSociales.html | 718 ++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 718 insertions(+)
+| 
+* commit ed6e83d142f3fcfe2610ed3a9ee4a81ef35d70a8
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:07 2025 +0200
+| 
+|     Create RMl4ESOCiencias.html
+| 
+|  RMl4ESOCiencias.html | 750 +++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 750 insertions(+)
+| 
+* commit cff3215e56035fb042cefc14fe66caf6cddcd4a5
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:04 2025 +0200
+| 
+|     Create service-worker.js
+| 
+|  service-worker.js | 20 ++++++++++++++++++++
+|  1 file changed, 20 insertions(+)
+| 
+* commit 07ab063534b34236739ad78c31a0e07afe4d601f
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:57:02 2025 +0200
+| 
+|     Create logoIES.png
+| 
+|  logoIES.png | Bin 0 -> 134126 bytes
+|  1 file changed, 0 insertions(+), 0 deletions(-)
+| 
+* commit df54b491af61ac074260b26d87abc3acebdf97da
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:56:59 2025 +0200
+| 
+|     Create RM4ESODiver.html
+| 
+|  RM4ESODiver.html | 605 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 605 insertions(+)
+| 
+* commit a5169f46666be41d02e5c053e0520119ee268a91
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:56:56 2025 +0200
+| 
+|     Create RM3ESODiver.html
+| 
+|  RM3ESODiver.html | 692 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 692 insertions(+)
+| 
+* commit 0e19e4d8a1b4382610f6ec0fd605db49d0f0864d
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:56:54 2025 +0200
+| 
+|     Create RM2ESO.html
+| 
+|  RM2ESO.html | 494 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 494 insertions(+)
+| 
+* commit 04eefaf6c32e105ceac2f13b5a0c52e9fb5f01ad
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:56:51 2025 +0200
+| 
+|     Create RazonamientoMatematico.html
+| 
+|  RazonamientoMatematico.html | 139 ++++++++++++++++++++++++++++++++++++++++++
+|  1 file changed, 139 insertions(+)
+| 
+* commit 452a221f9c5752bee95a20a7bffe85fb38d822a7
+| Author: angelmicelti <angelmicelti@users.noreply.github.com>
+| Date:   Sun Sep 28 21:56:50 2025 +0200
+| 
+|     Create manifest.json
+| 
+|  manifest.json | 21 +++++++++++++++++++++
+|  1 file changed, 21 insertions(+)
+| 
+* commit cacabfe12bb9fd6200ff374e9117945c428ec954
+  Author: angelmicelti <angelmicelti@users.noreply.github.com>
+  Date:   Sun Sep 28 21:56:48 2025 +0200
+  
+      Create index.html
+  
+   index.html | 69 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   1 file changed, 69 insertions(+)
