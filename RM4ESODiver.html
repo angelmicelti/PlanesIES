@@ -276,8 +276,8 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             sesionesProporcionales[primarySubject] = (sesionesProporcionales[primarySubject] || 0) + diff;
         }
 
-        // --- ALGORITMO MEJORADO: Distribución por semanas sin repetición ---
-        function distribuirMateriasSinRepeticion() {
+        // --- ALGORITMO MEJORADO: Distribución por semanas sin repetición y sin consecutivas ---
+        function distribuirMateriasOptimizado() {
             // Calcular sesiones por evaluación
             const sesionesPorEvaluacion = {
                 1: 14 * 2, // 28 sesiones
@@ -342,61 +342,84 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             // Combinar todas las evaluaciones en un solo pool
             let poolMaterias = [...evaluaciones[1], ...evaluaciones[2], ...evaluaciones[3]];
             
-            // Reorganizar para evitar que una misma materia aparezca dos veces en la misma semana
+            // Convertir a formato de semanas para facilitar el procesamiento
+            let semanas = [];
             for (let i = 0; i < TOTAL_WEEKS; i++) {
-                const materia2 = poolMaterias[i * 2];
-                const materia3 = poolMaterias[i * 2 + 1];
+                semanas.push([poolMaterias[i * 2], poolMaterias[i * 2 + 1]]);
+            }
+            
+            // Algoritmo mejorado para evitar repeticiones en la misma semana y consecutivas
+            let cambiosRealizados = true;
+            let maxIntentos = 100; // Límite de intentos para evitar bucles infinitos
+            
+            while (cambiosRealizados && maxIntentos > 0) {
+                cambiosRealizados = false;
+                maxIntentos--;
                 
-                // Si ambas materias son iguales en la misma semana, buscar un intercambio
-                if (materia2 === materia3) {
-                    let encontrado = false;
+                for (let i = 0; i < semanas.length; i++) {
+                    const semana = semanas[i];
                     
-                    // Buscar en las semanas siguientes una materia diferente para intercambiar
-                    for (let j = i + 1; j < TOTAL_WEEKS && !encontrado; j++) {
-                        const otraMateria2 = poolMaterias[j * 2];
-                        const otraMateria3 = poolMaterias[j * 2 + 1];
+                    // 1. Evitar que la misma materia aparezca dos veces en la misma semana
+                    if (semana[0] === semana[1]) {
+                        cambiosRealizados = true;
                         
-                        // Si la semana j tiene al menos una materia diferente, intentar intercambiar
-                        if (otraMateria2 !== materia2) {
-                            // Intercambiar materia3 (repetida) con otraMateria2
-                            poolMaterias[i * 2 + 1] = otraMateria2;
-                            poolMaterias[j * 2] = materia3;
-                            encontrado = true;
-                        } else if (otraMateria3 !== materia2) {
-                            // Intercambiar materia3 (repetida) con otraMateria3
-                            poolMaterias[i * 2 + 1] = otraMateria3;
-                            poolMaterias[j * 2 + 1] = materia3;
-                            encontrado = true;
+                        // Buscar una materia diferente en semanas cercanas para intercambiar
+                        for (let j = 0; j < semanas.length; j++) {
+                            if (i === j) continue;
+                            
+                            const otraSemana = semanas[j];
+                            
+                            // Intentar intercambiar con la primera posición de otra semana
+                            if (otraSemana[0] !== semana[0] && otraSemana[0] !== otraSemana[1]) {
+                                [semana[1], otraSemana[0]] = [otraSemana[0], semana[1]];
+                                break;
+                            }
+                            
+                            // Intentar intercambiar con la segunda posición de otra semana
+                            if (otraSemana[1] !== semana[0] && otraSemana[0] !== otraSemana[1]) {
+                                [semana[1], otraSemana[1]] = [otraSemana[1], semana[1]];
+                                break;
+                            }
                         }
                     }
                     
-                    // Si no se encontró en las semanas siguientes, buscar en las anteriores
-                    if (!encontrado) {
-                        for (let j = 0; j < i && !encontrado; j++) {
-                            const otraMateria2 = poolMaterias[j * 2];
-                            const otraMateria3 = poolMaterias[j * 2 + 1];
-                            
-                            // Verificar que el intercambio no cree una repetición en la semana j
-                            if (otraMateria2 !== materia2 && otraMateria2 !== otraMateria3) {
-                                // Intercambiar materia3 (repetida) con otraMateria2
-                                poolMaterias[i * 2 + 1] = otraMateria2;
-                                poolMaterias[j * 2] = materia3;
-                                encontrado = true;
-                            } else if (otraMateria3 !== materia2 && otraMateria2 !== otraMateria3) {
-                                // Intercambiar materia3 (repetida) con otraMateria3
-                                poolMaterias[i * 2 + 1] = otraMateria3;
-                                poolMaterias[j * 2 + 1] = materia3;
-                                encontrado = true;
+                    // 2. Evitar que una materia aparezca en semanas consecutivas
+                    if (i > 0) {
+                        const semanaAnterior = semanas[i - 1];
+                        
+                        // Verificar si alguna materia de esta semana está en la semana anterior
+                        for (let s = 0; s < 2; s++) {
+                            if (semanaAnterior.includes(semana[s])) {
+                                cambiosRealizados = true;
+                                
+                                // Buscar una materia diferente en semanas posteriores para intercambiar
+                                for (let j = i + 1; j < semanas.length; j++) {
+                                    const semanaPosterior = semanas[j];
+                                    
+                                    // Verificar que el intercambio no cree nuevos problemas
+                                    for (let sp = 0; sp < 2; sp++) {
+                                        if (!semanaAnterior.includes(semanaPosterior[sp]) && 
+                                            semanaPosterior[sp] !== semana[1-s]) {
+                                            
+                                            // Realizar el intercambio
+                                            [semana[s], semanaPosterior[sp]] = [semanaPosterior[sp], semana[s]];
+                                            break;
+                                        }
+                                    }
+                                    
+                                    if (!semanaAnterior.includes(semana[s])) break;
+                                }
                             }
                         }
                     }
                 }
             }
             
-            return poolMaterias;
+            // Convertir de nuevo a pool lineal
+            return semanas.flat();
         }
 
-        const poolMaterias = distribuirMateriasSinRepeticion();
+        const poolMaterias = distribuirMateriasOptimizado();
 
         const ambitosMap = {
             'Ámbito Socio-Lingüístico': 'SL',
