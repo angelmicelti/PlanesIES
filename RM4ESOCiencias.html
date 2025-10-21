@@ -113,7 +113,7 @@
 <script>
     // --- CONFIGURACIÓN PRINCIPAL ---
     const materiasHoras = {
-        'Lengua': 4, 'Geografía': 3, 'Inglés': 4, 'Religión': 1,
+        'Lengua': 4, 'Geografía e Historia': 3, 'Inglés': 4, 'Religión': 1,
         'Biología y Geología': 3, 'Física y Química': 3, 'Tecnología': 3, 'Cultura Científica': 2,
         'Dibujo Técnico': 2, 'Ed. Física': 2
     };
@@ -128,13 +128,19 @@
         return acc;
     }, {});
     
-    let materiasParaPlanificar = Object.keys(sesionesPorMateria).flatMap(materia => 
-        Array(sesionesPorMateria[materia]).fill(materia)
-    );
-    materiasParaPlanificar = shuffleArray(materiasParaPlanificar);
+    // Ajuste para asegurar que la suma sea exactamente 72
+    const sumaTotal = Object.values(sesionesPorMateria).reduce((a, b) => a + b, 0);
+    if (sumaTotal !== totalSesiones) {
+        const diferencia = totalSesiones - sumaTotal;
+        // Ajustar la materia con más horas
+        const materiaAjustar = Object.keys(sesionesPorMateria).reduce((a, b) => 
+            sesionesPorMateria[a] > sesionesPorMateria[b] ? a : b
+        );
+        sesionesPorMateria[materiaAjustar] += diferencia;
+    }
 
     const ambitosMaterias = {
-        'SL': ['Lengua', 'Geografía', 'Inglés', 'Religión'],
+        'SL': ['Lengua', 'Geografía e Historia', 'Inglés', 'Religión'],
         'CT': ['Biología y Geología', 'Física y Química', 'Tecnología', 'Cultura Científica', 'Matemáticas'],
         'AR': ['Dibujo Técnico', 'Ed. Física']
     };
@@ -145,6 +151,90 @@
         }
         return 'Desconocido';
     }
+
+    // --- DISTRIBUCIÓN UNIFORME ENTRE EVALUACIONES ---
+    function distribuirSesionesEntreEvaluaciones(sesionesPorMateria) {
+        const evaluaciones = {
+            primera: 14,  // semanas
+            segunda: 11,  // semanas  
+            tercera: 11   // semanas
+        };
+        
+        const resultado = {
+            primera: { CT: [], SLAR: [] },
+            segunda: { CT: [], SLAR: [] },
+            tercera: { CT: [], SLAR: [] }
+        };
+
+        // Para cada materia, distribuir sus sesiones entre evaluaciones
+        Object.keys(sesionesPorMateria).forEach(materia => {
+            const ambito = getAmbito(materia);
+            const totalSesionesMateria = sesionesPorMateria[materia];
+            
+            if (ambito === 'CT' && materia !== 'Matemáticas') {
+                // Distribuir sesiones CT entre evaluaciones
+                const sesionesPorEvaluacion = distribuirProporcionalmente(totalSesionesMateria, evaluaciones);
+                
+                // Añadir a cada evaluación
+                for (let i = 0; i < sesionesPorEvaluacion.primera; i++) {
+                    resultado.primera.CT.push(materia);
+                }
+                for (let i = 0; i < sesionesPorEvaluacion.segunda; i++) {
+                    resultado.segunda.CT.push(materia);
+                }
+                for (let i = 0; i < sesionesPorEvaluacion.tercera; i++) {
+                    resultado.tercera.CT.push(materia);
+                }
+            } else if (ambito === 'SL' || ambito === 'AR') {
+                // Distribuir sesiones SL/AR entre evaluaciones
+                const sesionesPorEvaluacion = distribuirProporcionalmente(totalSesionesMateria, evaluaciones);
+                
+                // Añadir a cada evaluación
+                for (let i = 0; i < sesionesPorEvaluacion.primera; i++) {
+                    resultado.primera.SLAR.push(materia);
+                }
+                for (let i = 0; i < sesionesPorEvaluacion.segunda; i++) {
+                    resultado.segunda.SLAR.push(materia);
+                }
+                for (let i = 0; i < sesionesPorEvaluacion.tercera; i++) {
+                    resultado.tercera.SLAR.push(materia);
+                }
+            }
+        });
+
+        // Mezclar aleatoriamente dentro de cada evaluación para evitar patrones
+        resultado.primera.CT = mezclarArray(resultado.primera.CT);
+        resultado.segunda.CT = mezclarArray(resultado.segunda.CT);
+        resultado.tercera.CT = mezclarArray(resultado.tercera.CT);
+        
+        resultado.primera.SLAR = mezclarArray(resultado.primera.SLAR);
+        resultado.segunda.SLAR = mezclarArray(resultado.segunda.SLAR);
+        resultado.tercera.SLAR = mezclarArray(resultado.tercera.SLAR);
+
+        return resultado;
+    }
+
+    function distribuirProporcionalmente(totalSesiones, evaluaciones) {
+        const totalSemanas = evaluaciones.primera + evaluaciones.segunda + evaluaciones.tercera;
+        
+        const primera = Math.round((totalSesiones * evaluaciones.primera) / totalSemanas);
+        const segunda = Math.round((totalSesiones * evaluaciones.segunda) / totalSemanas);
+        const tercera = totalSesiones - primera - segunda;
+        
+        return { primera, segunda, tercera };
+    }
+
+    function mezclarArray(array) {
+        const nuevoArray = [...array];
+        for (let i = nuevoArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [nuevoArray[i], nuevoArray[j]] = [nuevoArray[j], nuevoArray[i]];
+        }
+        return nuevoArray;
+    }
+
+    // Generar distribución entre evaluaciones
+    const distribucionEvaluaciones = distribuirSesionesEntreEvaluaciones(sesionesPorMateria);
 
     // --- CATÁLOGO DE ACTIVIDADES (SABERES BÁSICOS) ---
     const actividadesCE = {
@@ -228,7 +318,7 @@
             { desc: 'Diseñar un argumentario para un debate, previendo las refutaciones del contrario.', ce: 'LCL.C.E.1.2' },
             { desc: 'Elaborar un mapa conceptual que organice jerárquicamente las ideas de un texto expositivo.', ce: 'LCL.C.E.2.2' }
         ],
-        'Geografía': [
+        'Geografía e Historia': [
             { desc: 'Interpretar pirámides de población y calcular tasas de natalidad/mortalidad.', ce: 'GEH.C.E.2.2' },
             { desc: 'Analizar climogramas para identificar tipos de clima y deducir la vegetación asociada.', ce: 'GEH.C.E.2.1' },
             { desc: 'Calcular la densidad de población y analizar su distribución en un mapa temático.', ce: 'GEH.C.E.2.2' },
@@ -316,25 +406,66 @@
         return activity;
     }
 
-    let ctPool = materiasParaPlanificar.filter(m => getAmbito(m) === 'CT');
-    let slArPool = materiasParaPlanificar.filter(m => ['SL', 'AR'].includes(getAmbito(m)));
-
-    for (let i = 1; i <= totalSemanas; i++) {
-        const semanaData = { week: i };
-
+    // Generar el cronograma con distribución entre evaluaciones
+    let semanaGlobal = 0;
+    
+    // Primera evaluación (semanas 1-14)
+    for (let i = 0; i < 14; i++) {
+        const semanaData = { week: ++semanaGlobal };
+        
         // Sesión 1: Matemáticas
         const s1_activity = getNextActivity('Matemáticas');
         semanaData.session1 = { subject: 'Matemáticas', ambito: 'CT', activity: s1_activity.desc, ce: s1_activity.ce };
-
-        // Sesión 2: Ámbito CT
-        if (ctPool.length === 0) ctPool = materiasParaPlanificar.filter(m => getAmbito(m) === 'CT'); // Refill if empty
-        const s2_subject = ctPool.shift() || 'Sin asignar';
+        
+        // Sesión 2: CT de la primera evaluación
+        const s2_subject = distribucionEvaluaciones.primera.CT[i] || 'Sin asignar';
         const s2_activity = getNextActivity(s2_subject);
         semanaData.session2 = { subject: s2_subject, ambito: 'CT', activity: s2_activity.desc, ce: s2_activity.ce };
-
-        // Sesión 3: Ámbito SL o AR
-        if (slArPool.length === 0) slArPool = materiasParaPlanificar.filter(m => ['SL', 'AR'].includes(getAmbito(m))); // Refill if empty
-        const s3_subject = slArPool.shift() || 'Sin asignar';
+        
+        // Sesión 3: SL/AR de la primera evaluación
+        const s3_subject = distribucionEvaluaciones.primera.SLAR[i] || 'Sin asignar';
+        const s3_activity = getNextActivity(s3_subject);
+        semanaData.session3 = { subject: s3_subject, ambito: getAmbito(s3_subject), activity: s3_activity.desc, ce: s3_activity.ce };
+        
+        scheduleData.push(semanaData);
+    }
+    
+    // Segunda evaluación (semanas 15-25)
+    for (let i = 0; i < 11; i++) {
+        const semanaData = { week: ++semanaGlobal };
+        
+        // Sesión 1: Matemáticas
+        const s1_activity = getNextActivity('Matemáticas');
+        semanaData.session1 = { subject: 'Matemáticas', ambito: 'CT', activity: s1_activity.desc, ce: s1_activity.ce };
+        
+        // Sesión 2: CT de la segunda evaluación
+        const s2_subject = distribucionEvaluaciones.segunda.CT[i] || 'Sin asignar';
+        const s2_activity = getNextActivity(s2_subject);
+        semanaData.session2 = { subject: s2_subject, ambito: 'CT', activity: s2_activity.desc, ce: s2_activity.ce };
+        
+        // Sesión 3: SL/AR de la segunda evaluación
+        const s3_subject = distribucionEvaluaciones.segunda.SLAR[i] || 'Sin asignar';
+        const s3_activity = getNextActivity(s3_subject);
+        semanaData.session3 = { subject: s3_subject, ambito: getAmbito(s3_subject), activity: s3_activity.desc, ce: s3_activity.ce };
+        
+        scheduleData.push(semanaData);
+    }
+    
+    // Tercera evaluación (semanas 26-36)
+    for (let i = 0; i < 11; i++) {
+        const semanaData = { week: ++semanaGlobal };
+        
+        // Sesión 1: Matemáticas
+        const s1_activity = getNextActivity('Matemáticas');
+        semanaData.session1 = { subject: 'Matemáticas', ambito: 'CT', activity: s1_activity.desc, ce: s1_activity.ce };
+        
+        // Sesión 2: CT de la tercera evaluación
+        const s2_subject = distribucionEvaluaciones.tercera.CT[i] || 'Sin asignar';
+        const s2_activity = getNextActivity(s2_subject);
+        semanaData.session2 = { subject: s2_subject, ambito: 'CT', activity: s2_activity.desc, ce: s2_activity.ce };
+        
+        // Sesión 3: SL/AR de la tercera evaluación
+        const s3_subject = distribucionEvaluaciones.tercera.SLAR[i] || 'Sin asignar';
         const s3_activity = getNextActivity(s3_subject);
         semanaData.session3 = { subject: s3_subject, ambito: getAmbito(s3_subject), activity: s3_activity.desc, ce: s3_activity.ce };
         
@@ -343,19 +474,10 @@
 
     const subjectColors = {
         'Matemáticas': '#4F46E5', 'Biología y Geología': '#10B981', 'Física y Química': '#0EA5E9', 'Tecnología': '#D946EF', 'Cultura Científica': '#F97316',
-        'Lengua': '#EAB308', 'Geografía': '#8B5CF6', 'Inglés': '#EC4899', 'Religión': '#6B7280',
+        'Lengua': '#EAB308', 'Geografía e Historia': '#8B5CF6', 'Inglés': '#EC4899', 'Religión': '#6B7280',
         'Dibujo Técnico': '#EF4444', 'Ed. Física': '#3B82F6', 'Sin asignar': '#9CA3AF'
     };
     
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-	
 function generateDates() {
     const dates = [];
     
@@ -392,8 +514,6 @@ function generateDates() {
     return dates;
 }	
 
-
-	
     const weekDates = generateDates();
 
     function toggleEvaluation(evaluationNumber) {
@@ -551,5 +671,3 @@ function generateDates() {
 </script>
 </body>
 </html>
-
-
