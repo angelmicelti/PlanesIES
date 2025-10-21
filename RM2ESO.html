@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<link rel="manifest" href="./manifest.json" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon añadido -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>Plan Interactivo de Razonamiento Matemático - 2º ESO</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +39,6 @@
 </head>
 <body class="antialiased">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-
         <header class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Plan de Razonamiento Matemático (2º de ESO)</h1>
             <p class="mt-2 text-lg text-gray-600">Cronograma interactivo para 2º de ESO (36 semanas)</p>
@@ -57,13 +54,13 @@
                     <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Ámbito</h3>
                     <div id="ambito-filters" class="flex flex-wrap gap-2"></div>
                 </div>
-                 <div class="mt-6 text-center">
+                <div class="mt-6 text-center">
                     <button id="reset-filters" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 transition">Mostrar Todo</button>
                 </div>
             </section>
             
             <section id="summary" class="mb-12">
-                 <div class="bg-white rounded-2xl shadow-sm p-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6">
                     <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Distribución Proporcional de Sesiones</h2>
                     <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">
                         Este gráfico ilustra la distribución de las sesiones a lo largo del ciclo completo de 36 semanas. La asignación es directamente proporcional a la carga horaria semanal de cada materia, garantizando un reparto equitativo del trabajo interdisciplinar de razonamiento matemático.
@@ -83,7 +80,7 @@
                             <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-14)</h3>
                             <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden" >
+                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden">
                             <!-- Las semanas se renderizarán aquí -->
                         </div>
                     </div>
@@ -113,7 +110,54 @@
     </div>
 
     <script>
-        // Distribución de sesiones para 2º de ESO basada en las condiciones actualizadas
+        // Función para distribuir uniformemente las asignaturas
+        function distribuirUniformemente(asignaturas, totalSemanas) {
+            const resultado = [];
+            const asignaturasCount = {};
+            const asignaturasUltimaSemana = {};
+            
+            // Inicializar contadores
+            asignaturas.forEach(asig => {
+                asignaturasCount[asig.subject] = 0;
+                asignaturasUltimaSemana[asig.subject] = -10; // Valor inicial bajo
+            });
+            
+            // Para cada semana, elegir la asignatura que hace más tiempo que no aparece
+            for (let semana = 0; semana < totalSemanas; semana++) {
+                let mejorAsignatura = null;
+                let maxDistancia = -1;
+                
+                // Buscar la asignatura que hace más tiempo que no aparece
+                for (let i = 0; i < asignaturas.length; i++) {
+                    const asig = asignaturas[i];
+                    const distancia = semana - asignaturasUltimaSemana[asig.subject];
+                    
+                    if (distancia > maxDistancia) {
+                        maxDistancia = distancia;
+                        mejorAsignatura = asig;
+                    }
+                }
+                
+                // Si encontramos una asignatura, la añadimos y actualizamos contadores
+                if (mejorAsignatura) {
+                    resultado.push(mejorAsignatura);
+                    asignaturasCount[mejorAsignatura.subject]++;
+                    asignaturasUltimaSemana[mejorAsignatura.subject] = semana;
+                    
+                    // Reordenar el array para priorizar las que menos han aparecido
+                    asignaturas.sort((a, b) => {
+                        if (asignaturasCount[a.subject] !== asignaturasCount[b.subject]) {
+                            return asignaturasCount[a.subject] - asignaturasCount[b.subject];
+                        }
+                        return (semana - asignaturasUltimaSemana[a.subject]) - (semana - asignaturasUltimaSemana[b.subject]);
+                    });
+                }
+            }
+            
+            return resultado;
+        }
+
+        // Distribución de sesiones para 2º de ESO
         const ctSubjects = [
             ...Array(9).fill({ subject: 'Física y Química', ambito:'CT', activity: 'Análisis de diagramas de circuitos eléctricos', ce: 'FQ.C.E.2.1' }),
             ...Array(9).fill({ subject: 'Tecnología y Digitalización', ambito:'CT', activity: 'Creación de un algoritmo para un robot simple', ce: 'TEC.C.E.2.1' }),
@@ -132,17 +176,9 @@
             ...Array(5).fill({ subject: 'PEPA', ambito:'AR', activity: 'Estudio de la proporción áurea en una obra de arte', ce: 'PEPA.C.E.2.2' })
         ];
 
-        // Función para barajar un array
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-        
-        // Barajamos las listas para una distribución aleatoria
-        shuffleArray(ctSubjects);
-        shuffleArray(slArSubjects);
+        // Distribución uniforme
+        const ctDistribuidos = distribuirUniformemente(ctSubjects, 36);
+        const slArDistribuidos = distribuirUniformemente(slArSubjects, 36);
 
         const scheduleData = [];
         const totalWeeks = 36;
@@ -150,8 +186,8 @@
             scheduleData.push({
                 week: i + 1,
                 session1: { subject: 'Matemáticas', ambito:'CT', activity: 'Taller de razonamiento abstracto y resolución de problemas', ce: 'MA.C.E.2.3' },
-                session2: ctSubjects[i % ctSubjects.length],
-                session3: slArSubjects[i % slArSubjects.length]
+                session2: ctDistribuidos[i],
+                session3: slArDistribuidos[i]
             });
         }
 
