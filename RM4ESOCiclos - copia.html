@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<link rel="manifest" href="./manifest.json" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon añadido -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Plan Interactivo de Razonamiento Matemático - 4º ESO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .filter-btn {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .filter-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .week-card {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            transform: scale(1);
+        }
+        .week-card.filtered-out {
+            display: none;
+            opacity: 0;
+            transform: scale(0.98);
+        }
+        .session-card {
+            transition: transform 0.3s ease-in-out;
+        }
+        .session-card.highlight {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 2px #4F46E5;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Plan Interdisciplinar de Razonamiento Matemático</h1>
+            <p class="mt-2 text-lg text-gray-600">4º ESO - Itinerario de Ciclos Formativos</p>
+        </header>
+
+        <main>
+            <section id="controls" class="mb-12 p-6 bg-white rounded-2xl shadow-sm">
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Asignatura</h3>
+                    <div id="subject-filters" class="flex flex-wrap gap-2"></div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Ámbito</h3>
+                    <div id="ambito-filters" class="flex flex-wrap gap-2"></div>
+                </div>
+                 <div class="mt-6 text-center">
+                    <button id="reset-filters" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 transition">Mostrar Todo</button>
+                </div>
+            </section>
+            
+            <section id="summary" class="mb-12">
+                 <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <!-- Se ajusta el texto para reflejar el total de 36 semanas -->
+                    <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Distribución Proporcional de Sesiones</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">
+                        Este gráfico ilustra la distribución de las 72 sesiones (Sesión 2 y 3) a lo largo del ciclo de <strong>36 semanas</strong>. La asignación es directamente proporcional a la carga horaria semanal de cada materia, garantizando un reparto equitativo del trabajo interdisciplinar.
+                    </p>
+                    <div class="chart-container relative w-full max-w-lg mx-auto h-80 md:h-96">
+                        <canvas id="proportionalityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="schedule">
+                <!-- Se actualiza el título para el nuevo ciclo de 36 semanas -->
+                <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Cronograma del Curso Escolar (36 Semanas)</h2>
+                <div id="evaluations-container" class="space-y-6">
+                    <!-- Primera Evaluación (14 semanas: S1-S14) -->
+                    <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(1)">
+                            <!-- Fechas: 15/sept al 19/dic -->
+                            <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-14)</h3>
+                            <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">+</span>
+                        </button>
+                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
+                    </div>
+                    <!-- Segunda Evaluación (11 semanas: S15-S25) -->
+                    <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(2)">
+                            <!-- Fechas: 12/ene al 27/mar -->
+                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-25)</h3>
+                            <span id="toggle-icon-2" class="text-2xl font-bold transform transition-transform duration-300">+</span>
+                        </button>
+                        <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
+                    </div>
+                    <!-- Tercera Evaluación (11 semanas: S26-S36) -->
+                    <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(3)">
+                            <!-- Fechas: 6/abr al 19/jun -->
+                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 26-36)</h3>
+                            <span id="toggle-icon-3" class="text-2xl font-bold transform transition-transform duration-300">+</span>
+                        </button>
+                        <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // *** CONFIGURACIÓN PARA 36 SEMANAS ***
+        const TOTAL_WEEKS = 36;
+        const WEEKS_EVAL1 = 14; // S1 al S14 (15/sept - 19/dic)
+        const WEEKS_EVAL2 = 11; // S15 al S25 (12/ene - 27/mar)
+        const WEEKS_EVAL3 = 11; // S26 al S36 (6/abr - 19/jun)
+        
+        // Verificación: WEEKS_EVAL1 + WEEKS_EVAL2 + WEEKS_EVAL3 debe ser igual a TOTAL_WEEKS
+        console.assert(WEEKS_EVAL1 + WEEKS_EVAL2 + WEEKS_EVAL3 === TOTAL_WEEKS, "Error en la suma de semanas de evaluación.");
+
+        // Definición de las materias y sus horas de docencia directa
+        const subjects = {
+            'Lengua': { hours: 4, ambito: 'SL' },
+            'Geografía': { hours: 3, ambito: 'SL' },
+            'Inglés': { hours: 4, ambito: 'SL' },
+            'Religión': { hours: 1, ambito: 'SL' },
+            'Matemáticas': { hours: 4, ambito: 'CT' },
+            'Tecnología': { hours: 3, ambito: 'CT' },
+            'Cultura Científica': { hours: 2, ambito: 'CT' },
+            'Expresión Artística': { hours: 3, ambito: 'AR' },
+            'Música': { hours: 3, ambito: 'AR' },
+            'Dibujo Técnico': { hours: 2, ambito: 'AR' },
+            'Educación Física': { hours: 2, ambito: 'AR' }
+        };
+
+        // Datos de enlaces del CSV
+        const sessionLinks = {
+            1: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B5",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E5",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H5"
+            },
+            2: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B10",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E10",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H10"
+            },
+            3: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B17",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E17",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H17"
+            },
+            4: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B22",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E22",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H22"
+            },
+            5: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B27",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E27",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H27"
+            },
+            6: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B32",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E32",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H32"
+            },
+            7: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B37",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E37",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H37"
+            },
+            8: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B44",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E44",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H44"
+            },
+            9: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B49",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E49",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H49"
+            },
+            10: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B54",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E54",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H54"
+            },
+            11: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B59",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E59",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H59"
+            },
+            12: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B66",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E66",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H66"
+            },
+            13: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B71",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E71",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H71"
+            },
+            14: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B76",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E76",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H76"
+            },
+            15: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B83",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E83",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H83"
+            },
+            16: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B88",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E88",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H88"
+            },
+            17: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B93",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E93",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H93"
+            },
+            18: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B100",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E100",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H100"
+            },
+            19: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B105",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E105",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H105"
+            },
+            20: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B110",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E110",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H110"
+            },
+            21: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B115",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E115",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H115"
+            },
+            22: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B122",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E122",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H122"
+            },
+            23: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B127",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E127",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H127"
+            },
+            24: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B132",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E132",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H132"
+            },
+            25: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B137",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E137",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H137"
+            },
+            26: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B144",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E144",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H144"
+            },
+            27: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B149",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E149",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H149"
+            },
+            28: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B154",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E154",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H154"
+            },
+            29: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B159",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E159",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H159"
+            },
+            30: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B166",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E166",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H166"
+            },
+            31: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B171",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E171",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H171"
+            },
+            32: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B176",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E176",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H176"
+            },
+            33: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B181",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E181",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H181"
+            },
+            34: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B188",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E188",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H188"
+            },
+            35: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B193",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E193",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H193"
+            },
+            36: {
+                1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=B198",
+                2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=E198",
+                3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1031906857#gid=1031906857&range=H198"
+            }
+        };
+
+        const totalHoursCT = subjects['Tecnología'].hours + subjects['Cultura Científica'].hours + 2; // +2 de Matemáticas en sesión 2
+        const totalHoursSL_AR = subjects['Lengua'].hours + subjects['Geografía'].hours + subjects['Inglés'].hours + subjects['Religión'].hours + subjects['Expresión Artística'].hours + subjects['Música'].hours + subjects['Dibujo Técnico'].hours + subjects['Educación Física'].hours;
+
+        // Se ajustan el total de sesiones a distribuir (1 por semana * 36 semanas)
+        const totalSessionsToDistributeCT = TOTAL_WEEKS; // 1 por semana x 36 semanas
+        const totalSessionsToDistributeSL_AR = TOTAL_WEEKS; // 1 por semana x 36 semanas
+
+        const subjectSessionsCT = {};
+        const subjectFractionsCT = {};
+        
+        Object.keys(subjects).forEach(key => {
+            if (subjects[key].ambito === 'CT' && key !== 'Matemáticas') {
+                const calculatedSessions = (subjects[key].hours / totalHoursCT) * totalSessionsToDistributeCT;
+                subjectSessionsCT[key] = Math.floor(calculatedSessions);
+                subjectFractionsCT[key] = calculatedSessions - Math.floor(calculatedSessions);
+            }
+        });
+        
+        // Sesiones para Matemáticas en la Sesión 2
+        const calculatedSessionsMathCT = (2 / totalHoursCT) * totalSessionsToDistributeCT;
+        subjectSessionsCT['Matemáticas_CT'] = Math.floor(calculatedSessionsMathCT);
+        subjectFractionsCT['Matemáticas_CT'] = calculatedSessionsMathCT - Math.floor(calculatedSessionsMathCT);
+
+        // Ajuste de las sesiones para CT
+        let currentTotalSessionsCT = Object.values(subjectSessionsCT).reduce((a, b) => a + b, 0);
+        let remainingSessionsCT = totalSessionsToDistributeCT - currentTotalSessionsCT;
+        const sortedByFractionCT = Object.entries(subjectFractionsCT)
+            .sort(([, a], [, b]) => b - a)
+            .map(([key]) => key);
+        for (let i = 0; i < remainingSessionsCT; i++) {
+            const subjectToAdjust = sortedByFractionCT[i % sortedByFractionCT.length];
+            subjectSessionsCT[subjectToAdjust]++;
+        }
+        
+        const subjectSessionsSL_AR = {};
+        const subjectFractionsSL_AR = {};
+
+        Object.keys(subjects).forEach(key => {
+            if (subjects[key].ambito !== 'CT') {
+                const calculatedSessions = (subjects[key].hours / totalHoursSL_AR) * totalSessionsToDistributeSL_AR;
+                subjectSessionsSL_AR[key] = Math.floor(calculatedSessions);
+                subjectFractionsSL_AR[key] = calculatedSessions - Math.floor(calculatedSessions);
+            }
+        });
+        
+        // Ajuste de las sesiones para SL y AR
+        let currentTotalSessionsSL_AR = Object.values(subjectSessionsSL_AR).reduce((a, b) => a + b, 0);
+        let remainingSessionsSL_AR = totalSessionsToDistributeSL_AR - currentTotalSessionsSL_AR;
+        const sortedByFractionSL_AR = Object.entries(subjectFractionsSL_AR)
+            .sort(([, a], [, b]) => b - a)
+            .map(([key]) => key);
+        for (let i = 0; i < remainingSessionsSL_AR; i++) {
+            const subjectToAdjust = sortedByFractionSL_AR[i % sortedByFractionSL_AR.length];
+            subjectSessionsSL_AR[subjectToAdjust]++;
+        }
+
+        // Generamos las secuencias de sesiones para la semana 2 y 3
+        const sessionSequenceCT = [];
+        for (const subject in subjectSessionsCT) {
+            for (let i = 0; i < subjectSessionsCT[subject]; i++) {
+                sessionSequenceCT.push(subject);
+            }
+        }
+        const sessionSequenceSL_AR = [];
+        for (const subject in subjectSessionsSL_AR) {
+            for (let i = 0; i < subjectSessionsSL_AR[subject]; i++) {
+                sessionSequenceSL_AR.push(subject);
+            }
+        }
+        
+        // Barajamos las secuencias para que sean aleatorias
+        for (let i = sessionSequenceCT.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [sessionSequenceCT[i], sessionSequenceCT[j]] = [sessionSequenceCT[j], sessionSequenceCT[i]];
+        }
+        for (let i = sessionSequenceSL_AR.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [sessionSequenceSL_AR[i], sessionSequenceSL_AR[j]] = [sessionSequenceSL_AR[j], sessionSequenceSL_AR[i]];
+        }
+
+        // Definición de actividades y criterios de evaluación según la Orden de 30 de mayo de 2023
+        const activitiesBySubject = {
+            'Matemáticas': [
+                { activity: 'Análisis de datos de producción y consumo para un proyecto tecnológico.', ce: 'MA.C.E.2.3' },
+                { activity: 'Modelado de la trayectoria de un robot con funciones matemáticas.', ce: 'MA.C.E.3.1' },
+                { activity: 'Resolución de problemas de proporcionalidad en la construcción de maquetas.', ce: 'MA.C.E.1.2' },
+                { activity: 'Análisis de la eficiencia energética de un sistema usando datos estadísticos.', ce: 'MA.C.E.4.4' }
+            ],
+            'Tecnología': [
+                { activity: 'Aplicación de la lógica para el diseño de un circuito eléctrico simple.', ce: 'TE.C.E.1.1' },
+                { activity: 'Planificación de un proyecto tecnológico en un diagrama de flujo.', ce: 'TE.C.E.2.2' },
+                { activity: 'Optimización de recursos para la fabricación de un objeto.', ce: 'TE.C.E.3.3' },
+                { activity: 'Análisis del funcionamiento de un sistema mecánico a través de un esquema.', ce: 'TE.C.E.1.1' }
+            ],
+            'Cultura Científica': [
+                { activity: 'Análisis de la fiabilidad de fuentes de información científica.', ce: 'CCF.C.E.1.1' },
+                { activity: 'Interpretación de gráficos de datos sobre el cambio climático.', ce: 'CCF.C.E.2.1' },
+                { activity: 'Resolución de un problema lógico en el contexto de una investigación científica.', ce: 'CCF.C.E.3.2' },
+                { activity: 'Análisis de la influencia de la tecnología en la sociedad a través de datos.', ce: 'CCF.C.E.4.3' }
+            ],
+            'Lengua': [
+                { activity: 'Identificación de falacias lógicas en un discurso político.', ce: 'LCL.C.E.1.4' },
+                { activity: 'Organización de ideas para un debate siguiendo una estructura argumentativa.', ce: 'LCL.C.E.4.2' },
+                { activity: 'Creación de un texto que justifique una opinión con razonamientos sólidos.', ce: 'LCL.C.E.5.3' },
+                { activity: 'Análisis de la coherencia y cohesión de un párrafo.', ce: 'LCL.C.E.1.4' }
+            ],
+            'Geografía': [
+                { activity: 'Interpretación de mapas temáticos (densidad de población, PIB).', ce: 'GEH.C.E.1.1' },
+                { activity: 'Cálculo y análisis de la huella ecológica de una población.', ce: 'GEH.C.E.3.2' },
+                { activity: 'Proyección del crecimiento demográfico a partir de datos históricos.', ce: 'GEH.C.E.2.4' },
+                { activity: 'Análisis de patrones de migración a través de un diagrama de flujo.', ce: 'GEH.C.E.1.1' }
+            ],
+            'Inglés': [
+                { activity: 'Resolución de problemas lógicos y acertijos en inglés.', ce: 'IN.C.E.3.3' },
+                { activity: 'Análisis de la estructura lógica de un texto argumentativo en inglés.', ce: 'IN.C.E.4.2' },
+                { activity: 'Elaboración de un árbol de decisión para una situación en inglés.', ce: 'IN.C.E.4.2' },
+                { activity: 'Decodificación de mensajes secretos basados en la lógica en inglés.', ce: 'IN.C.E.3.3' }
+            ],
+            'Religión': [
+                { activity: 'Análisis de dilemas éticos y sus consecuencias lógicas.', ce: 'RE.C.E.1.2' },
+                { activity: 'Construcción de una narrativa que ilustre la conexión entre valores y acción.', ce: 'RE.C.E.1.2' },
+                { activity: 'Investigación sobre la influencia de las matemáticas en la cultura.', ce: 'RE.C.E.1.3' }
+            ],
+            'Expresión Artística': [
+                { activity: 'Aplicación de la proporción áurea para la composición de una obra de arte.', ce: 'EA.C.E.1.2' },
+                { activity: 'Análisis de la estructura geométrica en una obra de arte cubista.', ce: 'EA.C.E.1.2' },
+                { activity: 'Uso de la perspectiva lineal para crear una imagen 3D.', ce: 'EA.C.E.1.2' }
+            ],
+            'Música': [
+                { activity: 'Identificación de patrones rítmicos y su representación numérica.', ce: 'MU.C.E.1.3' },
+                { activity: 'Creación de una partitura con un patrón numérico o geométrico.', ce: 'MU.C.E.1.3' },
+                { activity: 'Análisis de la armonía musical usando relaciones matemáticas.', ce: 'MU.C.E.1.3' }
+            ],
+            'Dibujo Técnico': [
+                { activity: 'Proyección de vistas ortogonales de un objeto.', ce: 'DT.C.E.1.2' },
+                { activity: 'Diseño de un objeto en 3D usando software de CAD.', ce: 'DT.C.E.2.1' },
+                { activity: 'Cálculo de la superficie de una figura compleja.', ce: 'DT.C.E.3.1' }
+            ],
+            'Educación Física': [
+                { activity: 'Análisis de la cinemática de un salto usando datos de movimiento.', ce: 'EF.C.E.1.2' },
+                { activity: 'Estrategia de juego en deportes colectivos con diagramas de flujo.', ce: 'EF.C.E.2.1' },
+                { activity: 'Planificación de un circuito de entrenamiento para optimizar un resultado.', ce: 'EF.C.E.3.1' }
+            ]
+        };
+
+        // ********** COMIENZO DEL BLOQUE DE GENERACIÓN DEL CRONOGRAMA (scheduleData) **********
+        // Estas variables se inicializan antes del bucle de generación de semanas.
+        const scheduleData = [];
+        let sequenceIndexCT = 0;
+        let sequenceIndexSL_AR = 0;
+        const weekDates = [];
+        
+        // Se establece la fecha de inicio del curso (lunes 15 de septiembre de 2025)
+        let currentDay = new Date('2025-09-15T00:00:00Z'); 
+        
+        // El bucle se ajusta a TOTAL_WEEKS (36)
+        for (let i = 0; i < TOTAL_WEEKS; i++) {
+            const start = new Date(currentDay);
+            const end = new Date(currentDay);
+            // El fin de la semana es el viernes (4 días después del lunes, día 0)
+            end.setDate(currentDay.getDate() + 4); 
+            
+            // Almacenamos el rango de fechas de la semana actual
+            weekDates.push({ start, end });
+
+            // Lógica para saltar las vacaciones (Navidad y Semana Santa)
+            // NAVES: 19 de diciembre (fin E1, S14) al 12 de enero (inicio E2, S15)
+            if (i + 1 === WEEKS_EVAL1) { 
+                 // Ajustamos la fecha de inicio de la SEMANA 15 (Siguiente semana a procesar) al lunes 12 de enero de 2026.
+                currentDay = new Date('2026-01-12T00:00:00Z');
+            } 
+            // SEMANA SANTA: 27 de marzo (fin E2, S25) al 6 de abril (inicio E3, S26)
+            else if (i + 1 === WEEKS_EVAL1 + WEEKS_EVAL2) {
+                // Ajustamos la fecha de inicio de la SEMANA 26 (Siguiente semana a procesar) al lunes 6 de abril de 2026.
+                currentDay = new Date('2026-04-06T00:00:00Z');
+            } 
+            else {
+                 // Para el resto de semanas, avanzamos 7 días para el inicio del siguiente lunes
+                currentDay.setDate(currentDay.getDate() + 7);
+            }
+
+            const session2Subject = sessionSequenceCT[sequenceIndexCT++];
+            const session3Subject = sessionSequenceSL_AR[sequenceIndexSL_AR++];
+
+            const mathActivity = activitiesBySubject['Matemáticas'][Math.floor(Math.random() * activitiesBySubject['Matemáticas'].length)];
+            
+            // Usamos una variable auxiliar para el sujeto de la sesión 2 para evitar repetición en las búsquedas.
+            const session2SubjectKey = session2Subject === 'Matemáticas_CT' ? 'Matemáticas' : session2Subject;
+
+            const session2Activity = activitiesBySubject[session2SubjectKey][Math.floor(Math.random() * activitiesBySubject[session2SubjectKey].length)];
+            const session3Activity = activitiesBySubject[session3Subject][Math.floor(Math.random() * activitiesBySubject[session3Subject].length)];
+
+            scheduleData.push({
+                week: i + 1,
+                session1: {
+                    subject: 'Matemáticas',
+                    ambito: 'CT',
+                    activity: mathActivity.activity,
+                    ce: mathActivity.ce
+                },
+                session2: {
+                    subject: session2SubjectKey,
+                    ambito: subjects[session2SubjectKey].ambito,
+                    activity: session2Activity.activity,
+                    ce: session2Activity.ce
+                },
+                session3: {
+                    subject: session3Subject,
+                    ambito: subjects[session3Subject].ambito,
+                    activity: session3Activity.activity,
+                    ce: session3Activity.ce
+                }
+            });
+        }
+        // ********** FIN DEL BLOQUE DE GENERACIÓN DEL CRONOGRAMA (scheduleData) **********
+
+
+        const subjectColors = {
+            'Matemáticas': '#4F46E5', 'Tecnología': '#10B981', 'Cultura Científica': '#0EA5E9',
+            'Lengua': '#F97316', 'Geografía': '#8B5CF6', 'Inglés': '#EC4899',
+            'Religión': '#6B7280', 'Expresión Artística': '#D946EF', 'Música': '#F59E0B',
+            'Dibujo Técnico': '#EF4444', 'Educación Física': '#3B82F6'
+        };
+
+        function toggleEvaluation(evaluationNumber) {
+            const content = document.getElementById(`evaluation-content-${evaluationNumber}`);
+            const icon = document.getElementById(`toggle-icon-${evaluationNumber}`);
+            content.classList.toggle('hidden-content');
+            if (content.classList.contains('hidden-content')) {
+                icon.textContent = '+';
+            } else {
+                icon.textContent = '-';
+            }
+        }
+        window.toggleEvaluation = toggleEvaluation;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const subjectFiltersContainer = document.getElementById('subject-filters');
+            const ambitoFiltersContainer = document.getElementById('ambito-filters');
+            const resetBtn = document.getElementById('reset-filters');
+            
+            const allSubjects = Object.keys(subjects).sort();
+            const allAmbitos = [...new Set(Object.values(subjects).map(s => s.ambito))].sort();
+
+            function createFilterButtons(container, items, type) {
+                items.forEach(item => {
+                    const button = document.createElement('button');
+                    button.textContent = item;
+                    button.dataset.filter = item;
+                    button.dataset.type = type;
+                    button.className = 'filter-btn px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200';
+                    container.appendChild(button);
+                });
+            }
+
+            function renderSchedule(data, containerId) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                data.forEach(weekData => {
+                    const weekCard = document.createElement('div');
+                    weekCard.className = 'week-card bg-white rounded-2xl shadow-sm p-5';
+                    weekCard.dataset.week = weekData.week;
+
+                    // Usamos las fechas precalculadas
+                    const weekIndex = weekData.week - 1;
+                    const options = { day: 'numeric', month: 'long' };
+                    const startDate = weekDates[weekIndex].start.toLocaleDateString('es-ES', options);
+                    const endDate = weekDates[weekIndex].end.toLocaleDateString('es-ES', options);
+                    
+                    // MODIFICACIÓN: Eliminamos "(Lunes a Viernes)"
+                    const dateRange = `del ${startDate} al ${endDate}`; 
+
+                    weekCard.innerHTML = `
+                        <h3 class="text-xl font-bold text-indigo-700 mb-2">Semana ${weekData.week}</h3>
+                        <p class="text-sm text-gray-500 mb-4">${dateRange}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            ${createSessionCard(weekData.session1, 1, weekData.week)}
+                            ${createSessionCard(weekData.session2, 2, weekData.week)}
+                            ${createSessionCard(weekData.session3, 3, weekData.week)}
+                        </div>
+                    `;
+                    container.appendChild(weekCard);
+                });
+            }
+
+            function createSessionCard(session, sessionNumber, weekNumber) {
+                // Obtenemos el enlace correspondiente del objeto sessionLinks
+                const link = sessionLinks[weekNumber] ? sessionLinks[weekNumber][sessionNumber] : "#";
+                
+                // Se añade un botón de "Registrar evidencia" con el enlace correspondiente
+                return `
+                    <div class="session-card rounded-xl p-4 border border-gray-200 transition-all duration-300" 
+                         data-subject="${session.subject}" data-ambito="${session.ambito}"
+                         style="border-left: 5px solid ${subjectColors[session.subject] || '#6B7280'};">
+                        <p class="font-semibold text-sm text-gray-500">Sesión ${sessionNumber}</p>
+                        <p class="font-bold text-gray-800">${session.subject}</p>
+                        <p class="text-sm text-gray-600 mt-2">${session.activity}</p>
+                        <p class="text-xs text-gray-400 mt-3 font-mono">Criterio de Evaluación: ${session.ce}</p>
+                        <a href="${link}" target="_blank" class="block mt-4 w-full py-1.5 text-sm font-semibold text-white bg-indigo-500 rounded-lg shadow-md hover:bg-indigo-600 transition duration-150 text-center">
+                            Registrar evidencia
+                        </a>
+                    </div>
+                `;
+            }
+            
+            function applyFilter(filterValue, filterType) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700'));
+                const activeButton = document.querySelector(`.filter-btn[data-filter="${filterValue}"][data-type="${filterType}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700');
+                }
+
+                document.querySelectorAll('.week-card').forEach(weekCard => {
+                    let weekHasMatch = false;
+                    weekCard.querySelectorAll('.session-card').forEach(sessionCard => {
+                        const isMatch = sessionCard.dataset[filterType] === filterValue;
+                        if (isMatch) {
+                            sessionCard.classList.remove('opacity-40');
+                            sessionCard.classList.add('highlight');
+                            weekHasMatch = true;
+                        } else {
+                            sessionCard.classList.add('opacity-40');
+                            sessionCard.classList.remove('highlight');
+                        }
+                    });
+                    
+                    if (weekHasMatch) {
+                        weekCard.classList.remove('filtered-out');
+                    } else {
+                        weekCard.classList.add('filtered-out');
+                    }
+                });
+            }
+
+            function resetFilters() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700'));
+                document.querySelectorAll('.week-card').forEach(card => card.classList.remove('filtered-out'));
+                document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
+            }
+
+            function renderChart() {
+                const ctx = document.getElementById('proportionalityChart').getContext('2d');
+                const sessionCounts = {};
+                
+                // Unimos los dos conjuntos de sesiones para el gráfico
+                const allSubjects = { ...subjectSessionsCT, ...subjectSessionsSL_AR };
+                for (const subject in allSubjects) {
+                    if (subject === 'Matemáticas_CT') {
+                        sessionCounts['Matemáticas'] = (sessionCounts['Matemáticas'] || 0) + allSubjects[subject];
+                    } else {
+                        sessionCounts[subject] = (sessionCounts[subject] || 0) + allSubjects[subject];
+                    }
+                }
+                
+                const sortedSubjects = Object.keys(sessionCounts).sort((a, b) => sessionCounts[b] - sessionCounts[a]);
+                const labels = sortedSubjects;
+                const data = sortedSubjects.map(subject => sessionCounts[subject]);
+                const backgroundColors = sortedSubjects.map(subject => subjectColors[subject] || '#6B7280');
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Nº de Sesiones',
+                            data: data,
+                            backgroundColor: backgroundColors,
+                            borderColor: '#FDFBF8',
+                            borderWidth: 3,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: 'Inter',
+                                        size: 12
+                                    },
+                                    boxWidth: 15,
+                                    padding: 15
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' sesiones';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createFilterButtons(subjectFiltersContainer, allSubjects, 'subject');
+            createFilterButtons(ambitoFiltersContainer, allAmbitos, 'ambito');
+            
+            // Renderizar las semanas en sus respectivas secciones de evaluación
+            // EVAL1: Semanas 1 a 14 (WEEKS_EVAL1)
+            renderSchedule(scheduleData.slice(0, WEEKS_EVAL1), 'evaluation-content-1');
+            // EVAL2: Semanas 15 a 25 (WEEKS_EVAL1 a WEEKS_EVAL1 + WEEKS_EVAL2)
+            renderSchedule(scheduleData.slice(WEEKS_EVAL1, WEEKS_EVAL1 + WEEKS_EVAL2), 'evaluation-content-2');
+            // EVAL3: Semanas 26 a 36 (Restantes)
+            renderSchedule(scheduleData.slice(WEEKS_EVAL1 + WEEKS_EVAL2, TOTAL_WEEKS), 'evaluation-content-3');
+
+            renderChart();
+            
+            document.getElementById('controls').addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    const { filter, type } = e.target.dataset;
+                    applyFilter(filter, type);
+                }
+            });
+
+            resetBtn.addEventListener('click', resetFilters);
+        });
+    </script>
+</body>
+</html>
