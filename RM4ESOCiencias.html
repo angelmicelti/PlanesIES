@@ -30,6 +30,7 @@
         .week-card.filtered-out {
             opacity: 0.15;
             transform: scale(0.98);
+            display: none !important;
         }
         .session-card.highlight {
             transform: scale(1.05);
@@ -113,7 +114,7 @@
 <script>
     // --- CONFIGURACIÓN PRINCIPAL ---
     const materiasHoras = {
-        'Lengua': 4, 'Geografía e Historia': 3, 'Inglés': 4, 'Religión': 1,
+        'Lengua': 4, 'Geografía': 3, 'Inglés': 4, 'Religión': 1,
         'Biología y Geología': 3, 'Física y Química': 3, 'Tecnología': 3, 'Cultura Científica': 2,
         'Dibujo Técnico': 2, 'Ed. Física': 2
     };
@@ -140,7 +141,7 @@
     }
 
     const ambitosMaterias = {
-        'SL': ['Lengua', 'Geografía e Historia', 'Inglés', 'Religión'],
+        'SL': ['Lengua', 'Geografía', 'Inglés', 'Religión'],
         'CT': ['Biología y Geología', 'Física y Química', 'Tecnología', 'Cultura Científica', 'Matemáticas'],
         'AR': ['Dibujo Técnico', 'Ed. Física']
     };
@@ -152,89 +153,70 @@
         return 'Desconocido';
     }
 
-    // --- DISTRIBUCIÓN UNIFORME ENTRE EVALUACIONES ---
-    function distribuirSesionesEntreEvaluaciones(sesionesPorMateria) {
-        const evaluaciones = {
-            primera: 14,  // semanas
-            segunda: 11,  // semanas  
-            tercera: 11   // semanas
-        };
-        
-        const resultado = {
-            primera: { CT: [], SLAR: [] },
-            segunda: { CT: [], SLAR: [] },
-            tercera: { CT: [], SLAR: [] }
-        };
-
-        // Para cada materia, distribuir sus sesiones entre evaluaciones
-        Object.keys(sesionesPorMateria).forEach(materia => {
-            const ambito = getAmbito(materia);
-            const totalSesionesMateria = sesionesPorMateria[materia];
-            
-            if (ambito === 'CT' && materia !== 'Matemáticas') {
-                // Distribuir sesiones CT entre evaluaciones
-                const sesionesPorEvaluacion = distribuirProporcionalmente(totalSesionesMateria, evaluaciones);
-                
-                // Añadir a cada evaluación
-                for (let i = 0; i < sesionesPorEvaluacion.primera; i++) {
-                    resultado.primera.CT.push(materia);
-                }
-                for (let i = 0; i < sesionesPorEvaluacion.segunda; i++) {
-                    resultado.segunda.CT.push(materia);
-                }
-                for (let i = 0; i < sesionesPorEvaluacion.tercera; i++) {
-                    resultado.tercera.CT.push(materia);
-                }
-            } else if (ambito === 'SL' || ambito === 'AR') {
-                // Distribuir sesiones SL/AR entre evaluaciones
-                const sesionesPorEvaluacion = distribuirProporcionalmente(totalSesionesMateria, evaluaciones);
-                
-                // Añadir a cada evaluación
-                for (let i = 0; i < sesionesPorEvaluacion.primera; i++) {
-                    resultado.primera.SLAR.push(materia);
-                }
-                for (let i = 0; i < sesionesPorEvaluacion.segunda; i++) {
-                    resultado.segunda.SLAR.push(materia);
-                }
-                for (let i = 0; i < sesionesPorEvaluacion.tercera; i++) {
-                    resultado.tercera.SLAR.push(materia);
-                }
-            }
-        });
-
-        // Mezclar aleatoriamente dentro de cada evaluación para evitar patrones
-        resultado.primera.CT = mezclarArray(resultado.primera.CT);
-        resultado.segunda.CT = mezclarArray(resultado.segunda.CT);
-        resultado.tercera.CT = mezclarArray(resultado.tercera.CT);
-        
-        resultado.primera.SLAR = mezclarArray(resultado.primera.SLAR);
-        resultado.segunda.SLAR = mezclarArray(resultado.segunda.SLAR);
-        resultado.tercera.SLAR = mezclarArray(resultado.tercera.SLAR);
-
-        return resultado;
-    }
-
-    function distribuirProporcionalmente(totalSesiones, evaluaciones) {
-        const totalSemanas = evaluaciones.primera + evaluaciones.segunda + evaluaciones.tercera;
-        
-        const primera = Math.round((totalSesiones * evaluaciones.primera) / totalSemanas);
-        const segunda = Math.round((totalSesiones * evaluaciones.segunda) / totalSemanas);
-        const tercera = totalSesiones - primera - segunda;
-        
-        return { primera, segunda, tercera };
-    }
-
-    function mezclarArray(array) {
-        const nuevoArray = [...array];
-        for (let i = nuevoArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [nuevoArray[i], nuevoArray[j]] = [nuevoArray[j], nuevoArray[i]];
+    // --- DISTRIBUCIÓN FIJA Y REPRODUCIBLE ---
+    // Distribución predefinida para garantizar consistencia
+    const distribucionFija = {
+        primera: {
+            CT: [
+                'Biología y Geología', 'Física y Química', 'Tecnología', 'Cultura Científica', 
+                'Física y Química', 'Biología y Geología', 'Tecnología', 'Cultura Científica',
+                'Biología y Geología', 'Física y Química', 'Tecnología', 'Cultura Científica',
+                'Física y Química', 'Biología y Geología'
+            ],
+            SLAR: [
+                'Lengua', 'Geografía', 'Inglés', 'Religión', 'Dibujo Técnico', 'Ed. Física',
+                'Lengua', 'Geografía', 'Inglés', 'Dibujo Técnico', 'Ed. Física', 'Lengua',
+                'Geografía', 'Inglés'
+            ]
+        },
+        segunda: {
+            CT: [
+                'Tecnología', 'Biología y Geología', 'Física y Química', 'Cultura Científica',
+                'Biología y Geología', 'Física y Química', 'Tecnología', 'Cultura Científica',
+                'Física y Química', 'Biología y Geología', 'Tecnología'
+            ],
+            SLAR: [
+                'Religión', 'Lengua', 'Geografía', 'Inglés', 'Dibujo Técnico', 'Ed. Física',
+                'Lengua', 'Geografía', 'Inglés', 'Dibujo Técnico', 'Ed. Física'
+            ]
+        },
+        tercera: {
+            CT: [
+                'Cultura Científica', 'Tecnología', 'Biología y Geología', 'Física y Química',
+                'Biología y Geología', 'Física y Química', 'Tecnología', 'Cultura Científica',
+                'Física y Química', 'Biología y Geología', 'Tecnología'
+            ],
+            SLAR: [
+                'Lengua', 'Geografía', 'Inglés', 'Religión', 'Dibujo Técnico', 'Ed. Física',
+                'Lengua', 'Geografía', 'Inglés', 'Dibujo Técnico', 'Ed. Física'
+            ]
         }
-        return nuevoArray;
-    }
+    };
 
-    // Generar distribución entre evaluaciones
-    const distribucionEvaluaciones = distribuirSesionesEntreEvaluaciones(sesionesPorMateria);
+    // Verificar que la distribución coincide con sesionesPorMateria
+    function verificarDistribucion() {
+        const contadores = {};
+        
+        // Contar sesiones en distribución fija
+        ['primera', 'segunda', 'tercera'].forEach(eval => {
+            distribucionFija[eval].CT.forEach(materia => {
+                contadores[materia] = (contadores[materia] || 0) + 1;
+            });
+            distribucionFija[eval].SLAR.forEach(materia => {
+                contadores[materia] = (contadores[materia] || 0) + 1;
+            });
+        });
+        
+        // Verificar que coincide con sesionesPorMateria
+        for (const materia in sesionesPorMateria) {
+            if (contadores[materia] !== sesionesPorMateria[materia]) {
+                console.warn(`Advertencia: ${materia} tiene ${contadores[materia]} sesiones pero debería tener ${sesionesPorMateria[materia]}`);
+            }
+        }
+    }
+    
+    // Ejecutar verificación
+    verificarDistribucion();
 
     // --- CATÁLOGO DE ACTIVIDADES (SABERES BÁSICOS) ---
     const actividadesCE = {
@@ -318,7 +300,7 @@
             { desc: 'Diseñar un argumentario para un debate, previendo las refutaciones del contrario.', ce: 'LCL.C.E.1.2' },
             { desc: 'Elaborar un mapa conceptual que organice jerárquicamente las ideas de un texto expositivo.', ce: 'LCL.C.E.2.2' }
         ],
-        'Geografía e Historia': [
+        'Geografía': [
             { desc: 'Interpretar pirámides de población y calcular tasas de natalidad/mortalidad.', ce: 'GEH.C.E.2.2' },
             { desc: 'Analizar climogramas para identificar tipos de clima y deducir la vegetación asociada.', ce: 'GEH.C.E.2.1' },
             { desc: 'Calcular la densidad de población y analizar su distribución en un mapa temático.', ce: 'GEH.C.E.2.2' },
@@ -406,7 +388,7 @@
         return activity;
     }
 
-    // Generar el cronograma con distribución entre evaluaciones
+    // Generar el cronograma con distribución fija
     let semanaGlobal = 0;
     
     // Primera evaluación (semanas 1-14)
@@ -417,13 +399,13 @@
         const s1_activity = getNextActivity('Matemáticas');
         semanaData.session1 = { subject: 'Matemáticas', ambito: 'CT', activity: s1_activity.desc, ce: s1_activity.ce };
         
-        // Sesión 2: CT de la primera evaluación
-        const s2_subject = distribucionEvaluaciones.primera.CT[i] || 'Sin asignar';
+        // Sesión 2: CT de la primera evaluación (distribución fija)
+        const s2_subject = distribucionFija.primera.CT[i] || 'Sin asignar';
         const s2_activity = getNextActivity(s2_subject);
         semanaData.session2 = { subject: s2_subject, ambito: 'CT', activity: s2_activity.desc, ce: s2_activity.ce };
         
-        // Sesión 3: SL/AR de la primera evaluación
-        const s3_subject = distribucionEvaluaciones.primera.SLAR[i] || 'Sin asignar';
+        // Sesión 3: SL/AR de la primera evaluación (distribución fija)
+        const s3_subject = distribucionFija.primera.SLAR[i] || 'Sin asignar';
         const s3_activity = getNextActivity(s3_subject);
         semanaData.session3 = { subject: s3_subject, ambito: getAmbito(s3_subject), activity: s3_activity.desc, ce: s3_activity.ce };
         
@@ -438,13 +420,13 @@
         const s1_activity = getNextActivity('Matemáticas');
         semanaData.session1 = { subject: 'Matemáticas', ambito: 'CT', activity: s1_activity.desc, ce: s1_activity.ce };
         
-        // Sesión 2: CT de la segunda evaluación
-        const s2_subject = distribucionEvaluaciones.segunda.CT[i] || 'Sin asignar';
+        // Sesión 2: CT de la segunda evaluación (distribución fija)
+        const s2_subject = distribucionFija.segunda.CT[i] || 'Sin asignar';
         const s2_activity = getNextActivity(s2_subject);
         semanaData.session2 = { subject: s2_subject, ambito: 'CT', activity: s2_activity.desc, ce: s2_activity.ce };
         
-        // Sesión 3: SL/AR de la segunda evaluación
-        const s3_subject = distribucionEvaluaciones.segunda.SLAR[i] || 'Sin asignar';
+        // Sesión 3: SL/AR de la segunda evaluación (distribución fija)
+        const s3_subject = distribucionFija.segunda.SLAR[i] || 'Sin asignar';
         const s3_activity = getNextActivity(s3_subject);
         semanaData.session3 = { subject: s3_subject, ambito: getAmbito(s3_subject), activity: s3_activity.desc, ce: s3_activity.ce };
         
@@ -459,13 +441,13 @@
         const s1_activity = getNextActivity('Matemáticas');
         semanaData.session1 = { subject: 'Matemáticas', ambito: 'CT', activity: s1_activity.desc, ce: s1_activity.ce };
         
-        // Sesión 2: CT de la tercera evaluación
-        const s2_subject = distribucionEvaluaciones.tercera.CT[i] || 'Sin asignar';
+        // Sesión 2: CT de la tercera evaluación (distribución fija)
+        const s2_subject = distribucionFija.tercera.CT[i] || 'Sin asignar';
         const s2_activity = getNextActivity(s2_subject);
         semanaData.session2 = { subject: s2_subject, ambito: 'CT', activity: s2_activity.desc, ce: s2_activity.ce };
         
-        // Sesión 3: SL/AR de la tercera evaluación
-        const s3_subject = distribucionEvaluaciones.tercera.SLAR[i] || 'Sin asignar';
+        // Sesión 3: SL/AR de la tercera evaluación (distribución fija)
+        const s3_subject = distribucionFija.tercera.SLAR[i] || 'Sin asignar';
         const s3_activity = getNextActivity(s3_subject);
         semanaData.session3 = { subject: s3_subject, ambito: getAmbito(s3_subject), activity: s3_activity.desc, ce: s3_activity.ce };
         
@@ -474,7 +456,7 @@
 
     const subjectColors = {
         'Matemáticas': '#4F46E5', 'Biología y Geología': '#10B981', 'Física y Química': '#0EA5E9', 'Tecnología': '#D946EF', 'Cultura Científica': '#F97316',
-        'Lengua': '#EAB308', 'Geografía e Historia': '#8B5CF6', 'Inglés': '#EC4899', 'Religión': '#6B7280',
+        'Lengua': '#EAB308', 'Geografía': '#8B5CF6', 'Inglés': '#EC4899', 'Religión': '#6B7280',
         'Dibujo Técnico': '#EF4444', 'Ed. Física': '#3B82F6', 'Sin asignar': '#9CA3AF'
     };
     
@@ -594,13 +576,23 @@ function generateDates() {
                 }
             });
             
-            weekCard.classList.toggle('filtered-out', !weekHasMatch);
+            // Ocultar completamente las semanas sin coincidencias
+            if (weekHasMatch) {
+                weekCard.style.display = 'block';
+                weekCard.classList.remove('filtered-out');
+            } else {
+                weekCard.style.display = 'none';
+                weekCard.classList.add('filtered-out');
+            }
         });
     }
 
     function resetFilters() {
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white'));
-        document.querySelectorAll('.week-card').forEach(card => card.classList.remove('filtered-out'));
+        document.querySelectorAll('.week-card').forEach(card => {
+            card.classList.remove('filtered-out');
+            card.style.display = 'block'; // Asegurar que todas las semanas sean visibles
+        });
         document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
     }
 
