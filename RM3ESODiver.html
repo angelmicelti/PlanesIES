@@ -364,36 +364,71 @@
         const totalHoursSession2 = ambitoCT.reduce((sum, s) => s.name === 'Ámbito Científico-Tecnológico' ? sum + 4 : sum + s.hours, 0);
         const totalHoursSession3 = ambitoARSL.reduce((sum, s) => sum + s.hours, 0);
 
-        const ctScheduleSequence = [];
-        ambitoCT.forEach(s => {
-            const hours = s.name === 'Ámbito Científico-Tecnológico' ? 4 : s.hours;
-            const count = Math.round((hours / totalHoursSession2) * totalWeeks);
-            for (let i = 0; i < count; i++) {
-                ctScheduleSequence.push(s.name);
-            }
-        });
+        // Función para crear una secuencia uniforme de asignaturas
+        function createUniformSequence(subjectList, totalHoursForSession, weeks) {
+            // Calcular el número de sesiones para cada asignatura
+            const sessionCounts = subjectList.map(s => {
+                const hours = s.name === 'Ámbito Científico-Tecnológico' ? 4 : s.hours;
+                return {
+                    name: s.name,
+                    count: Math.round((hours / totalHoursForSession) * weeks)
+                };
+            });
 
-        const arslScheduleSequence = [];
-        ambitoARSL.forEach(s => {
-            const count = Math.round((s.hours / totalHoursSession3) * totalWeeks);
-            for (let i = 0; i < count; i++) {
-                arslScheduleSequence.push(s.name);
+            // Ajustar para que la suma sea exactamente el número de semanas
+            let totalSessions = sessionCounts.reduce((sum, item) => sum + item.count, 0);
+            let index = 0;
+            while (totalSessions !== weeks) {
+                if (totalSessions > weeks) {
+                    sessionCounts[index % sessionCounts.length].count--;
+                    totalSessions--;
+                } else {
+                    sessionCounts[index % sessionCounts.length].count++;
+                    totalSessions++;
+                }
+                index++;
             }
-        });
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+            // Crear un array con las asignaturas repetidas según su count
+            let sequence = [];
+            sessionCounts.forEach(item => {
+                for (let i = 0; i < item.count; i++) {
+                    sequence.push(item.name);
+                }
+            });
+
+            // Distribuir uniformemente (no barajar)
+            return distributeUniformly(sequence);
         }
-        while (ctScheduleSequence.length < totalWeeks) ctScheduleSequence.push(ctScheduleSequence[Math.floor(Math.random() * ctScheduleSequence.length)]);
-        while (ctScheduleSequence.length > totalWeeks) ctScheduleSequence.pop();
-        while (arslScheduleSequence.length < totalWeeks) arslScheduleSequence.push(arslScheduleSequence[Math.floor(Math.random() * arslScheduleSequence.length)]);
-        while (arslScheduleSequence.length > totalWeeks) arslScheduleSequence.pop();
 
-        shuffleArray(ctScheduleSequence);
-        shuffleArray(arslScheduleSequence);
+        // Función para distribuir uniformemente las asignaturas
+        function distributeUniformly(sequence) {
+            const subjectGroups = {};
+            sequence.forEach(subject => {
+                if (!subjectGroups[subject]) {
+                    subjectGroups[subject] = [];
+                }
+                subjectGroups[subject].push(subject);
+            });
+
+            const result = [];
+            const subjects = Object.keys(subjectGroups);
+            const maxCount = Math.max(...subjects.map(s => subjectGroups[s].length));
+
+            for (let i = 0; i < maxCount; i++) {
+                subjects.forEach(subject => {
+                    if (subjectGroups[subject].length > i) {
+                        result.push(subjectGroups[subject][i]);
+                    }
+                });
+            }
+
+            return result.slice(0, sequence.length);
+        }
+
+        // Crear secuencias uniformes
+        const ctScheduleSequence = createUniformSequence(ambitoCT, totalHoursSession2, totalWeeks);
+        const arslScheduleSequence = createUniformSequence(ambitoARSL, totalHoursSession3, totalWeeks);
         
         const subjectDetails = {};
         const subjectColors = {};
