@@ -276,8 +276,8 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             sesionesProporcionales[primarySubject] = (sesionesProporcionales[primarySubject] || 0) + diff;
         }
 
-        // --- ALGORITMO MEJORADO: Distribución uniforme por evaluación ---
-        function distribuirMateriasUniformemente() {
+        // --- ALGORITMO MEJORADO: Distribución por semanas sin repetición ---
+        function distribuirMateriasSinRepeticion() {
             // Calcular sesiones por evaluación
             const sesionesPorEvaluacion = {
                 1: 14 * 2, // 28 sesiones
@@ -340,12 +340,63 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             evaluaciones[3] = mezclarDeterminista(evaluaciones[3]);
             
             // Combinar todas las evaluaciones en un solo pool
-            const poolMaterias = [...evaluaciones[1], ...evaluaciones[2], ...evaluaciones[3]];
+            let poolMaterias = [...evaluaciones[1], ...evaluaciones[2], ...evaluaciones[3]];
+            
+            // Reorganizar para evitar que una misma materia aparezca dos veces en la misma semana
+            for (let i = 0; i < TOTAL_WEEKS; i++) {
+                const materia2 = poolMaterias[i * 2];
+                const materia3 = poolMaterias[i * 2 + 1];
+                
+                // Si ambas materias son iguales en la misma semana, buscar un intercambio
+                if (materia2 === materia3) {
+                    let encontrado = false;
+                    
+                    // Buscar en las semanas siguientes una materia diferente para intercambiar
+                    for (let j = i + 1; j < TOTAL_WEEKS && !encontrado; j++) {
+                        const otraMateria2 = poolMaterias[j * 2];
+                        const otraMateria3 = poolMaterias[j * 2 + 1];
+                        
+                        // Si la semana j tiene al menos una materia diferente, intentar intercambiar
+                        if (otraMateria2 !== materia2) {
+                            // Intercambiar materia3 (repetida) con otraMateria2
+                            poolMaterias[i * 2 + 1] = otraMateria2;
+                            poolMaterias[j * 2] = materia3;
+                            encontrado = true;
+                        } else if (otraMateria3 !== materia2) {
+                            // Intercambiar materia3 (repetida) con otraMateria3
+                            poolMaterias[i * 2 + 1] = otraMateria3;
+                            poolMaterias[j * 2 + 1] = materia3;
+                            encontrado = true;
+                        }
+                    }
+                    
+                    // Si no se encontró en las semanas siguientes, buscar en las anteriores
+                    if (!encontrado) {
+                        for (let j = 0; j < i && !encontrado; j++) {
+                            const otraMateria2 = poolMaterias[j * 2];
+                            const otraMateria3 = poolMaterias[j * 2 + 1];
+                            
+                            // Verificar que el intercambio no cree una repetición en la semana j
+                            if (otraMateria2 !== materia2 && otraMateria2 !== otraMateria3) {
+                                // Intercambiar materia3 (repetida) con otraMateria2
+                                poolMaterias[i * 2 + 1] = otraMateria2;
+                                poolMaterias[j * 2] = materia3;
+                                encontrado = true;
+                            } else if (otraMateria3 !== materia2 && otraMateria2 !== otraMateria3) {
+                                // Intercambiar materia3 (repetida) con otraMateria3
+                                poolMaterias[i * 2 + 1] = otraMateria3;
+                                poolMaterias[j * 2 + 1] = materia3;
+                                encontrado = true;
+                            }
+                        }
+                    }
+                }
+            }
             
             return poolMaterias;
         }
 
-        const poolMaterias = distribuirMateriasUniformemente();
+        const poolMaterias = distribuirMateriasSinRepeticion();
 
         const ambitosMap = {
             'Ámbito Socio-Lingüístico': 'SL',
