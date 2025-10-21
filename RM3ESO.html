@@ -262,11 +262,10 @@
         }
         window.openLink = openLink;
 
-
         // Definición de las asignaturas, ámbitos y carga horaria (con Matemáticas descontada para la distribución)
         const subjects = [
             { name: 'Lengua', hours: 4, ambito: 'SL' },
-            { name: 'Geografía', hours: 3, ambito: 'SL' },
+            { name: 'Geografía e Historia', hours: 3, ambito: 'SL' },
             { name: 'Inglés', hours: 4, ambito: 'SL' },
             { name: 'Religión', hours: 1, ambito: 'SL' },
             { name: 'Biología y Geología', hours: 3, ambito: 'CT' },
@@ -286,42 +285,144 @@
         const totalHoursCT = ambitoCT.reduce((sum, s) => s.name !== 'Matemáticas' ? sum + s.hours : sum, 0) + 2; // +2 de Matemáticas para la Sesión 2
         const totalHoursARSL = ambitoARSL.reduce((sum, s) => sum + s.hours, 0);
 
-        // Generar la secuencia proporcional de sesiones para la Sesión 2 (Ámbito CT)
-        const ctSubjectsForDistribution = ambitoCT.filter(s => s.name !== 'Matemáticas');
-        const ctScheduleSequence = [];
-        ctSubjectsForDistribution.forEach(s => {
-            const count = Math.round((s.hours + (s.name === 'Matemáticas' ? 2 : 0)) / totalHoursCT * 36 * 1);
-            for (let i = 0; i < count; i++) {
-                ctScheduleSequence.push(s.name);
+        // Función para generar distribución uniforme global
+        function generateUniformDistribution() {
+            // Distribución para CT (Sesión 2)
+            const ctSubjectsForDistribution = ambitoCT.filter(s => s.name !== 'Matemáticas');
+            let ctCounts = {};
+            
+            // Calcular el número de sesiones para cada materia
+            ctSubjectsForDistribution.forEach(s => {
+                ctCounts[s.name] = Math.round((s.hours) / totalHoursCT * 36);
+            });
+            
+            // Añadir las 2h de Matemáticas a la sesión 2
+            ctCounts['Matemáticas'] = Math.round(2 / totalHoursCT * 36);
+            
+            // Ajustar para que sumen 36
+            let totalCT = Object.values(ctCounts).reduce((sum, count) => sum + count, 0);
+            while (totalCT < 36) {
+                // Encontrar la materia con mayor diferencia entre lo que debería tener y lo que tiene
+                let maxDiff = 0;
+                let subjectToAdd = '';
+                
+                ctSubjectsForDistribution.concat([{name: 'Matemáticas', hours: 2}]).forEach(s => {
+                    const expected = (s.name === 'Matemáticas' ? 2 : s.hours) / totalHoursCT * 36;
+                    const diff = expected - ctCounts[s.name];
+                    if (diff > maxDiff) {
+                        maxDiff = diff;
+                        subjectToAdd = s.name;
+                    }
+                });
+                
+                ctCounts[subjectToAdd]++;
+                totalCT++;
             }
-        });
-        
-        // Añadir las 2h de Matemáticas a la sesión 2
-        const mathCountSession2 = Math.round(2 / totalHoursCT * 36 * 1);
-        for(let i=0; i<mathCountSession2; i++) {
-            ctScheduleSequence.push('Matemáticas');
+            
+            while (totalCT > 36) {
+                // Encontrar la materia con mayor diferencia negativa
+                let minDiff = 0;
+                let subjectToRemove = '';
+                
+                ctSubjectsForDistribution.concat([{name: 'Matemáticas', hours: 2}]).forEach(s => {
+                    const expected = (s.name === 'Matemáticas' ? 2 : s.hours) / totalHoursCT * 36;
+                    const diff = expected - ctCounts[s.name];
+                    if (diff < minDiff && ctCounts[s.name] > 0) {
+                        minDiff = diff;
+                        subjectToRemove = s.name;
+                    }
+                });
+                
+                ctCounts[subjectToRemove]--;
+                totalCT--;
+            }
+            
+            // Distribución para ARSL (Sesión 3)
+            let arslCounts = {};
+            ambitoARSL.forEach(s => {
+                arslCounts[s.name] = Math.round(s.hours / totalHoursARSL * 36);
+            });
+            
+            // Ajustar para que sumen 36
+            let totalARSL = Object.values(arslCounts).reduce((sum, count) => sum + count, 0);
+            while (totalARSL < 36) {
+                let maxDiff = 0;
+                let subjectToAdd = '';
+                
+                ambitoARSL.forEach(s => {
+                    const expected = s.hours / totalHoursARSL * 36;
+                    const diff = expected - arslCounts[s.name];
+                    if (diff > maxDiff) {
+                        maxDiff = diff;
+                        subjectToAdd = s.name;
+                    }
+                });
+                
+                arslCounts[subjectToAdd]++;
+                totalARSL++;
+            }
+            
+            while (totalARSL > 36) {
+                let minDiff = 0;
+                let subjectToRemove = '';
+                
+                ambitoARSL.forEach(s => {
+                    const expected = s.hours / totalHoursARSL * 36;
+                    const diff = expected - arslCounts[s.name];
+                    if (diff < minDiff && arslCounts[s.name] > 0) {
+                        minDiff = diff;
+                        subjectToRemove = s.name;
+                    }
+                });
+                
+                arslCounts[subjectToRemove]--;
+                totalARSL--;
+            }
+            
+            // Crear secuencias uniformemente distribuidas
+            function createUniformSequence(counts) {
+                const subjects = Object.keys(counts);
+                const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+                const sequence = [];
+                
+                // Crear un array con todas las asignaturas según su frecuencia
+                let allSubjects = [];
+                subjects.forEach(subject => {
+                    for (let i = 0; i < counts[subject]; i++) {
+                        allSubjects.push(subject);
+                    }
+                });
+                
+                // Ordenar aleatoriamente pero de forma consistente (sin barajar)
+                // Usaremos una semilla fija para que sea consistente
+                function seededShuffle(array, seed) {
+                    const shuffled = [...array];
+                    for (let i = shuffled.length - 1; i > 0; i--) {
+                        const j = Math.floor(seededRandom(seed) * (i + 1));
+                        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                    }
+                    return shuffled;
+                }
+                
+                function seededRandom(seed) {
+                    const x = Math.sin(seed++) * 10000;
+                    return x - Math.floor(x);
+                }
+                
+                // Usar semillas fijas para que la distribución sea consistente
+                const ctSequence = seededShuffle(allSubjects, 12345);
+                
+                return ctSequence;
+            }
+            
+            const ctSequence = createUniformSequence(ctCounts);
+            const arslSequence = createUniformSequence(arslCounts);
+            
+            return { ctSequence, arslSequence };
         }
 
-        // Generar la secuencia proporcional de sesiones para la Sesión 3 (Ámbitos AR y SL)
-        const arslScheduleSequence = [];
-        ambitoARSL.forEach(s => {
-            const count = Math.round(s.hours / totalHoursARSL * 36 * 1);
-            for (let i = 0; i < count; i++) {
-                arslScheduleSequence.push(s.name);
-            }
-        });
-
-        // Asegurarse de que las secuencias tienen 36 elementos y mezclarlas
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-        while (ctScheduleSequence.length < 36) ctScheduleSequence.push(ctScheduleSequence[Math.floor(Math.random() * ctScheduleSequence.length)]);
-        while (arslScheduleSequence.length < 36) arslScheduleSequence.push(arslScheduleSequence[Math.floor(Math.random() * arslScheduleSequence.length)]);
-        shuffleArray(ctScheduleSequence);
-        shuffleArray(arslScheduleSequence);
+        // Generar las secuencias uniformes
+        const { ctSequence, arslSequence } = generateUniformDistribution();
 
         // Mapa de asignaturas a ámbitos y colores
         const subjectDetails = {};
@@ -337,8 +438,8 @@
             scheduleData.push({
                 week: i + 1,
                 session1: { subject: 'Matemáticas', ambito: 'CT', activity: 'Resolución de un problema de la vida cotidiana', ce: 'MA.C.E.1.3' },
-                session2: { subject: ctScheduleSequence[i], ambito: subjectDetails[ctScheduleSequence[i]], activity: 'Actividad de razonamiento transversal', ce: 'CE_EJEMPLO' },
-                session3: { subject: arslScheduleSequence[i], ambito: subjectDetails[arslScheduleSequence[i]], activity: 'Actividad de razonamiento transversal', ce: 'CE_EJEMPLO' }
+                session2: { subject: ctSequence[i], ambito: subjectDetails[ctSequence[i]], activity: 'Actividad de razonamiento transversal', ce: 'CE_EJEMPLO' },
+                session3: { subject: arslSequence[i], ambito: subjectDetails[arslSequence[i]], activity: 'Actividad de razonamiento transversal', ce: 'CE_EJEMPLO' }
             });
         }
         
@@ -352,7 +453,7 @@
                 'LCL.C.E.1.2': 'Planificar y desarrollar textos escritos atendiendo a la coherencia y cohesión.',
                 'LCL.C.E.4.3': 'Reconocer el poder del lenguaje para la construcción de identidades y la creación de consensos y disensos.'
             },
-            'Geografía': {
+            'Geografía e Historia': {
                 'GEH.C.E.1.4': 'Analizar patrones de distribución espacial y temporal para explicar fenómenos geográficos, empleando las herramientas y fuentes cartográficas y geotecnológicas adecuadas.'
             },
             'Inglés': {
@@ -394,7 +495,7 @@
                 'LCL.C.E.1.2': 'Organización de un texto argumentativo sobre un tema de actualidad.',
                 'LCL.C.E.4.3': 'Análisis de un discurso para identificar falacias lógicas.'
             },
-            'Geografía': {
+            'Geografía e Historia': {
                 'GEH.C.E.1.4': 'Análisis de datos de densidad de población en diferentes países y representación en un gráfico.'
             },
             'Inglés': {
