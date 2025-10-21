@@ -308,10 +308,10 @@
 
         // --- CONFIGURACIÓN AJUSTADA A 36 SEMANAS ---
 
-        // Definición de las materias y sus horas de docencia directa
+        // Definición de las materias y sus horas de docencia directa (ACTUALIZADO con Educación Física)
         const subjects = {
             'Lengua': { hours: 4, ambito: 'SL' },
-            'Geografía': { hours: 3, ambito: 'SL' },
+            'Geografía e Historia': { hours: 3, ambito: 'SL' },
             'Inglés': { hours: 4, ambito: 'SL' },
             'Religión': { hours: 1, ambito: 'SL' },
             'Ampliación de Cultura Clásica': { hours: 2, ambito: 'SL' },
@@ -320,10 +320,12 @@
             'Francés': { hours: 3, ambito: 'SL' },
             // Matemáticas tiene 4h fijas (Sesión 1) y 2h de peso para distribución interdisciplinar (Sesiones 2 y 3)
             'Matemáticas': { hours: 4, ambito: 'CT', interdisciplinary_weight: 2 },
-            'Música': { hours: 3, ambito: 'AR' }
+            'Música': { hours: 3, ambito: 'AR' },
+            'Educación Física': { hours: 2, ambito: 'AR' } // NUEVA MATERIA AÑADIDA
         };
 
         // 1. Cálculo del peso total para las Sesiones 2 y 3 (72 sesiones a repartir)
+        // ACTUALIZADO: Ahora incluye Educación Física (2 horas)
         const totalHoursForDistribution = Object.keys(subjects).reduce((sum, key) => {
             const subject = subjects[key];
             // Sumamos las horas de las materias SL/AR
@@ -336,7 +338,7 @@
             }
             return sum;
         }, 0);
-        // El total de peso ahora es 28 (26 horas SL/AR + 2 horas Matemáticas)
+        // El total de peso ahora es 30 (28 horas SL/AR + 2 horas Matemáticas)
 
         // Ajuste: 36 semanas * 2 sesiones/semana = 72 sesiones a distribuir
         const totalSessionsToDistribute = 72; 
@@ -377,21 +379,33 @@
             subjectSessions[subjectToAdjust]++;
         }
         
-        // Generamos la secuencia de sesiones para las semanas 2 y 3
-        const sessionSequence = [];
-        for (const subject in subjectSessions) {
-            for (let i = 0; i < subjectSessions[subject]; i++) {
-                sessionSequence.push(subject);
+        // Generamos la secuencia de sesiones para las semanas 2 y 3 con distribución uniforme
+        const sessionSequence = generateUniformSequence(subjectSessions, 72);
+        
+        // Función para generar una secuencia uniforme sin barajado aleatorio
+        function generateUniformSequence(subjectSessions, totalSessions) {
+            const sequence = [];
+            const subjectCounts = { ...subjectSessions };
+            const subjectsList = Object.keys(subjectCounts);
+            
+            let totalAssigned = 0;
+            
+            while (totalAssigned < totalSessions) {
+                for (const subject of subjectsList) {
+                    if (subjectCounts[subject] > 0) {
+                        sequence.push(subject);
+                        subjectCounts[subject]--;
+                        totalAssigned++;
+                        
+                        if (totalAssigned >= totalSessions) break;
+                    }
+                }
             }
+            
+            return sequence;
         }
-        
-        // Barajamos la secuencia de sesiones para que sea aleatoria
-        for (let i = sessionSequence.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [sessionSequence[i], sessionSequence[j]] = [sessionSequence[j], sessionSequence[i]];
-        }
-        
-        // Definición de actividades y criterios de evaluación según la Orden de 30 de mayo de 2023 (sin cambios)
+
+        // Definición de actividades y criterios de evaluación según la Orden de 30 de mayo de 2023 (ACTUALIZADO)
         const activitiesBySubject = {
             'Matemáticas': [
                 { activity: 'Análisis de datos económicos y sociales usando herramientas estadísticas.', ce: 'MA.C.E.2.3' },
@@ -407,7 +421,7 @@
                 { activity: 'Creación de un texto que justifique una opinión con razonamientos sólidos.', ce: 'LCL.C.E.5.3' },
                 { activity: 'Análisis de la coherencia y cohesión de un párrafo.', ce: 'LCL.C.E.1.4' }
             ],
-            'Geografía': [
+            'Geografía e Historia': [
                 { activity: 'Interpretación de mapas temáticos (densidad de población, PIB).', ce: 'GEH.C.E.1.1' },
                 { activity: 'Cálculo y análisis de la huella ecológica de una población.', ce: 'GEH.C.E.3.2' },
                 { activity: 'Proyección del crecimiento demográfico a partir de datos históricos.', ce: 'GEH.C.E.2.4' },
@@ -448,6 +462,13 @@
                 { activity: 'Identificación de patrones rítmicos y su representación numérica.', ce: 'MU.C.E.1.3' },
                 { activity: 'Creación de una partitura con un patrón numérico o geométrico.', ce: 'MU.C.E.1.3' },
                 { activity: 'Análisis de la armonía musical usando relaciones matemáticas.', ce: 'MU.C.E.1.3' }
+            ],
+            // NUEVAS ACTIVIDADES PARA EDUCACIÓN FÍSICA
+            'Educación Física': [
+                { activity: 'Cálculo de ángulos y trayectorias en lanzamientos y golpeos.', ce: 'EF.C.E.2.1' },
+                { activity: 'Análisis estadístico de resultados deportivos y rendimiento físico.', ce: 'EF.C.E.3.2' },
+                { activity: 'Medición y cálculo de distancias, tiempos y velocidades en actividades deportivas.', ce: 'EF.C.E.1.1' },
+                { activity: 'Planificación de entrenamientos usando proporciones y porcentajes.', ce: 'EF.C.E.4.1' }
             ]
         };
 
@@ -592,10 +613,12 @@
             });
         }
         
+        // ACTUALIZADO: Añadido color para Educación Física
         const subjectColors = {
-            'Matemáticas': '#4F46E5', 'Lengua': '#F97316', 'Geografía': '#8B5CF6',
+            'Matemáticas': '#4F46E5', 'Lengua': '#F97316', 'Geografía e Historia': '#8B5CF6',
             'Inglés': '#EC4899', 'Religión': '#6B7280', 'Ampliación de Cultura Clásica': '#06B6D4',
-            'Economía': '#10B981', 'Latín': '#F59E0B', 'Francés': '#D946EF', 'Música': '#EF4444'
+            'Economía': '#10B981', 'Latín': '#F59E0B', 'Francés': '#D946EF', 'Música': '#EF4444',
+            'Educación Física': '#22C55E' // NUEVO COLOR
         };
 
         function toggleEvaluation(evaluationNumber) {
