@@ -12,10 +12,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Paleta de colores: Warm Academia -->
-    <!-- Plan de Estructura de la Aplicación: Se ha optado por un diseño de dashboard interactivo. La estructura principal consta de: 1) Un panel de control con filtros por asignatura y ámbito, permitiendo al usuario aislar la información relevante de forma inmediata. 2) Una visualización de datos (gráfico de donut) que resume la distribución proporcional de las sesiones, ofreciendo una vista general del equilibrio del plan. 3) Una vista de cronograma en formato de tarjetas, que es más flexible y legible en dispositivos móviles que una tabla tradicional. Esta estructura se eligió porque convierte un documento estático en una herramienta de consulta activa, facilitando a los docentes la planificación y la comprensión de la carga de trabajo interdisciplinar. -->
-    <!-- Opciones de Visualización y Contenido: 1. Distribución de Materias -> Objetivo: Comparar -> Visualización: Gráfico de Donut (Chart.js) -> Interacción: Hover para ver detalles -> Justificación: Muestra de forma instantánea y clara la proporcionalidad del plan, un requisito clave del informe. 2. Cronograma Semanal -> Objetivo: Organizar/Explorar -> Visualización: Tarjetas de Contenido (HTML/Tailwind) -> Interacción: Filtrado dinámico con JS -> Justificación: Permite a los usuarios (docentes) encontrar rápidamente sus sesiones asignadas sin tener que escanear todo el documento, mejorando la usabilidad. 3. Filtros -> Objetivo: Interactuar/Seleccionar -> Visualización: Botones (HTML/Tailwind) -> Interacción: Clic para actualizar la vista -> Justificación: Es el núcleo de la interactividad, transformando la visualización pasiva en una exploración activa. -->
-    <!-- CONFIRMATION: NO se usan gráficos SVG. NO se usa Mermaid JS. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -40,6 +36,9 @@
         .session-card.highlight {
             transform: scale(1.05);
             box-shadow: 0 0 0 2px #4F46E5;
+        }
+        .hidden-week {
+            display: none !important;
         }
     </style>
 </head>
@@ -277,15 +276,150 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             sesionesProporcionales[primarySubject] = (sesionesProporcionales[primarySubject] || 0) + diff;
         }
 
-        const poolMaterias = Object.keys(sesionesProporcionales).flatMap(materia => 
-            Array(sesionesProporcionales[materia]).fill(materia)
-        );
-
-        // Mezclar el pool de materias (Fisher-Yates shuffle)
-        for (let i = poolMaterias.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [poolMaterias[i], poolMaterias[j]] = [poolMaterias[j], poolMaterias[i]];
+        // --- ALGORITMO MEJORADO: Distribución por semanas sin repetición y sin consecutivas ---
+        function distribuirMateriasOptimizado() {
+            // Calcular sesiones por evaluación
+            const sesionesPorEvaluacion = {
+                1: 14 * 2, // 28 sesiones
+                2: 11 * 2, // 22 sesiones  
+                3: 11 * 2  // 22 sesiones
+            };
+            
+            // Crear arrays separados para cada evaluación
+            const evaluaciones = {
+                1: [],
+                2: [], 
+                3: []
+            };
+            
+            // Para cada materia, distribuir sus sesiones entre las evaluaciones
+            Object.keys(sesionesProporcionales).forEach(materia => {
+                const totalSesionesMateria = sesionesProporcionales[materia];
+                
+                // Calcular distribución ideal entre evaluaciones
+                const distribucionIdeal = {
+                    1: Math.round(totalSesionesMateria * (sesionesPorEvaluacion[1] / totalSesionesAdicionales)),
+                    2: Math.round(totalSesionesMateria * (sesionesPorEvaluacion[2] / totalSesionesAdicionales)),
+                    3: totalSesionesMateria // Se ajustará después
+                };
+                
+                // Ajustar para que sume el total
+                distribucionIdeal[3] = totalSesionesMateria - distribucionIdeal[1] - distribucionIdeal[2];
+                
+                // Asegurar que no haya valores negativos
+                if (distribucionIdeal[3] < 0) {
+                    distribucionIdeal[3] = 0;
+                    // Reajustar las otras dos
+                    const sobrante = Math.abs(distribucionIdeal[3]);
+                    if (distribucionIdeal[1] > sobrante) {
+                        distribucionIdeal[1] -= sobrante;
+                    } else if (distribucionIdeal[2] > sobrante) {
+                        distribucionIdeal[2] -= sobrante;
+                    }
+                }
+                
+                // Añadir las sesiones a cada evaluación
+                for (let i = 0; i < distribucionIdeal[1]; i++) evaluaciones[1].push(materia);
+                for (let i = 0; i < distribucionIdeal[2]; i++) evaluaciones[2].push(materia);
+                for (let i = 0; i < distribucionIdeal[3]; i++) evaluaciones[3].push(materia);
+            });
+            
+            // Mezclar cada evaluación por separado (pero de forma determinista)
+            const mezclarDeterminista = (array) => {
+                const nuevoArray = [...array];
+                for (let i = nuevoArray.length - 1; i > 0; i--) {
+                    const j = Math.floor((i * 13 + 7) % (i + 1));
+                    [nuevoArray[i], nuevoArray[j]] = [nuevoArray[j], nuevoArray[i]];
+                }
+                return nuevoArray;
+            };
+            
+            // Mezclar cada evaluación
+            evaluaciones[1] = mezclarDeterminista(evaluaciones[1]);
+            evaluaciones[2] = mezclarDeterminista(evaluaciones[2]);
+            evaluaciones[3] = mezclarDeterminista(evaluaciones[3]);
+            
+            // Combinar todas las evaluaciones en un solo pool
+            let poolMaterias = [...evaluaciones[1], ...evaluaciones[2], ...evaluaciones[3]];
+            
+            // Convertir a formato de semanas para facilitar el procesamiento
+            let semanas = [];
+            for (let i = 0; i < TOTAL_WEEKS; i++) {
+                semanas.push([poolMaterias[i * 2], poolMaterias[i * 2 + 1]]);
+            }
+            
+            // Algoritmo mejorado para evitar repeticiones en la misma semana y consecutivas
+            let cambiosRealizados = true;
+            let maxIntentos = 100; // Límite de intentos para evitar bucles infinitos
+            
+            while (cambiosRealizados && maxIntentos > 0) {
+                cambiosRealizados = false;
+                maxIntentos--;
+                
+                for (let i = 0; i < semanas.length; i++) {
+                    const semana = semanas[i];
+                    
+                    // 1. Evitar que la misma materia aparezca dos veces en la misma semana
+                    if (semana[0] === semana[1]) {
+                        cambiosRealizados = true;
+                        
+                        // Buscar una materia diferente en semanas cercanas para intercambiar
+                        for (let j = 0; j < semanas.length; j++) {
+                            if (i === j) continue;
+                            
+                            const otraSemana = semanas[j];
+                            
+                            // Intentar intercambiar con la primera posición de otra semana
+                            if (otraSemana[0] !== semana[0] && otraSemana[0] !== otraSemana[1]) {
+                                [semana[1], otraSemana[0]] = [otraSemana[0], semana[1]];
+                                break;
+                            }
+                            
+                            // Intentar intercambiar con la segunda posición de otra semana
+                            if (otraSemana[1] !== semana[0] && otraSemana[0] !== otraSemana[1]) {
+                                [semana[1], otraSemana[1]] = [otraSemana[1], semana[1]];
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // 2. Evitar que una materia aparezca en semanas consecutivas
+                    if (i > 0) {
+                        const semanaAnterior = semanas[i - 1];
+                        
+                        // Verificar si alguna materia de esta semana está en la semana anterior
+                        for (let s = 0; s < 2; s++) {
+                            if (semanaAnterior.includes(semana[s])) {
+                                cambiosRealizados = true;
+                                
+                                // Buscar una materia diferente en semanas posteriores para intercambiar
+                                for (let j = i + 1; j < semanas.length; j++) {
+                                    const semanaPosterior = semanas[j];
+                                    
+                                    // Verificar que el intercambio no cree nuevos problemas
+                                    for (let sp = 0; sp < 2; sp++) {
+                                        if (!semanaAnterior.includes(semanaPosterior[sp]) && 
+                                            semanaPosterior[sp] !== semana[1-s]) {
+                                            
+                                            // Realizar el intercambio
+                                            [semana[s], semanaPosterior[sp]] = [semanaPosterior[sp], semana[s]];
+                                            break;
+                                        }
+                                    }
+                                    
+                                    if (!semanaAnterior.includes(semana[s])) break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Convertir de nuevo a pool lineal
+            return semanas.flat();
         }
+
+        const poolMaterias = distribuirMateriasOptimizado();
 
         const ambitosMap = {
             'Ámbito Socio-Lingüístico': 'SL',
@@ -302,7 +436,6 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
         // Generar datos solo para las 36 semanas
         for (let i = 0; i < TOTAL_WEEKS; i++) {
             // Se utiliza el operador ternario para evitar acceder a índices fuera de los límites
-            // si por algún error la poolMaterias no tuviera la longitud esperada.
             const materia2 = poolMaterias[i * 2] || 'Error de Materia';
             const materia3 = poolMaterias[i * 2 + 1] || 'Error de Materia';
 
@@ -507,17 +640,20 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                         }
                     });
                     
+                    // Ocultar completamente las semanas que no tengan la materia
                     if (weekHasMatch) {
-                        weekCard.classList.remove('filtered-out');
+                        weekCard.classList.remove('filtered-out', 'hidden-week');
                     } else {
-                        weekCard.classList.add('filtered-out');
+                        weekCard.classList.add('hidden-week');
                     }
                 });
             }
 
             function resetFilters() {
                 document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700'));
-                document.querySelectorAll('.week-card').forEach(card => card.classList.remove('filtered-out'));
+                document.querySelectorAll('.week-card').forEach(card => {
+                    card.classList.remove('filtered-out', 'hidden-week');
+                });
                 document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
             }
 
