@@ -124,7 +124,7 @@
             3: { start: 26, end: TOTAL_WEEKS } // 11 semanas: 6/abr al 19/jun
         };
 
-        // Datos del CSV con enlaces de evidencia
+        // Datos del CSV con enlaces de evidencia (CORREGIDO EL TYPO 'httpss' en Semana 16)
         const csvData = `,Sesión 1,Sesión 2,Sesión 3
 Semana 1,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=B5,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=E5,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=H5
 Semana 2,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=B10,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=E10,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=H10
@@ -195,7 +195,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             'Dibujo Técnico': 2
         };
 
-        // Asignación de asignaturas a los ámbitos
+        // Asignación de asignaturas a los ámbitos - CORREGIDO
         const ambitoMaterias = {
             'Ámbito Socio-Lingüístico': 'SL',
             'Religión': 'SL',
@@ -207,29 +207,147 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             'Dibujo Técnico': 'AR'
         };
 
-        // Criterios de evaluación de la Orden de 30 de mayo de 2023 (ejemplos adaptados para 4º ESO Diversificación)
+        // Criterios de Evaluación Reales del Anexo IV (Segundo Curso - 4º ESO)
+        const criteriosCT = [
+            { id: "CT.1.1", text: "Reconocer situaciones susceptibles de ser formuladas y resueltas mediante herramientas y estrategias matemáticas, planteando variantes, modificando alguno de sus datos o alguna condición del problema y proporcionando una representación matemática adecuada." },
+            { id: "CT.1.2", text: "Comprobar la validez de las soluciones a un problema desde un punto de vista lógico-matemático, verbalizando de forma clara y concisa el procedimiento seguido, y elaborar las respuestas evaluando su alcance, repercusión y coherencia en su contexto." },
+            { id: "CT.2.1", text: "Reconocer y usar las relaciones entre los conocimientos y experiencias matemáticas formando un todo coherente, reconociendo y utilizando las conexiones entre ideas matemáticas en la resolución de problemas." },
+            { id: "CT.3.1", text: "Establecer conexiones entre el mundo real y las matemáticas usando los procesos inherentes a la investigación científica y matemática: inferir, medir, comunicar, clasificar y predecir, aplicando distintos procedimientos en la resolución de problemas en situaciones diversas." },
+            { id: "CT.3.2", text: "Analizar conexiones coherentes en el entorno próximo, entre las necesidades tecnológicas, ambientales, económicas y sociales más importantes que demanda la sociedad para reconocer la capacidad de la ciencia para darle solución a situaciones de la vida cotidiana." },
+            { id: "CT.4.1", text: "Gestionar las emociones propias y desarrollar el autoconcepto matemático como herramienta, generando expectativas positivas ante nuevos retos, pensando de forma crítica y creativa, adaptándose ante la incertidumbre y reconociendo fuentes de estrés." },
+            { id: "CT.5.1", text: "Interpretar el paisaje analizando el origen, relación y evolución integrada de sus elementos, entendiendo los procesos geológicos que lo han formado y los fundamentos que determinan su dinámica." },
+            { id: "CT.6.1", text: "Interpretar y comprender problemas matemáticos complejos de la vida cotidiana y fenómenos fisicoquímicos, organizando y analizando los datos dados, estableciendo relaciones entre ellos, comprendiendo las preguntas formuladas y explicarlos en términos básicos de los principios, teorías y leyes científicas." },
+            { id: "CT.7.1", text: "Analizar preguntas e hipótesis que puedan ser respondidas o contrastadas, a través de la indagación, la deducción, el trabajo experimental y el razonamiento lógico-matemático, utilizando métodos científicos." },
+            { id: "CT.8.1", text: "Resolver problemas cotidianos complejos o dar explicación a procesos naturales, trabajando la abstracción para determinar los aspectos más relevantes, utilizando conocimientos, organizando datos e información aportados a través del razonamiento lógico, el pensamiento computacional o recursos digitales." },
+            { id: "CT.9.1", text: "Analizar conceptos y procesos relacionados con los saberes de Biología y Geología, Física y Química y Matemáticas interpretando información en diferentes formatos (modelos, gráficos, tablas, diagramas, fórmulas, etc.), manteniendo una actitud crítica." },
+            { id: "CT.10.1", text: "Utilizar recursos variados, tradicionales y digitales, para el correcto trabajo autónomo y cooperativo de saberes científicos, seleccionando, analizando críticamente y representando información, mediante el uso distintas fuentes." },
+            { id: "CT.11.1", text: "Relacionar con fundamentos científicos la preservación de la biodiversidad, la conservación del medio ambiente, la protección de los seres vivos del entorno, el desarrollo sostenible y la calidad de vida, comprendiendo la repercusión global de actuaciones locales." }
+        ];
+
+        const criteriosSL = [
+            { id: "SL.1.1", text: "Reconocer y valorar las lenguas de España y alguna de las variedades dialectales, especialmente la modalidad lingüística andaluza a partir de su estudio histórico, contrastando sus diferencias y actuando de forma empática y respetuosa." },
+            { id: "SL.2.1", text: "Comprender e interpretar el sentido global, estructura e información más relevante en función de las necesidades comunicativas y la intención del emisor en textos orales, escritos y multimodales sobre temas frecuentes y de la vida cotidiana." },
+            { id: "SL.3.1", text: "Realizar narraciones y exposiciones sencillas en lengua castellana, así como textos orales, escritos y multimodales en lengua extranjera, atendiendo a los diversos géneros discursivos en ambas lenguas, con coherencia y corrección." },
+            { id: "SL.4.1", text: "Comprender e interpretar el sentido global, la estructura, la información más relevante y la intención del emisor de textos escritos y multimodales sencillos de diferentes ámbitos en lengua castellana y en lengua extranjera." },
+            { id: "SL.5.1", text: "Planificar la redacción de textos escritos y multimodales sencillos en lengua castellana, atendiendo a la situación comunicativa, destinatario, propósito y canal; redactar borradores y revisarlos... y presentar un texto final coherente." },
+            { id: "SL.6.1", text: "Buscar, seleccionar y contrastar información mediante la consulta de diferentes fuentes, desarrollando estrategias de búsqueda, selección y tratamiento de información relativas a procesos y acontecimientos relevantes del presente y del pasado." },
+            { id: "SL.7.3", text: "Identificar e interpretar la conexión de España y Andalucía con los grandes procesos históricos, valorando su evolución y vinculándola con los desafíos del mundo actual." },
+            { id: "SL.8.2", text: "Utilizar un metalenguaje específico, en lengua castellana y en lengua extranjera, para explicar y argumentar la interrelación entre el propósito comunicativo y las elecciones lingüísticas en situaciones comunicativas cotidianas." },
+            { id: "SL.9.1", text: "Identificar, interpretar y analizar los mecanismos que han regulado la convivencia y la vida en común a lo largo de la historia, destacando las actitudes pacíficas y tolerantes que favorecen la convivencia democrática." },
+            { id: "SL.10.1", text: "Identificar y analizar de forma crítica el entorno desde una perspectiva sistémica e integradora, a través del concepto de paisaje y sus elementos, reflexionando sobre la evolución de los ciclos demográficos." }
+        ];
+
+        // --- ACTIVIDADES ESPECÍFICAS PARA MATERIAS NO-ÁMBITO ---
+        const actividadesPorMateria = {
+            'Religión': [
+                "Análisis estadístico de datos demográficos sobre prácticas religiosas en diferentes culturas, interpretando gráficos y calculando porcentajes.",
+                "Cálculo de proporciones en la construcción de edificios religiosos históricos (catedrales, mezquitas) aplicando razones y escalas.",
+                "Resolución de problemas sobre distribución equitativa de recursos en comunidades basado en principios éticos y matemáticos.",
+                "Análisis temporal de eventos históricos religiosos mediante líneas de tiempo y cálculo de intervalos entre fechas significativas.",
+                "Interpretación de patrones geométricos en arte sacro y cálculo de simetrías y transformaciones."
+            ],
+            
+            'Cultura Científica': [
+                "Análisis de datos epidemiológicos: cálculo de tasas de incidencia, prevalencia e interpretación de gráficos de evolución.",
+                "Resolución de problemas sobre sostenibilidad: cálculo de huella ecológica y análisis de datos de consumo energético.",
+                "Interpretación de estudios científicos: análisis estadístico de resultados, cálculo de promedios y desviaciones.",
+                "Cálculo de magnitudes en experimentos físicos: conversión de unidades, análisis dimensional y proporcionalidad.",
+                "Análisis de datos climáticos: interpretación de series temporales, cálculo de tendencias y predicciones."
+            ],
+            
+            'Expresión Artística': [
+                "Cálculo de proporciones áureas en composiciones artísticas y análisis matemático de la belleza estética.",
+                "Análisis geométrico de perspectivas en dibujo y pintura: cálculo de puntos de fuga y relaciones espaciales.",
+                "Cálculo de mezclas de colores: proporciones porcentuales y relaciones matemáticas en la teoría del color.",
+                "Análisis de ritmos y patrones en diseño: identificación de secuencias y progresiones matemáticas.",
+                "Cálculo de escalas y dimensiones en maquetas y proyectos artísticos tridimensionales."
+            ],
+            
+            'Música': [
+                "Cálculo de proporciones matemáticas en intervalos musicales y análisis de relaciones numéricas en escalas.",
+                "Análisis de compases y ritmos: identificación de patrones matemáticos y fracciones temporales.",
+                "Cálculo de frecuencias y relaciones armónicas: aplicación de progresiones geométricas en acústica.",
+                "Análisis estadístico de preferencias musicales: interpretación de encuestas y cálculo de modas y medianas.",
+                "Resolución de problemas sobre tempo y duraciones: cálculo de proporciones en cambios de velocidad musical."
+            ],
+            
+            'Educación Física': [
+                "Cálculo de estadísticas deportivas: promedios, porcentajes de efectividad y análisis de rendimiento.",
+                "Análisis geométrico de trayectorias en deportes: cálculo de ángulos, distancias y parábolas.",
+                "Resolución de problemas sobre dosificación de entrenamiento: proporciones, progresiones y cálculos de intensidad.",
+                "Cálculo de índices corporales: IMC, porcentaje de grasa y análisis de datos antropométricos.",
+                "Análisis de estrategias deportivas mediante teoría de juegos y probabilidades de éxito."
+            ],
+            
+            'Dibujo Técnico': [
+                "Resolución de problemas de geometría descriptiva: cálculo de verdaderas magnitudes y relaciones espaciales.",
+                "Aplicación de proporciones áureas en diseño: cálculo de relaciones matemáticas en composiciones.",
+                "Cálculo de escalas y acotaciones: conversión entre medidas reales y representaciones gráficas.",
+                "Análisis de simetrías y transformaciones geométricas: identificación de patrones matemáticos.",
+                "Resolución de problemas de tangencias y enlaces: aplicación de propiedades geométricas y trigonométricas."
+            ]
+        };
+
+        // Funciones de utilidad
+        function getRandomElement(arr) {
+            if (!arr || arr.length === 0) return { id: "error", text: "Array de criterios vacío" };
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // Función para obtener actividad específica según materia
+        function obtenerActividadEspecifica(materia) {
+            const actividades = actividadesPorMateria[materia];
+            if (actividades && actividades.length > 0) {
+                return actividades[Math.floor(Math.random() * actividades.length)];
+            }
+            return `Actividad de razonamiento matemático en el contexto de ${materia}.`;
+        }
+
+        function generateCTActivity(criterio) {
+            if (!criterio) return "Actividad de CT no definida.";
+            switch (criterio.id) {
+                case "CT.1.1": return "Planteamiento de un problema (ej. factura de luz) y búsqueda de 3 formas distintas de representarlo matemáticamente (ecuación, tabla, gráfico).";
+                case "CT.1.2": return "Ejercicio de 'Comprobación de Errores': Analizar un problema resuelto (con fallos) y verbalizar dónde está el error lógico y cuál sería la solución coherente.";
+                case "CT.2.1": return "Mapa conceptual conectando conceptos: ¿Cómo se relaciona la 'función lineal' con el 'porcentaje' y con el cálculo de 'velocidad media'?";
+                case "CT.3.1": return "Taller de 'Mates en la Cocina': Inferir, medir y predecir cantidades para una receta, aplicando proporcionalidad y conversión de unidades (ml a L, g a kg).";
+                case "CT.3.2": return "Debate: ¿Qué modelo matemático (crecimiento lineal, exponencial) explica mejor el consumo de recursos en nuestra ciudad? Analizar datos reales.";
+                case "CT.4.1": return "Resolución de un 'problema imposible' (sin solución aparente) para gestionar la frustración y desarrollar estrategias creativas de aproximación.";
+                case "CT.5.1": return "Análisis de una foto de un paisaje local (ej. una rambla): Identificar procesos geológicos (erosión, sedimentación) y razonar su evolución futura.";
+                case "CT.6.1": return "Interpretación de un fenómeno fisicoquímico (ej. dilución): Organizar datos, establecer la relación (proporcionalidad) y formular la ley científica.";
+                case "CT.7.1": return "Proyecto de indagación: Formular una hipótesis (ej. 'El ángulo de un panel solar afecta a la energía recogida') y diseñar un experimento simple para contrastarla.";
+                case "CT.8.1": return "Uso de pensamiento computacional: Crear un diagrama de flujo (algoritmo) para resolver un problema cotidiano (ej. 'Decidir la mejor ruta al instituto').";
+                case "CT.9.1": return "Análisis de infografías científicas (ej. ciclo del agua, estructura del átomo): Interpretar los gráficos, tablas y diagramas para extraer conclusiones.";
+                case "CT.10.1": return "Búsqueda y crítica de fuentes: Comparar dos noticias sobre un avance científico (una de un medio fiable, otra de un blog) y analizar críticamente la información.";
+                case "CT.11.1": return "Cálculo de la huella hídrica o de carbono personal. Relacionar los resultados con el desarrollo sostenible y proponer acciones locales de mejora.";
+                default: return "Resolver problemas matemáticos aplicados a un contexto científico, analizando la validez de las soluciones.";
+            }
+        }
+
+        function generateSLActivity(criterio) {
+            if (!criterio) return "Actividad de SL no definida.";
+            switch (criterio.id) {
+                case "SL.1.1": return "Análisis comparativo de un mismo texto (ej. una noticia) en castellano estándar y transcrito a la modalidad andaluza. Identificar rasgos y debatir sobre prejuicios.";
+                case "SL.2.1": return "Escucha de un podcast o visionado de un reportaje. Identificar la tesis del emisor, los argumentos principales y la información secundaria.";
+                case "SL.3.1": return "Taller de 'Storytelling': Narrar un evento histórico o social relevante usando una estructura lógica (inicio, nudo, desenlace) y coherencia temporal.";
+                case "SL.4.1": return "Interpretación de textos multimodales: Analizar un mapa demográfico de España. ¿Qué información global transmite? ¿Cuál es la intención del autor?";
+                case "SL.5.1": return "Redacción de una carta al director sobre un problema social (ej. despoblación rural). Planificar la estructura (tesis, argumentos, cierre) y revisar el borrador.";
+                case "SL.6.1": return "Micro-investigación: Buscar en 3 fuentes diferentes (prensa, enciclopedia, web institucional) información sobre un hecho histórico y contrastar la fiabilidad de los datos.";
+                case "SL.7.3": return "Creación de una línea del tiempo que conecte un proceso histórico (ej. la Revolución Industrial) con un desafío actual (ej. el cambio climático).";
+                case "SL.8.2": return "Juego de roles: 'El Abogado y el Fiscal'. Argumentar a favor y en contra de una tesis, usando conectores discursivos (metalenguaje) de forma precisa.";
+                case "SL.9.1": return "Análisis de un conflicto en el aula: Aplicar mecanismos de resolución pacífica (escucha activa, empatía) y relacionarlos con los principios democráticos de convivencia.";
+                case "SL.10.1": return "Análisis crítico del paisaje urbano: Identificar elementos del entorno (parques, zonas industriales) y reflexionar sobre su impacto en la demografía y la convivencia.";
+                default: return "Analizar un texto social o histórico, identificando la estructura lógica y los datos clave.";
+            }
+        }
+
+        // Criterios de evaluación (ejemplos adaptados para 4º ESO Diversificación)
         const criteriosEvaluacion = {
-            'Ámbito Socio-Lingüístico': [
-                'SL.C.E.1.2. Analizar y reconstruir la estructura lógica de textos orales y escritos, identificando su tesis, argumentos y conclusiones.',
-                'SL.C.E.2.4. Utilizar estrategias de razonamiento deductivo e inductivo para la resolución de problemas en diferentes contextos.',
-                'SL.C.E.3.1. Elaborar textos de opinión, utilizando argumentos sólidos y coherentes para defender una postura.',
-                'SL.C.E.4.3. Interpretar la información de textos multimodales, como gráficos, mapas y diagramas, para la comprensión de datos.',
-                'SL.C.E.5.1. Analizar el uso de falacias y sesgos cognitivos en los discursos, desarrollando un pensamiento crítico.',
-            ],
-            'Ámbito Científico-Tecnológico': [
-                'CT.C.E.1.1. Emplear el pensamiento computacional para la resolución de problemas complejos, descomponiéndolos en partes más sencillas.',
-                'CT.C.E.2.3. Interpretar y elaborar representaciones gráficas y simbólicas para describir fenómenos científicos y tecnológicos.',
-                'CT.C.E.3.2. Aplicar el razonamiento lógico-matemático para la resolución de problemas numéricos en contextos científicos.',
-                'CT.C.E.4.4. Analizar la validez y fiabilidad de los datos en investigaciones científicas, utilizando herramientas estadísticas básicas.',
-                'CT.C.E.5.1. Diseñar y ejecutar pequeños proyectos de investigación, aplicando el método científico y la lógica experimental.',
-            ],
             'Expresión Artística': [
                 'AR.C.E.1.4. Analizar la proporción y la estructura geométrica en obras de arte, comprendiendo su impacto estético.',
                 'AR.C.E.2.2. Desarrollar un proceso creativo, aplicando la lógica y la secuencia para la producción de obras artísticas.',
             ],
             'Música': [
                 'AR.C.E.3.5. Interpretar patrones rítmicos y estructuras formales en obras musicales, relacionándolos con conceptos numéricos.',
-                'AR.C.E.4.1. Utilizar técnicas de dibujo técnico para la representación de objetos tridimensionales, aplicando la geometría descriptiva.',
             ],
             'Educación Física': [
                 'EF.C.E.1.3. Analizar la estrategia de juego en deportes de equipo, comprendiendo la lógica táctica.',
@@ -252,11 +370,12 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             ]
         };
 
+        // Función original, ahora solo para materias no-Ámbito
         function seleccionarCriterio(materia) {
             const criterios = criteriosEvaluacion[materia];
             return criterios ? criterios[Math.floor(Math.random() * criterios.length)] : 'Criterio de evaluación no especificado';
         }
-
+        
         const totalHoras = Object.values(horasSemanales).reduce((sum, h) => sum + h, 0);
         // Ajustado a 36 semanas * 2 sesiones/semana = 72 sesiones
         const totalSesionesAdicionales = TOTAL_WEEKS * 2; 
@@ -348,7 +467,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 semanas.push([poolMaterias[i * 2], poolMaterias[i * 2 + 1]]);
             }
             
-            // Algoritmo mejorado para evitar repeticiones en la misma semana y consecutivas
+            // Algoritmo mejorado para evitar repeticiones en la misma semana y sin consecutivas
             let cambiosRealizados = true;
             let maxIntentos = 100; // Límite de intentos para evitar bucles infinitos
             
@@ -421,46 +540,86 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
 
         const poolMaterias = distribuirMateriasOptimizado();
 
-        const ambitosMap = {
-            'Ámbito Socio-Lingüístico': 'SL',
-            'Religión': 'SL',
-            'Ámbito Científico-Tecnológico': 'CT',
-            'Cultura Científica': 'CT',
-            'Expresión Artística': 'AR',
-            'Música': 'AR',
-            'Educación Física': 'AR',
-            'Dibujo Técnico': 'AR'
-        };
         
+        // --- CORRECCIÓN COMPLETA DEL BUCLE DE SCHEDULE ---
         const scheduleData = [];
-        // Generar datos solo para las 36 semanas
+        // Generar datos para las 36 semanas
         for (let i = 0; i < TOTAL_WEEKS; i++) {
-            // Se utiliza el operador ternario para evitar acceder a índices fuera de los límites
-            const materia2 = poolMaterias[i * 2] || 'Error de Materia';
-            const materia3 = poolMaterias[i * 2 + 1] || 'Error de Materia';
+            const materia2 = poolMaterias[i * 2] || 'Ámbito Socio-Lingüístico';
+            const materia3 = poolMaterias[i * 2 + 1] || 'Cultura Científica';
+
+            // --- Generación de Sesión 1 (Fija: CT) ---
+            const crit1 = getRandomElement(criteriosCT);
+            const act1 = generateCTActivity(crit1);
+            
+            const session1Data = {
+                subject: 'Ámbito Científico-Tecnológico', 
+                ambito: 'CT', 
+                activity: act1,
+                ce: crit1.text
+            };
+            
+            // --- Generación de Sesión 2 (Variable) ---
+            let session2Data = {};
+            if (materia2 === 'Ámbito Científico-Tecnológico') {
+                const crit = getRandomElement(criteriosCT);
+                session2Data = {
+                    subject: materia2,
+                    ambito: 'CT',
+                    activity: generateCTActivity(crit),
+                    ce: crit.text
+                };
+            } else if (materia2 === 'Ámbito Socio-Lingüístico') {
+                const crit = getRandomElement(criteriosSL);
+                session2Data = {
+                    subject: materia2,
+                    ambito: 'SL',
+                    activity: generateSLActivity(crit),
+                    ce: crit.text
+                };
+            } else {
+                // Para otras materias - CON ACTIVIDADES ESPECÍFICAS
+                session2Data = {
+                    subject: materia2,
+                    ambito: ambitoMaterias[materia2] || 'XX',
+                    activity: obtenerActividadEspecifica(materia2),
+                    ce: seleccionarCriterio(materia2)
+                };
+            }
+            
+            // --- Generación de Sesión 3 (Variable) ---
+            let session3Data = {};
+            if (materia3 === 'Ámbito Científico-Tecnológico') {
+                const crit = getRandomElement(criteriosCT);
+                session3Data = {
+                    subject: materia3,
+                    ambito: 'CT',
+                    activity: generateCTActivity(crit),
+                    ce: crit.text
+                };
+            } else if (materia3 === 'Ámbito Socio-Lingüístico') {
+                const crit = getRandomElement(criteriosSL);
+                session3Data = {
+                    subject: materia3,
+                    ambito: 'SL',
+                    activity: generateSLActivity(crit),
+                    ce: crit.text
+                };
+            } else {
+                // Para otras materias - CON ACTIVIDADES ESPECÍFICAS
+                session3Data = {
+                    subject: materia3,
+                    ambito: ambitoMaterias[materia3] || 'XX',
+                    activity: obtenerActividadEspecifica(materia3),
+                    ce: seleccionarCriterio(materia3)
+                };
+            }
 
             const weekData = {
                 week: i + 1,
-                session1: { 
-                    subject: 'Ámbito Científico-Tecnológico', 
-                    ambito: 'CT', 
-                    activity: 'Taller de resolución de un problema de proporcionalidad o lógica elemental.',
-                    ce: seleccionarCriterio('Ámbito Científico-Tecnológico')
-                },
-                session2: {
-                    subject: materia2,
-                    // Asegurar ámbito para evitar errores
-                    ambito: ambitosMap[materia2] || 'XX',
-                    activity: `Actividad de razonamiento matemático en el contexto de la asignatura de ${materia2}.`,
-                    ce: seleccionarCriterio(materia2)
-                },
-                session3: {
-                    subject: materia3,
-                    // Asegurar ámbito para evitar errores
-                    ambito: ambitosMap[materia3] || 'XX',
-                    activity: `Actividad de razonamiento matemático en el contexto de la asignatura de ${materia3}.`,
-                    ce: seleccionarCriterio(materia3)
-                }
+                session1: session1Data,
+                session2: session2Data,
+                session3: session3Data
             };
             scheduleData.push(weekData);
         }
@@ -469,12 +628,10 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             'Ámbito Socio-Lingüístico': '#F97316', 'Religión': '#6B7280', 
             'Ámbito Científico-Tecnológico': '#4F46E5', 'Cultura Científica': '#10B981',
             'Expresión Artística': '#EF4444', 'Música': '#F59E0B', 
-            'Educación Física': '#3B82F6', 'Dibujo Técnico': '#8B5CF6',
-            'Error de Materia': '#333333' // Color de respaldo
+            'Educación Física': '#3B82F6', 'Dibujo Técnico': '#8B5CF6'
         };
         
-        // --- FUNCIÓN CORREGIDA PARA GARANTIZAR 36 SEMANAS SIN SALTARSE NINGUNA ---
-        // Y MODIFICADA PARA REFLEJAR SOLO DÍAS HÁBILES (LUNES A VIERNES)
+        // Función para generar fechas - CORREGIDA
         function generateDates() {
             const dates = [];
             // Fecha de inicio: 15 de septiembre de 2025 (lunes)
@@ -490,17 +647,15 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 // El fin de la semana hábil es el viernes (4 días después del lunes)
                 end.setDate(currentDay.getDate() + 4); 
 
-                dates.push({ start, end }); // Agregamos la semana actual
+                dates.push({ start, end });
 
                 // Preparamos el inicio de la siguiente semana (saltando sábado y domingo)
                 currentDay.setDate(currentDay.getDate() + 7);
 
                 // Verificamos si acabamos de terminar la última semana de una evaluación
-                if (weekCount === EVALUATION_WEEKS[1].end - 1) { // Final de la semana 14 (índice 13)
-                    // Saltamos al inicio de la segunda evaluación
+                if (weekCount === EVALUATION_WEEKS[1].end - 1) {
                     currentDay = INICIO_SEGUNDA;
-                } else if (weekCount === EVALUATION_WEEKS[2].end - 1) { // Final de la semana 25 (índice 24)
-                    // Saltamos al inicio de la tercera evaluación
+                } else if (weekCount === EVALUATION_WEEKS[2].end - 1) {
                     currentDay = INICIO_TERCERA;
                 }
             }
@@ -526,16 +681,20 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             const ambitoFiltersContainer = document.getElementById('ambito-filters');
             const resetBtn = document.getElementById('reset-filters');
             
-            // Usamos una pequeña validación por si alguna materia no se asignó correctamente
-            const validPoolMaterias = poolMaterias.filter(m => m !== 'Error de Materia');
-            const subjects = [...new Set(validPoolMaterias)].sort();
+            // Obtener todas las materias únicas
+            const subjects = [...new Set([
+                'Ámbito Científico-Tecnológico',
+                'Ámbito Socio-Lingüístico',
+                'Religión',
+                'Cultura Científica',
+                'Expresión Artística',
+                'Música',
+                'Educación Física',
+                'Dibujo Técnico'
+            ])].sort();
             
-            // Re-añadir 'Ámbito Científico-Tecnológico' ya que está en la sesión 1 fija y podría no estar en el pool
-            if (!subjects.includes('Ámbito Científico-Tecnológico')) {
-                subjects.unshift('Ámbito Científico-Tecnológico');
-            }
-            
-            const ambitos = [...new Set(Object.values(ambitosMap))].sort();
+            // Obtener todos los ámbitos únicos
+            const ambitos = [...new Set(Object.values(ambitoMaterias))].sort();
 
             function createFilterButtons(container, items, type) {
                 items.forEach(item => {
@@ -562,10 +721,8 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                         weekCard.className = 'week-card bg-white rounded-2xl shadow-sm p-5';
                         weekCard.dataset.week = weekData.week;
 
-                        // Aseguramos que el índice existe en weekDates (de 0 a 35)
                         const dateIndex = weekData.week - 1;
                         if (dateIndex < weekDates.length) {
-                            // --- Rango de fechas sin año ni días de la semana ---
                             const dateOptions = { day: 'numeric', month: 'long' }; 
                             const startDate = weekDates[dateIndex].start.toLocaleDateString('es-ES', dateOptions);
                             const endDate = weekDates[dateIndex].end.toLocaleDateString('es-ES', dateOptions);
@@ -593,12 +750,9 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                     evidenceLinks[weekNumber][`session${sessionNumber}`] : 
                     '#';
                 
-                // Generamos un ID único para la sesión (útil para asociar la evidencia)
-                const sessionId = `week-${weekNumber}-session-${sessionNumber}`; 
-                
                 return `
                     <div class="session-card rounded-xl p-4 border border-gray-200 transition-all duration-300 flex flex-col justify-between" 
-                         data-subject="${session.subject}" data-ambito="${session.ambito}" data-session-id="${sessionId}"
+                         data-subject="${session.subject}" data-ambito="${session.ambito}"
                          style="border-left: 5px solid ${subjectColors[session.subject] || '#6B7280'};">
                         
                         <div>
@@ -640,7 +794,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                         }
                     });
                     
-                    // Ocultar completamente las semanas que no tengan la materia
+                    // Mostrar/ocultar semanas según si tienen match
                     if (weekHasMatch) {
                         weekCard.classList.remove('filtered-out', 'hidden-week');
                     } else {
@@ -723,7 +877,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             createFilterButtons(subjectFiltersContainer, subjects, 'subject');
             createFilterButtons(ambitoFiltersContainer, ambitos, 'ambito');
             
-            // Renderizar el calendario. Al pasar toda la data, el renderSchedule se encarga de filtrar por rango de semanas.
+            // Renderizar el calendario
             renderSchedule(scheduleData, 'evaluation-content-1');
             renderSchedule(scheduleData, 'evaluation-content-2');
             renderSchedule(scheduleData, 'evaluation-content-3');
