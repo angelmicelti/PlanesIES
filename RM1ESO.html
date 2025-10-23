@@ -41,6 +41,12 @@
             transform: scale(1.05);
             box-shadow: 0 0 0 2px #4F46E5;
         }
+        .loading {
+            cursor: wait;
+        }
+        .loading * {
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -126,20 +132,33 @@
 
         // Función para parsear el CSV y mapear enlaces por semana
         function parseLinksCSV(csvText) {
+            if (!csvText || typeof csvText !== 'string') {
+                console.error('Invalid CSV content');
+                return {};
+            }
+            
             const links = {};
-            const lines = csvText.trim().split('\n');
-            // La primera línea es la cabecera, la ignoramos
-            for (let i = 1; i < lines.length; i++) {
-                const parts = lines[i].split(';');
-                if (parts.length < 4) continue;
+            try {
+                const lines = csvText.trim().split('\n');
+                // La primera línea es la cabecera, la ignoramos
+                for (let i = 1; i < lines.length; i++) {
+                    const parts = lines[i].split(';');
+                    if (parts.length < 4) continue;
 
-                // parts[0] es "Semana X"
-                const weekMatch = parts[0].match(/\d+/);
-                if (weekMatch) {
-                    const weekNum = parseInt(weekMatch[0], 10);
-                    // parts[1] -> Sesión 1 URL, parts[2] -> Sesión 2 URL, parts[3] -> Sesión 3 URL
-                    links[weekNum] = [parts[1].trim(), parts[2].trim(), parts[3].trim()];
+                    // parts[0] es "Semana X"
+                    const weekMatch = parts[0].match(/\d+/);
+                    if (weekMatch) {
+                        const weekNum = parseInt(weekMatch[0], 10);
+                        // parts[1] -> Sesión 1 URL, parts[2] -> Sesión 2 URL, parts[3] -> Sesión 3 URL
+                        links[weekNum] = [
+                            parts[1]?.trim() || '#',
+                            parts[2]?.trim() || '#', 
+                            parts[3]?.trim() || '#'
+                        ];
+                    }
                 }
+            } catch (error) {
+                console.error('Error parsing CSV:', error);
             }
             return links;
         }
@@ -276,7 +295,7 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 { activity: 'Creación de una clave dicotómica para identificar animales', ce: 'BQ.C.E.1.4' },
                 { activity: 'Análisis de datos de la temperatura y su impacto en un ecosistema', ce: 'BQ.C.E.1.4' },
                 { activity: 'Análisis de un ciclo de vida con un diagrama de flujo', ce: 'BQ.C.E.1.4' },
-                { activity: 'Creación de un modelo a escala del sistema solar', ce: 'BQ.C.E.1.4' } // Repetido para completar 12
+                { activity: 'Creación de un modelo a escala del sistema solar', ce: 'BQ.C.E.1.4' }
             ],
             'Computación y Robótica': [
                 { activity: 'Diseño de un algoritmo para una tarea cotidiana', ce: 'CR.C.E.1.1' },
@@ -289,6 +308,18 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 { activity: 'Resolución de un problema de robótica a través de la lógica', ce: 'CR.C.E.1.1' }
             ]
         };
+
+        // Función auxiliar para obtener actividad de sesión 2 con validación
+        function getSession2Activity(subject, index) {
+            const activities = session2Content[subject];
+            if (!activities || activities.length === 0) {
+                return {
+                    activity: 'Actividad por determinar',
+                    ce: 'CE.POR.DETERMINAR'
+                };
+            }
+            return activities[index % activities.length];
+        }
 
         // Secuencia de asignaturas de Sesión 2 para 36 semanas (Proporcional 4:3:2 -> M:B:C)
         // Secuencia base de 9 semanas: M, B, C, M, B, M, B, C, M
@@ -321,30 +352,24 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             
             // Asignar actividad de Sesión 2 y rotar el índice
             if (session2Subject === 'Matemáticas') {
-                const activities = session2Content['Matemáticas'];
                 session2Details = { 
                     subject: session2Subject, 
                     ambito: 'CT', 
-                    activity: activities[matIndex % activities.length].activity, 
-                    ce: activities[matIndex % activities.length].ce 
+                    ...getSession2Activity('Matemáticas', matIndex)
                 };
                 matIndex++;
             } else if (session2Subject === 'Biología y Geología') {
-                const activities = session2Content['Biología y Geología'];
                 session2Details = { 
                     subject: session2Subject, 
                     ambito: 'CT', 
-                    activity: activities[bioIndex % activities.length].activity, 
-                    ce: activities[bioIndex % activities.length].ce 
+                    ...getSession2Activity('Biología y Geología', bioIndex)
                 };
                 bioIndex++;
             } else if (session2Subject === 'Computación y Robótica') {
-                const activities = session2Content['Computación y Robótica'];
                 session2Details = { 
                     subject: session2Subject, 
                     ambito: 'CT', 
-                    activity: activities[compIndex % activities.length].activity, 
-                    ce: activities[compIndex % activities.length].ce 
+                    ...getSession2Activity('Computación y Robótica', compIndex)
                 };
                 compIndex++;
             }
@@ -369,7 +394,7 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             const dates = [];
             
             // Primera evaluación: 15 de septiembre - 19 de diciembre (14 semanas)
-            let currentDay = new Date('2025-09-15T00:00:00Z');
+            let currentDay = new Date('2025-09-15');
             for (let i = 0; i < 14; i++) {
                 const start = new Date(currentDay);
                 const end = new Date(currentDay);
@@ -379,7 +404,7 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             }
             
             // Segunda evaluación: 12 de enero - 27 de marzo (11 semanas)
-            currentDay = new Date('2026-01-12T00:00:00Z');
+            currentDay = new Date('2026-01-12');
             for (let i = 0; i < 11; i++) {
                 const start = new Date(currentDay);
                 const end = new Date(currentDay);
@@ -389,7 +414,7 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             }
             
             // Tercera evaluación: 6 de abril - 19 de junio (11 semanas)
-            currentDay = new Date('2026-04-06T00:00:00Z');
+            currentDay = new Date('2026-04-06');
             for (let i = 0; i < 11; i++) {
                 const start = new Date(currentDay);
                 const end = new Date(currentDay);
@@ -407,23 +432,31 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
         function toggleEvaluation(evaluationNumber) {
             const content = document.getElementById(`evaluation-content-${evaluationNumber}`);
             const icon = document.getElementById(`toggle-icon-${evaluationNumber}`);
-            content.classList.toggle('hidden');
-            if (content.classList.contains('hidden')) {
-                icon.textContent = '+';
-            } else {
-                icon.textContent = '-';
+            if (content && icon) {
+                content.classList.toggle('hidden');
+                icon.textContent = content.classList.contains('hidden') ? '+' : '-';
             }
         }
         window.toggleEvaluation = toggleEvaluation;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Cargar y parsear enlaces al inicio
-            courseLinksA = parseLinksCSV(csvAContent);
-            courseLinksB = parseLinksCSV(csvBContent);
+            // Añadir estado de loading
+            document.body.classList.add('loading');
 
+            // Verificar que los elementos DOM existan
             const subjectFiltersContainer = document.getElementById('subject-filters');
             const ambitoFiltersContainer = document.getElementById('ambito-filters');
             const resetBtn = document.getElementById('reset-filters');
+            
+            if (!subjectFiltersContainer || !ambitoFiltersContainer || !resetBtn) {
+                console.error('Required DOM elements not found');
+                document.body.classList.remove('loading');
+                return;
+            }
+
+            // Cargar y parsear enlaces al inicio
+            courseLinksA = parseLinksCSV(csvAContent);
+            courseLinksB = parseLinksCSV(csvBContent);
             
             // Recolectar sujetos y ámbitos únicos
             const subjects = [...new Set(scheduleData.flatMap(w => [w.session1.subject, w.session2.subject, w.session3.subject]))].sort();
@@ -442,6 +475,10 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
 
             function renderSchedule(data, containerId) {
                 const container = document.getElementById(containerId);
+                if (!container) {
+                    console.error(`Container ${containerId} not found`);
+                    return;
+                }
                 container.innerHTML = '';
                 data.forEach(weekData => {
                     const weekCard = document.createElement('div');
@@ -466,12 +503,16 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             }
 
             function createSessionCard(session, sessionNumber, weekNumber) {
-                // El índice de sesión en los arrays de enlaces es 0-based
-                const sessionIndex = sessionNumber - 1; 
+                // Validar parámetros
+                if (!session || !session.subject) {
+                    console.warn(`Invalid session data for week ${weekNumber}, session ${sessionNumber}`);
+                    return '<div class="session-card rounded-xl p-4 border border-gray-200">Datos no disponibles</div>';
+                }
 
-                // Obtener URLs para el curso y sesión específicos. Si no se encuentra, usa '#'
-                const linkA = (courseLinksA[weekNumber] && courseLinksA[weekNumber][sessionIndex]) ? courseLinksA[weekNumber][sessionIndex] : '#';
-                const linkB = (courseLinksB[weekNumber] && courseLinksB[weekNumber][sessionIndex]) ? courseLinksB[weekNumber][sessionIndex] : '#';
+                const sessionIndex = sessionNumber - 1;
+                const linkA = courseLinksA[weekNumber]?.[sessionIndex] || '#';
+                const linkB = courseLinksB[weekNumber]?.[sessionIndex] || '#';
+                const color = subjectColors[session.subject] || '#6B7280';
 
                 // Generar los botones de clase con los enlaces
                 const classButtons = `
@@ -484,7 +525,7 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 return `
                     <div class="session-card rounded-xl p-4 border border-gray-200 transition-all duration-300" 
                          data-subject="${session.subject}" data-ambito="${session.ambito}"
-                         style="border-left: 5px solid ${subjectColors[session.subject] || '#6B7280'};">
+                         style="border-left: 5px solid ${color};">
                         <p class="font-semibold text-sm text-gray-500">Sesión ${sessionNumber}</p>
                         <p class="font-bold text-gray-800">${session.subject}</p>
                         <p class="text-sm text-gray-600 mt-2">${session.activity}</p>
@@ -532,7 +573,17 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             }
 
             function renderChart() {
-                const ctx = document.getElementById('proportionalityChart').getContext('2d');
+                const ctx = document.getElementById('proportionalityChart');
+                if (!ctx) {
+                    console.error('Canvas element not found');
+                    return;
+                }
+                
+                // Destruir gráfico existente de forma segura
+                if (window.proportionalityChart instanceof Chart) {
+                    window.proportionalityChart.destroy();
+                }
+                
                 const sessionCounts = {};
 
                 // Solo contamos Sesión 2 y 3 para la proporcionalidad mostrada
@@ -547,11 +598,6 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 const labels = sortedSubjects;
                 const data = sortedSubjects.map(subject => sessionCounts[subject]);
                 const backgroundColors = sortedSubjects.map(subject => subjectColors[subject] || '#6B7280');
-
-                // Solución al TypeError: Comprobar que existe y que tiene el método destroy antes de llamar
-                if (window.proportionalityChart && typeof window.proportionalityChart.destroy === 'function') {
-                    window.proportionalityChart.destroy();
-                }
 
                 window.proportionalityChart = new Chart(ctx, {
                     type: 'doughnut',
@@ -610,14 +656,23 @@ Semana 36;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
 
             renderChart();
             
-            document.getElementById('controls').addEventListener('click', (e) => {
-                if (e.target.classList.contains('filter-btn')) {
-                    const { filter, type } = e.target.dataset;
-                    applyFilter(filter, type);
-                }
-            });
+            // Manejo de eventos con validación
+            const controls = document.getElementById('controls');
+            if (controls) {
+                controls.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('filter-btn')) {
+                        const { filter, type } = e.target.dataset;
+                        if (filter && type) {
+                            applyFilter(filter, type);
+                        }
+                    }
+                });
+            }
 
             resetBtn.addEventListener('click', resetFilters);
+
+            // Remover estado de loading
+            document.body.classList.remove('loading');
         });
     </script>
 </body>
