@@ -75,3 +75,11 @@ Para resumir, te recomiendo seguir estos pasos:
 3.  **Implementa la apertura** a través de un enlace `<a>` con `target="_blank"`.
 
 Con estas acciones, es muy probable que soluciones el problema y tu PWA funcione de manera consistente en todas las plataformas. ¡Mucha suerte\!
+
+
+OTROS PROBLEMAS QUE HAN IDO APARECIENDO
+Problemas de Tailwind con el cortafuegos del IES: 
+
+Sustituidas líneas de código: <script src="https://cdn.tailwindcss.com"></script>
+
+Por:     <script src="https://unpkg.com/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
