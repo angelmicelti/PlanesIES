@@ -1,56 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<link rel="manifest" href="./manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>Plan Interactivo de Razonamiento Matemático - 3º ESO DIVERSIFICACIÓN</title>
-    <script src="https://unpkg.com/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F8F9FA;
-            color: #343A40;
-        }
-        .filter-btn {
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-        .filter-btn.active {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-        .week-card {
-            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-            transform: scale(1);
-        }
-        .week-card.filtered-out {
-            opacity: 0.15;
-            transform: scale(0.98);
-        }
-        .session-card.highlight {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 2px #10B981;
-        }
-        .class-btn {
-            @apply px-2 py-1 text-xs font-semibold rounded-full border border-blue-600 bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow-md;
+        body { font-family: 'Inter', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .filter-btn.active { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
+        .week-card.filtered-out { opacity: 0.15; transform: scale(0.98); }
+        .session-card.highlight { transform: scale(1.05); box-shadow: 0 0 0 2px #10B981; }
+        .hidden-content { display: none; }
+        .hidden { display: none !important; }
+        .export-btn { background: linear-gradient(135deg, #10B981 0%, #047857 100%); transition: all 0.3s ease; }
+        .export-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
+        .date-preview { font-size: 0.875rem; color: #6B7280; margin-top: 0.25rem; }
+        .chart-tooltip {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
         }
     </style>
 </head>
 <body class="antialiased">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-
         <header class="text-center mb-10">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Plan de Razonamiento Matemático (3º de ESO Diversificación)</h1>
-            <p class="mt-2 text-lg text-gray-600">Cronograma interactivo para 3º de ESO DIVER (36 semanas)</p>
+            <p class="mt-2 text-lg text-gray-600">Cronograma interactivo para 3º de ESO Diver (<span class="font-bold text-green-600">36 semanas</span>)</p>
         </header>
 
         <main>
+            <!-- SECCIÓN DE CONFIGURACIÓN -->
+            <section id="trimestre-config" class="mb-12 bg-white rounded-2xl shadow-sm overflow-hidden">
+                <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleConfig()">
+                    <h2 class="text-2xl font-bold text-gray-800">Configurar Trimestres</h2>
+                    <span id="toggle-config-icon" class="text-2xl font-bold transform transition-transform duration-300">+</span>
+                </button>
+                
+                <div id="config-content" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Primer Trimestre</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
+                                    <input type="date" id="trim1-start" value="2025-09-15" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="updateDatesInRealTime()">
+                                    <div class="date-preview" id="trim1-dates">15/09 - 19/12</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Semanas (1-36)</label>
+                                    <input type="number" id="trim1-weeks" min="1" max="34" value="14" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="updateDatesInRealTime()" oninput="updateWeeksSummary()">
+                                </div>
+                                <div class="text-sm text-gray-500"><span id="trim1-range">Semanas: 1-14</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Segundo Trimestre</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
+                                    <input type="date" id="trim2-start" value="2026-01-12" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="updateDatesInRealTime()">
+                                    <div class="date-preview" id="trim2-dates">12/01 - 27/03</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Semanas (1-36)</label>
+                                    <input type="number" id="trim2-weeks" min="1" max="34" value="11" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="updateDatesInRealTime()" oninput="updateWeeksSummary()">
+                                </div>
+                                <div class="text-sm text-gray-500"><span id="trim2-range">Semanas: 15-25</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Tercer Trimestre</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
+                                    <input type="date" id="trim3-start" value="2026-04-06" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="updateDatesInRealTime()">
+                                    <div class="date-preview" id="trim3-dates">06/04 - 19/06</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Semanas (1-36)</label>
+                                    <input type="number" id="trim3-weeks" min="1" max="34" value="11" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" onchange="updateDatesInRealTime()" oninput="updateWeeksSummary()">
+                                </div>
+                                <div class="text-sm text-gray-500"><span id="trim3-range">Semanas: 26-36</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-between items-center p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="text-sm text-green-800">
+                            <p><strong>Total de semanas:</strong> <span id="total-weeks" class="font-bold">36</span>/36</p>
+                            <p id="weeks-warning" class="text-orange-600 hidden">¡La suma debe ser exactamente 36 semanas!</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="applyConfiguration()" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition">Aplicar Configuración</button>
+                            <button onclick="exportToHTML()" class="export-btn px-6 py-3 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition">Exportar a HTML</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTROLES DE FILTRO -->
             <section id="controls" class="mb-12 p-6 bg-white rounded-2xl shadow-sm">
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Asignatura</h3>
@@ -61,54 +122,117 @@
                     <div id="ambito-filters" class="flex flex-wrap gap-2"></div>
                 </div>
                  <div class="mt-6 text-center">
-                    <button id="reset-filters" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75 transition">Mostrar Todo</button>
+                    <button id="reset-filters" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition">Mostrar Todo</button>
+                </div>
+            </section>
+
+            <!-- INFORMES PDF -->
+            <section id="reports" class="mb-12 bg-white rounded-2xl shadow-sm overflow-hidden">
+                <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleReports()">
+                    <h2 class="text-2xl font-bold text-gray-800">Generar Informes PDF</h2>
+                    <span id="toggle-reports-icon" class="text-2xl font-bold transform transition-transform duration-300">+</span>
+                </button>
+                
+                <div id="reports-content" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Informe por Materia</h3>
+                            <p class="text-gray-600 mb-4">Genera un informe detallado con todas las sesiones de una materia específica.</p>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Seleccionar materia</label>
+                                <select id="subject-select" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    <option value="">-- Selecciona una materia --</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Incluir evaluaciones</label>
+                                <div class="flex flex-wrap gap-4">
+                                    <label class="inline-flex items-center"><input type="checkbox" id="eval1-report" class="h-5 w-5 rounded border-gray-300" checked><span class="ml-2 text-gray-700">1ª Evaluación</span></label>
+                                    <label class="inline-flex items-center"><input type="checkbox" id="eval2-report" class="h-5 w-5 rounded border-gray-300" checked><span class="ml-2 text-gray-700">2ª Evaluación</span></label>
+                                    <label class="inline-flex items-center"><input type="checkbox" id="eval3-report" class="h-5 w-5 rounded border-gray-300" checked><span class="ml-2 text-gray-700">3ª Evaluación</span></label>
+                                </div>
+                            </div>
+                            <button id="generate-subject-pdf" class="w-full px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Generar Informe por Materia
+                            </button>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Informe por Trimestre</h3>
+                            <p class="text-gray-600 mb-4">Genera un informe completo de uno o varios trimestres con todas las materias.</p>
+                            <div class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Seleccionar trimestre(s)</label>
+                                <div class="space-y-2">
+                                    <label class="flex items-center p-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                        <input type="checkbox" id="trimestre1" class="h-5 w-5 rounded border-gray-300" checked>
+                                        <span class="ml-3"><span class="font-medium text-gray-700">Primer Trimestre</span><span class="block text-sm text-gray-500" id="trim1-info">Semanas 1-14</span></span>
+                                    </label>
+                                    <label class="flex items-center p-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                        <input type="checkbox" id="trimestre2" class="h-5 w-5 rounded border-gray-300" checked>
+                                        <span class="ml-3"><span class="font-medium text-gray-700">Segundo Trimestre</span><span class="block text-sm text-gray-500" id="trim2-info">Semanas 15-25</span></span>
+                                    </label>
+                                    <label class="flex items-center p-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                        <input type="checkbox" id="trimestre3" class="h-5 w-5 rounded border-gray-300" checked>
+                                        <span class="ml-3"><span class="font-medium text-gray-700">Tercer Trimestre</span><span class="block text-sm text-gray-500" id="trim3-info">Semanas 26-36</span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="generate-trimestre-pdf" class="w-full px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 transition flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Generar Informe por Trimestre
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p class="text-sm text-green-800">
+                            <strong>Nota:</strong> Los informes se generarán en formato PDF y se descargarán automáticamente. 
+                            Cada informe incluye fecha de generación, resumen de sesiones y cronograma detallado.
+                        </p>
+                    </div>
                 </div>
             </section>
             
+            <!-- GRÁFICO -->
             <section id="summary" class="mb-12">
                  <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Distribución Proporcional de Sesiones</h2>
-                    <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">
-                        Este gráfico ilustra la distribución de las sesiones (Sesión 2 y 3) a lo largo del ciclo completo de 36 semanas. La asignación es directamente proporcional a la carga horaria semanal de cada materia, garantizando un reparto equitativo del trabajo interdisciplinar de razonamiento matemático.
-                    </p>
+                    <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Distribución Proporcional de Sesiones (36 Semanas)</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">Este gráfico ilustra la distribución de las 108 sesiones a lo largo del ciclo completo de 36 semanas.</p>
                     <div class="chart-container relative w-full max-w-lg mx-auto h-80 md:h-96">
                         <canvas id="proportionalityChart"></canvas>
                     </div>
                 </div>
             </section>
 
+            <!-- CRONOGRAMA -->
             <section id="schedule">
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Cronograma del Curso Escolar Completo</h2>
-                <div id="evaluations-container" class="space-y-6">
-                    <!-- Primera Evaluación -->
+                <div id="evaluaciones-container" class="space-y-6">
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(1)">
-                            <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-14)</h3>
+                            <h3 class="text-xl font-bold text-gray-800" id="eval1-title">Primera Evaluación (Semanas 1-14: 15/09 - 19/12)</h3>
                             <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden">
-                            <!-- Las semanas se renderizarán aquí -->
-                        </div>
+                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden"></div>
                     </div>
-                    <!-- Segunda Evaluación -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(2)">
-                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-25)</h3>
+                            <h3 class="text-xl font-bold text-gray-800" id="eval2-title">Segunda Evaluación (Semanas 15-25: 12/01 - 27/03)</h3>
                             <span id="toggle-icon-2" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden">
-                            <!-- Las semanas se renderizarán aquí -->
-                        </div>
+                        <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden"></div>
                     </div>
-                    <!-- Tercera Evaluación -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(3)">
-                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 26-36)</h3>
+                            <h3 class="text-xl font-bold text-gray-800" id="eval3-title">Tercera Evaluación (Semanas 26-36: 06/04 - 19/06)</h3>
                             <span id="toggle-icon-3" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden">
-                            <!-- Las semanas se renderizarán aquí -->
-                        </div>
+                        <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden"></div>
                     </div>
                 </div>
             </section>
@@ -116,234 +240,27 @@
     </div>
 
     <script>
-        // Datos del CSV con los enlaces
-        const csvLinks = {
-            1: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B5",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E5",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H5"
-            },
-            2: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B9",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E9",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H9"
-            },
-            3: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B15",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E15",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H15"
-            },
-            4: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B19",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E19",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H19"
-            },
-            5: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B23",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E23",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H23"
-            },
-            6: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B27",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E27",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H27"
-            },
-            7: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B31",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E31",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H31"
-            },
-            8: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B37",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E37",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H37"
-            },
-            9: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B41",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E41",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H41"
-            },
-            10: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B45",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E45",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H45"
-            },
-            11: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B49",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E49",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H49"
-            },
-            12: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B55",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E55",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H55"
-            },
-            13: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B59",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E59",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H59"
-            },
-            14: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B63",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E63",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H63"
-            },
-            15: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B69",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E69",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H69"
-            },
-            16: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B73",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E73",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H73"
-            },
-            17: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B77",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E77",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H77"
-            },
-            18: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B83",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E83",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H83"
-            },
-            19: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B87",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E87",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H87"
-            },
-            20: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B91",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E91",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H91"
-            },
-            21: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B95",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E95",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H95"
-            },
-            22: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B101",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E101",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H101"
-            },
-            23: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B105",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E105",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H105"
-            },
-            24: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B109",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E109",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H109"
-            },
-            25: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B113",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E113",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H113"
-            },
-            26: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B119",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E119",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H119"
-            },
-            27: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B123",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E123",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H123"
-            },
-            28: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B127",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E127",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H127"
-            },
-            29: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B131",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E131",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H131"
-            },
-            30: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B137",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E137",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H137"
-            },
-            31: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B141",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E141",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H141"
-            },
-            32: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B145",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E145",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H145"
-            },
-            33: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B149",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E149",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H149"
-            },
-            34: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B155",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E155",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H155"
-            },
-            35: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B159",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E159",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H159"
-            },
-            36: {
-                session1: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B163",
-                session2: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E163",
-                session3: "https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H163"
-            }
+        // CONFIGURACIONES GLOBALES
+        const config = {
+            trim1: { weeks: 14, startDate: '2025-09-15' },
+            trim2: { weeks: 11, startDate: '2026-01-12' },
+            trim3: { weeks: 11, startDate: '2026-04-06' }
         };
+        
+        const subjectColors = {
+            'Ámbito SocioLingüístico': '#F97316',
+            'Religión': '#6B7280',
+            'Ámbito Científico-Tecnológico': '#10B981',
+            'Tecnología y Digitalización': '#0EA5E9',
+            'Computación y Robótica': '#8B5CF6',
+            'Cultura del Flamenco': '#EC4899',
+            'Educación Plástica': '#EF4444',
+            'Educación Física': '#3B82F6'
+        };
+        
+        let scheduleData = [], weekDates = [], proportionalityChart = null;
 
-        // Fechas de inicio y fin del curso escolar
-        const startDate = new Date(2025, 8, 15);
-        const midDate = new Date(2026, 0, 12);
-        const thirdDate = new Date(2026, 3, 6);
-        const endDate = new Date(2026, 5, 19);
-        const totalWeeks = 36;
-        const eval1Weeks = 14;
-        const eval2Weeks = 11;
-        const eval3Weeks = 11;
-
-        // Función para calcular las fechas de una semana dada
-        function getDatesForWeek(weekNumber) {
-            let startOfWeek = new Date(startDate);
-            if (weekNumber > eval1Weeks) {
-                startOfWeek = new Date(midDate);
-                let weeksSinceMid = weekNumber - eval1Weeks;
-                startOfWeek.setDate(startOfWeek.getDate() + (weeksSinceMid - 1) * 7);
-            } else {
-                startOfWeek.setDate(startOfWeek.getDate() + (weekNumber - 1) * 7);
-            }
-
-            if (weekNumber > eval1Weeks + eval2Weeks) {
-                startOfWeek = new Date(thirdDate);
-                let weeksSinceThird = weekNumber - (eval1Weeks + eval2Weeks);
-                startOfWeek.setDate(startOfWeek.getDate() + (weeksSinceThird - 1) * 7);
-            } else if (weekNumber > eval1Weeks) {
-                startOfWeek = new Date(midDate);
-                let weeksSinceMid = weekNumber - eval1Weeks;
-                startOfWeek.setDate(startOfWeek.getDate() + (weeksSinceMid - 1) * 7);
-            } else {
-                startOfWeek = new Date(startDate);
-                startOfWeek.setDate(startOfWeek.getDate() + (weekNumber - 1) * 7);
-            }
-
-            const endOfWeek = new Date(startOfWeek);
-            endOfWeek.setDate(endOfWeek.getDate() + 4);
-            
-            return {
-                start: startOfWeek.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }),
-                end: endOfWeek.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })
-            };
-        }
-
-        // Definición de las asignaturas, ámbitos y carga horaria
+        // DATOS BASE PARA 3º ESO DIVER
         const subjects = [
             { name: 'Ámbito SocioLingüístico', hours: 9, ambito: 'SL' },
             { name: 'Religión', hours: 1, ambito: 'SL' },
@@ -354,90 +271,6 @@
             { name: 'Educación Plástica', hours: 2, ambito: 'AR' },
             { name: 'Educación Física', hours: 2, ambito: 'AR' }
         ];
-
-        const totalHours = subjects.reduce((sum, s) => sum + s.hours, 0);
-
-        const ambitoCT = subjects.filter(s => s.ambito === 'CT');
-        const ambitoARSL = subjects.filter(s => s.ambito === 'AR' || s.ambito === 'SL');
-        
-        const totalHoursSession2 = ambitoCT.reduce((sum, s) => s.name === 'Ámbito Científico-Tecnológico' ? sum + 4 : sum + s.hours, 0);
-        const totalHoursSession3 = ambitoARSL.reduce((sum, s) => sum + s.hours, 0);
-
-        // Función para crear una secuencia uniforme de asignaturas
-        function createUniformSequence(subjectList, totalHoursForSession, weeks) {
-            // Calcular el número de sesiones para cada asignatura
-            const sessionCounts = subjectList.map(s => {
-                const hours = s.name === 'Ámbito Científico-Tecnológico' ? 4 : s.hours;
-                return {
-                    name: s.name,
-                    count: Math.round((hours / totalHoursForSession) * weeks)
-                };
-            });
-
-            // Ajustar para que la suma sea exactamente el número de semanas
-            let totalSessions = sessionCounts.reduce((sum, item) => sum + item.count, 0);
-            let index = 0;
-            while (totalSessions !== weeks) {
-                if (totalSessions > weeks) {
-                    sessionCounts[index % sessionCounts.length].count--;
-                    totalSessions--;
-                } else {
-                    sessionCounts[index % sessionCounts.length].count++;
-                    totalSessions++;
-                }
-                index++;
-            }
-
-            // Crear un array con las asignaturas repetidas según su count
-            let sequence = [];
-            sessionCounts.forEach(item => {
-                for (let i = 0; i < item.count; i++) {
-                    sequence.push(item.name);
-                }
-            });
-
-            // Distribuir uniformemente (no barajar)
-            return distributeUniformly(sequence);
-        }
-
-        // Función para distribuir uniformemente las asignaturas
-        function distributeUniformly(sequence) {
-            const subjectGroups = {};
-            sequence.forEach(subject => {
-                if (!subjectGroups[subject]) {
-                    subjectGroups[subject] = [];
-                }
-                subjectGroups[subject].push(subject);
-            });
-
-            const result = [];
-            const subjects = Object.keys(subjectGroups);
-            const maxCount = Math.max(...subjects.map(s => subjectGroups[s].length));
-
-            for (let i = 0; i < maxCount; i++) {
-                subjects.forEach(subject => {
-                    if (subjectGroups[subject].length > i) {
-                        result.push(subjectGroups[subject][i]);
-                    }
-                });
-            }
-
-            return result.slice(0, sequence.length);
-        }
-
-        // Crear secuencias uniformes
-        const ctScheduleSequence = createUniformSequence(ambitoCT, totalHoursSession2, totalWeeks);
-        const arslScheduleSequence = createUniformSequence(ambitoARSL, totalHoursSession3, totalWeeks);
-        
-        const subjectDetails = {};
-        const subjectColors = {};
-        subjects.forEach(s => {
-            subjectDetails[s.name] = s.ambito;
-            subjectColors[s.name] = `hsl(${Math.random() * 360}, 60%, 50%)`;
-        });
-        subjectColors['Ámbito Científico-Tecnológico'] = '#10B981';
-        subjectDetails['Matemáticas'] = 'CT';
-        subjectColors['Matemáticas'] = '#10B981';
 
         const ces = {
             'Ámbito SocioLingüístico': {
@@ -499,230 +332,876 @@
             }
         };
 
-        function getRandomCE(subject) {
-            const ceMap = ces[subject];
-            if (!ceMap) return { key: 'CE_EJEMPLO', value: 'Criterio de Evaluación no especificado.' };
-            const keys = Object.keys(ceMap);
-            const randomKey = keys[Math.floor(Math.random() * keys.length)];
-            return { key: randomKey, value: ceMap[randomKey] };
+        // CSV CONTENT (enlaces de ejemplo)
+        const csvContent = `;Sesión 1;Sesión 2;Sesión 3
+Semana 1;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B5;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E5;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H5
+Semana 2;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B9;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E9;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H9
+Semana 3;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=B15;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=E15;https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=569508156#gid=569508156&range=H15`;
+
+        // FUNCIONES PRINCIPALES
+        function parseCSV(csvText) {
+            const links = {};
+            const lines = csvText.trim().split('\n');
+            for (let i = 1; i < lines.length; i++) {
+                const parts = lines[i].split(';');
+                const weekMatch = parts[0].match(/\d+/);
+                if (weekMatch) {
+                    const weekNum = parseInt(weekMatch[0], 10);
+                    links[weekNum] = [
+                        parts[1]?.trim() || '#',
+                        parts[2]?.trim() || '#',
+                        parts[3]?.trim() || '#'
+                    ];
+                }
+            }
+            return links;
         }
-        
-        const scheduleData = [];
-        for (let i = 0; i < totalWeeks; i++) {
-            const ce1 = getRandomCE('Ámbito Científico-Tecnológico');
-            const ce2 = getRandomCE(ctScheduleSequence[i]);
-            const ce3 = getRandomCE(arslScheduleSequence[i]);
+
+        // DISTRIBUIR SESIONES UNIFORMEMENTE ENTRE TRIMESTRES
+        function distributeSessionsUniformly(subjectList, totalWeeks) {
+            const result = { trim1: [], trim2: [], trim3: [] };
+            const t1Weeks = config.trim1.weeks;
+            const t2Weeks = config.trim2.weeks;
+            const t3Weeks = config.trim3.weeks;
             
-            scheduleData.push({
-                week: i + 1,
-                session1: {
-                    subject: 'Ámbito Científico-Tecnológico',
-                    ambito: 'CT',
-                    activity: activityExamples['Ámbito Científico-Tecnológico'][ce1.key],
-                    ce: ce1.key
-                },
-                session2: {
-                    subject: ctScheduleSequence[i],
-                    ambito: subjectDetails[ctScheduleSequence[i]],
-                    activity: activityExamples[ctScheduleSequence[i]][ce2.key],
-                    ce: ce2.key
-                },
-                session3: {
-                    subject: arslScheduleSequence[i],
-                    ambito: subjectDetails[arslScheduleSequence[i]],
-                    activity: activityExamples[arslScheduleSequence[i]][ce3.key],
-                    ce: ce3.key
+            subjectList.forEach(subject => {
+                // Calcular cuántas sesiones por trimestre
+                let sessionsPerSubject = 0;
+                if (subject.name === 'Ámbito Científico-Tecnológico') {
+                    // Esta asignatura aparece en TODAS las semanas (sesión 1)
+                    sessionsPerSubject = totalWeeks;
+                } else {
+                    // Calcular proporción según horas
+                    const totalHours = subjects.reduce((sum, s) => sum + s.hours, 0);
+                    sessionsPerSubject = Math.round((subject.hours / totalHours) * totalWeeks);
+                }
+                
+                // Distribuir uniformemente entre trimestres
+                let remaining = sessionsPerSubject;
+                const perTrim = Math.floor(sessionsPerSubject / 3);
+                
+                // Asignar base por trimestre
+                for (let i = 0; i < perTrim; i++) {
+                    result.trim1.push(subject.name);
+                    result.trim2.push(subject.name);
+                    result.trim3.push(subject.name);
+                }
+                
+                remaining -= perTrim * 3;
+                
+                // Distribuir las restantes
+                while (remaining > 0) {
+                    if (remaining > 0) {
+                        result.trim1.push(subject.name);
+                        remaining--;
+                    }
+                    if (remaining > 0) {
+                        result.trim2.push(subject.name);
+                        remaining--;
+                    }
+                    if (remaining > 0) {
+                        result.trim3.push(subject.name);
+                        remaining--;
+                    }
                 }
             });
-        }
-
-        function toggleEvaluation(evaluationNumber) {
-            const content = document.getElementById(`evaluation-content-${evaluationNumber}`);
-            const icon = document.getElementById(`toggle-icon-${evaluationNumber}`);
-            content.classList.toggle('hidden');
-            if (content.classList.contains('hidden')) {
-                icon.textContent = '+';
-            } else {
-                icon.textContent = '-';
-            }
-        }
-        window.toggleEvaluation = toggleEvaluation;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const subjectFiltersContainer = document.getElementById('subject-filters');
-            const ambitoFiltersContainer = document.getElementById('ambito-filters');
-            const resetBtn = document.getElementById('reset-filters');
             
-            const allSubjects = [...new Set(scheduleData.flatMap(w => [w.session1.subject, w.session2.subject, w.session3.subject]))].sort();
-            const allAmbitos = [...new Set(subjects.map(s => s.ambito))].sort();
+            // Mezclar las secuencias para cada trimestre
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            result.trim1 = shuffleArray(result.trim1);
+            result.trim2 = shuffleArray(result.trim2);
+            result.trim3 = shuffleArray(result.trim3);
+            
+            return result;
+        }
 
-            function createFilterButtons(container, items, type) {
-                items.forEach(item => {
-                    const button = document.createElement('button');
-                    button.textContent = item;
-                    button.dataset.filter = item;
-                    button.dataset.type = type;
-                    button.className = 'filter-btn px-4 py-1.5 text-sm font-medium text-blue-800 bg-blue-100 rounded-full hover:bg-blue-200 border border-blue-200';
-                    container.appendChild(button);
+        function generateSchedule() {
+            scheduleData = [];
+            weekDates = [];
+            const t1Weeks = config.trim1.weeks;
+            const t2Weeks = config.trim2.weeks;
+            const t3Weeks = config.trim3.weeks;
+            const totalWeeks = t1Weeks + t2Weeks + t3Weeks;
+            
+            // Generar fechas
+            let currentDate = new Date(config.trim1.startDate);
+            for (let i = 0; i < totalWeeks; i++) {
+                const start = new Date(currentDate);
+                const end = new Date(currentDate);
+                end.setDate(currentDate.getDate() + 4);
+                weekDates.push({ start, end, trimestre: i < t1Weeks ? 1 : i < t1Weeks + t2Weeks ? 2 : 3 });
+                currentDate.setDate(currentDate.getDate() + 7);
+            }
+            
+            // Distribuir asignaturas uniformemente entre trimestres
+            const distribution = distributeSessionsUniformly(subjects, totalWeeks);
+            
+            // Combinar las secuencias de los tres trimestres
+            const allSessions2 = [...distribution.trim1.slice(0, t1Weeks), 
+                                 ...distribution.trim2.slice(0, t2Weeks), 
+                                 ...distribution.trim3.slice(0, t3Weeks)];
+            
+            const allSessions3 = [...distribution.trim1.slice(t1Weeks, t1Weeks * 2).filter(s => s !== 'Ámbito Científico-Tecnológico'), 
+                                 ...distribution.trim2.slice(t2Weeks, t2Weeks * 2).filter(s => s !== 'Ámbito Científico-Tecnológico'), 
+                                 ...distribution.trim3.slice(t3Weeks, t3Weeks * 2).filter(s => s !== 'Ámbito Científico-Tecnológico')];
+            
+            // Asegurar que tenemos suficientes sesiones
+            while (allSessions2.length < totalWeeks) {
+                allSessions2.push(subjects[Math.floor(Math.random() * subjects.length)].name);
+            }
+            
+            while (allSessions3.length < totalWeeks) {
+                allSessions3.push(subjects.filter(s => s.ambito !== 'CT')[Math.floor(Math.random() * subjects.filter(s => s.ambito !== 'CT').length)].name);
+            }
+            
+            // Generar cronograma
+            for (let week = 1; week <= totalWeeks; week++) {
+                const session2Subject = allSessions2[week - 1] || 'Ámbito Científico-Tecnológico';
+                const session3Subject = allSessions3[week - 1] || 'Ámbito SocioLingüístico';
+                
+                // Obtener CE aleatorio para cada asignatura
+                function getRandomCE(subject) {
+                    const ceMap = ces[subject];
+                    if (!ceMap) return { key: 'CE_EJEMPLO', value: 'Criterio de Evaluación no especificado.' };
+                    const keys = Object.keys(ceMap);
+                    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+                    return { key: randomKey, value: ceMap[randomKey] };
+                }
+                
+                const ce1 = getRandomCE('Ámbito Científico-Tecnológico');
+                const ce2 = getRandomCE(session2Subject);
+                const ce3 = getRandomCE(session3Subject);
+                
+                scheduleData.push({
+                    week: week,
+                    session1: {
+                        subject: 'Ámbito Científico-Tecnológico',
+                        ambito: 'CT',
+                        activity: activityExamples['Ámbito Científico-Tecnológico'][ce1.key] || 'Actividad de razonamiento matemático',
+                        ce: ce1.key
+                    },
+                    session2: {
+                        subject: session2Subject,
+                        ambito: subjects.find(s => s.name === session2Subject)?.ambito || 'CT',
+                        activity: activityExamples[session2Subject][ce2.key] || 'Actividad interdisciplinar',
+                        ce: ce2.key
+                    },
+                    session3: {
+                        subject: session3Subject,
+                        ambito: subjects.find(s => s.name === session3Subject)?.ambito || 'SL',
+                        activity: activityExamples[session3Subject][ce3.key] || 'Actividad interdisciplinar',
+                        ce: ce3.key
+                    }
                 });
             }
+            
+            return scheduleData;
+        }
 
-            function renderSchedule(data, containerId) {
+        // FUNCIONES DE INTERFAZ (igual que en 1ESO)
+        function toggleConfig() {
+            const content = document.getElementById('config-content');
+            const icon = document.getElementById('toggle-config-icon');
+            content.classList.toggle('hidden-content');
+            icon.textContent = content.classList.contains('hidden-content') ? '+' : '-';
+            if (!content.classList.contains('hidden-content')) updateWeeksSummary();
+        }
+
+        function toggleReports() {
+            const content = document.getElementById('reports-content');
+            const icon = document.getElementById('toggle-reports-icon');
+            content.classList.toggle('hidden-content');
+            icon.textContent = content.classList.contains('hidden-content') ? '+' : '-';
+        }
+
+        function toggleEvaluation(num) {
+            const content = document.getElementById(`evaluation-content-${num}`);
+            const icon = document.getElementById(`toggle-icon-${num}`);
+            content.classList.toggle('hidden');
+            icon.textContent = content.classList.contains('hidden') ? '+' : '-';
+        }
+
+        function formatDateForDisplay(date) {
+            return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+        }
+
+        function updateWeeksSummary() {
+            const t1 = parseInt(document.getElementById('trim1-weeks').value) || 14;
+            const t2 = parseInt(document.getElementById('trim2-weeks').value) || 11;
+            const t3 = parseInt(document.getElementById('trim3-weeks').value) || 11;
+            const total = t1 + t2 + t3;
+            
+            document.getElementById('total-weeks').textContent = total;
+            document.getElementById('trim1-range').textContent = `Semanas: 1-${t1}`;
+            document.getElementById('trim2-range').textContent = `Semanas: ${t1 + 1}-${t1 + t2}`;
+            document.getElementById('trim3-range').textContent = `Semanas: ${t1 + t2 + 1}-${total}`;
+            
+            document.getElementById('trim1-info').textContent = `Semanas 1-${t1}`;
+            document.getElementById('trim2-info').textContent = `Semanas ${t1 + 1}-${t1 + t2}`;
+            document.getElementById('trim3-info').textContent = `Semanas ${t1 + t2 + 1}-${total}`;
+            
+            const warning = document.getElementById('weeks-warning');
+            warning.classList.toggle('hidden', total === 36);
+        }
+
+        function updateDatesInRealTime() {
+            const t1Start = document.getElementById('trim1-start').value;
+            const t2Start = document.getElementById('trim2-start').value;
+            const t3Start = document.getElementById('trim3-start').value;
+            const t1Weeks = parseInt(document.getElementById('trim1-weeks').value) || 14;
+            const t2Weeks = parseInt(document.getElementById('trim2-weeks').value) || 11;
+            const t3Weeks = parseInt(document.getElementById('trim3-weeks').value) || 11;
+            
+            if (t1Start) {
+                const startDate1 = new Date(t1Start);
+                const endDate1 = new Date(startDate1);
+                endDate1.setDate(startDate1.getDate() + (t1Weeks * 7) - 3);
+                document.getElementById('trim1-dates').textContent = `${formatDateForDisplay(startDate1)} - ${formatDateForDisplay(endDate1)}`;
+            }
+            
+            if (t2Start) {
+                const startDate2 = new Date(t2Start);
+                const endDate2 = new Date(startDate2);
+                endDate2.setDate(startDate2.getDate() + (t2Weeks * 7) - 3);
+                document.getElementById('trim2-dates').textContent = `${formatDateForDisplay(startDate2)} - ${formatDateForDisplay(endDate2)}`;
+            }
+            
+            if (t3Start) {
+                const startDate3 = new Date(t3Start);
+                const endDate3 = new Date(startDate3);
+                endDate3.setDate(startDate3.getDate() + (t3Weeks * 7) - 3);
+                document.getElementById('trim3-dates').textContent = `${formatDateForDisplay(startDate3)} - ${formatDateForDisplay(endDate3)}`;
+            }
+            
+            if (t1Start && t2Start && t3Start) {
+                const trim1EndDate = new Date(t1Start);
+                trim1EndDate.setDate(trim1EndDate.getDate() + (t1Weeks * 7) - 3);
+                const trim2EndDate = new Date(t2Start);
+                trim2EndDate.setDate(trim2EndDate.getDate() + (t2Weeks * 7) - 3);
+                const trim3EndDate = new Date(t3Start);
+                trim3EndDate.setDate(trim3EndDate.getDate() + (t3Weeks * 7) - 3);
+                
+                document.getElementById('eval1-title').textContent = `Primera Evaluación (Semanas 1-${t1Weeks}: ${formatDateForDisplay(new Date(t1Start))} - ${formatDateForDisplay(trim1EndDate)})`;
+                document.getElementById('eval2-title').textContent = `Segunda Evaluación (Semanas ${t1Weeks + 1}-${t1Weeks + t2Weeks}: ${formatDateForDisplay(new Date(t2Start))} - ${formatDateForDisplay(trim2EndDate)})`;
+                document.getElementById('eval3-title').textContent = `Tercera Evaluación (Semanas ${t1Weeks + t2Weeks + 1}-36: ${formatDateForDisplay(new Date(t3Start))} - ${formatDateForDisplay(trim3EndDate)})`;
+            }
+            
+            updateWeeksSummary();
+        }
+
+        function applyConfiguration() {
+            config.trim1.weeks = parseInt(document.getElementById('trim1-weeks').value) || 14;
+            config.trim2.weeks = parseInt(document.getElementById('trim2-weeks').value) || 11;
+            config.trim3.weeks = parseInt(document.getElementById('trim3-weeks').value) || 11;
+            config.trim1.startDate = document.getElementById('trim1-start').value;
+            config.trim2.startDate = document.getElementById('trim2-start').value;
+            config.trim3.startDate = document.getElementById('trim3-start').value;
+            
+            if (config.trim1.weeks + config.trim2.weeks + config.trim3.weeks !== 36) {
+                alert('La suma de semanas debe ser exactamente 36.');
+                return;
+            }
+            
+            generateSchedule();
+            renderEverything();
+            alert('Configuración aplicada correctamente.');
+        }
+
+        function initializeChart() {
+            const ctx = document.getElementById('proportionalityChart');
+            if (!ctx) return;
+            
+            if (proportionalityChart instanceof Chart) {
+                proportionalityChart.destroy();
+            }
+            
+            // Contar sesiones por materia
+            const sessionCounts = {};
+            scheduleData.forEach(week => {
+                // Contar sesión 2 (excepto Ámbito Científico-Tecnológico si ya está en sesión 1)
+                if (week.session2.subject !== 'Ámbito Científico-Tecnológico' || 
+                    (week.session2.subject === 'Ámbito Científico-Tecnológico' && week.session1.subject !== week.session2.subject)) {
+                    sessionCounts[week.session2.subject] = (sessionCounts[week.session2.subject] || 0) + 1;
+                }
+                
+                // Contar sesión 3
+                sessionCounts[week.session3.subject] = (sessionCounts[week.session3.subject] || 0) + 1;
+            });
+            
+            // También contar la sesión 1 (Ámbito Científico-Tecnológico aparece todas las semanas)
+            const cienciaTecCount = scheduleData.filter(w => w.session1.subject === 'Ámbito Científico-Tecnológico').length;
+            if (cienciaTecCount > 0) {
+                sessionCounts['Ámbito Científico-Tecnológico (S1)'] = cienciaTecCount;
+            }
+            
+            const labels = Object.keys(sessionCounts);
+            const data = labels.map(subject => sessionCounts[subject]);
+            const colors = labels.map(subject => {
+                if (subject === 'Ámbito Científico-Tecnológico (S1)') {
+                    return '#10B981'; // Color más claro para diferenciar
+                }
+                return subjectColors[subject.replace(' (S1)', '')] || '#6B7280';
+            });
+            
+            proportionalityChart = new Chart(ctx.getContext('2d'), {
+                type: 'doughnut',
+                data: { 
+                    labels: labels,
+                    datasets: [{ 
+                        data: data, 
+                        backgroundColor: colors, 
+                        borderColor: '#FDFBF8', 
+                        borderWidth: 3, 
+                        hoverOffset: 20,
+                        hoverBorderColor: '#10B981',
+                        hoverBorderWidth: 2
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 20,
+                            left: 10,
+                            right: 10
+                        }
+                    },
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12,
+                                    family: 'Inter'
+                                },
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1F2937',
+                            bodyColor: '#4B5563',
+                            borderColor: '#E5E7EB',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            padding: 12,
+                            displayColors: true,
+                            usePointStyle: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        const totalSessions = data.reduce((a, b) => a + b, 0);
+                                        const percentage = Math.round((context.parsed / totalSessions) * 100);
+                                        label += `${context.parsed} sesiones (${percentage}%)`;
+                                    }
+                                    return label;
+                                },
+                                title: function(tooltipItems) {
+                                    return tooltipItems[0].label;
+                                }
+                            }
+                        }
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 1000
+                    }
+                }
+            });
+            
+            // Asegurarse de que el gráfico se renderice correctamente
+            setTimeout(() => {
+                if (proportionalityChart) {
+                    proportionalityChart.update();
+                }
+            }, 100);
+        }
+
+        // FUNCIÓN DE EXPORTACIÓN A HTML COMPLETA
+        async function exportToHTML() {
+            applyConfiguration();
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            let chartImage = '';
+            if (proportionalityChart && proportionalityChart.canvas) {
+                chartImage = proportionalityChart.toBase64Image();
+            }
+            
+            const exportDoc = document.documentElement.outerHTML;
+            const startMarker = '<!-- SECCIÓN DE CONFIGURACIÓN -->';
+            const endMarker = '</section>';
+            
+            let startIndex = exportDoc.indexOf(startMarker);
+            let endIndex = exportDoc.indexOf(endMarker, startIndex) + endMarker.length;
+            
+            let fixedHTML = exportDoc;
+            
+            if (startIndex !== -1 && endIndex !== -1) {
+                fixedHTML = exportDoc.substring(0, startIndex) + exportDoc.substring(endIndex);
+                
+                if (chartImage) {
+                    const canvasPattern = /<canvas id="proportionalityChart"[^>]*>[\s\S]*?<\/canvas>/i;
+                    const imageHTML = `<div class="text-center"><img src="${chartImage}" alt="Gráfico de distribución proporcional" style="max-width: 100%; height: auto;" /></div>`;
+                    fixedHTML = fixedHTML.replace(canvasPattern, imageHTML);
+                }
+                
+                fixedHTML = fixedHTML.replace(/onchange="updateDatesInRealTime\(\)"/g, '');
+                fixedHTML = fixedHTML.replace(/oninput="updateWeeksSummary\(\)"/g, '');
+                fixedHTML = fixedHTML.replace(/onclick="toggleConfig\(\)"/g, '');
+                fixedHTML = fixedHTML.replace(/onclick="applyConfiguration\(\)"/g, '');
+                fixedHTML = fixedHTML.replace(/onclick="exportToHTML\(\)"/g, '');
+                fixedHTML = fixedHTML.replace(/<button onclick="exportToHTML\(\)"[^>]*>[\s\S]*?<\/button>/g, '');
+                
+                const t1Weeks = config.trim1.weeks;
+                const t2Weeks = config.trim2.weeks;
+                const t1Start = new Date(config.trim1.startDate);
+                const t2Start = new Date(config.trim2.startDate);
+                const t3Start = new Date(config.trim3.startDate);
+                
+                const t1EndDate = new Date(t1Start);
+                t1EndDate.setDate(t1EndDate.getDate() + (t1Weeks * 7) - 3);
+                const t2EndDate = new Date(t2Start);
+                t2EndDate.setDate(t2EndDate.getDate() + (t2Weeks * 7) - 3);
+                const t3EndDate = new Date(t3Start);
+                t3EndDate.setDate(t3EndDate.getDate() + (config.trim3.weeks * 7) - 3);
+                
+                const eval1Title = `Primera Evaluación (Semanas 1-${t1Weeks}: ${formatDateForDisplay(t1Start)} - ${formatDateForDisplay(t1EndDate)})`;
+                const eval2Title = `Segunda Evaluación (Semanas ${t1Weeks + 1}-${t1Weeks + t2Weeks}: ${formatDateForDisplay(t2Start)} - ${formatDateForDisplay(t2EndDate)})`;
+                const eval3Title = `Tercera Evaluación (Semanas ${t1Weeks + t2Weeks + 1}-36: ${formatDateForDisplay(t3Start)} - ${formatDateForDisplay(t3EndDate)})`;
+                
+                fixedHTML = fixedHTML.replace(/id="eval1-title"[^>]*>([^<]*)<\/h3>/, `id="eval1-title">${eval1Title}</h3>`);
+                fixedHTML = fixedHTML.replace(/id="eval2-title"[^>]*>([^<]*)<\/h3>/, `id="eval2-title">${eval2Title}</h3>`);
+                fixedHTML = fixedHTML.replace(/id="eval3-title"[^>]*>([^<]*)<\/h3>/, `id="eval3-title">${eval3Title}</h3>`);
+                
+                fixedHTML = fixedHTML.replace(/id="trim1-info"[^>]*>([^<]*)<\/span>/, `id="trim1-info">Semanas 1-${t1Weeks}</span>`);
+                fixedHTML = fixedHTML.replace(/id="trim2-info"[^>]*>([^<]*)<\/span>/, `id="trim2-info">Semanas ${t1Weeks + 1}-${t1Weeks + t2Weeks}</span>`);
+                fixedHTML = fixedHTML.replace(/id="trim3-info"[^>]*>([^<]*)<\/span>/, `id="trim3-info">Semanas ${t1Weeks + t2Weeks + 1}-36</span>`);
+            }
+            
+            const blob = new Blob([fixedHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'RM3ESODIVER.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Archivo HTML exportado correctamente. La sección de configuración ha sido eliminada y todas las fechas están fijas.');
+        }
+
+        // FUNCIONES PARA GENERAR INFORMES PDF
+        function generateSubjectPDF() {
+            const subjectSelect = document.getElementById('subject-select');
+            const selectedSubject = subjectSelect.value;
+            
+            if (!selectedSubject) {
+                alert('Por favor, selecciona una materia para generar el informe.');
+                return;
+            }
+            
+            const includeEval1 = document.getElementById('eval1-report').checked;
+            const includeEval2 = document.getElementById('eval2-report').checked;
+            const includeEval3 = document.getElementById('eval3-report').checked;
+            
+            if (!includeEval1 && !includeEval2 && !includeEval3) {
+                alert('Por favor, selecciona al menos una evaluación.');
+                return;
+            }
+            
+            let filteredWeeks = scheduleData.filter((week, index) => {
+                if (index < config.trim1.weeks) return includeEval1;
+                if (index < config.trim1.weeks + config.trim2.weeks) return includeEval2;
+                return includeEval3;
+            });
+            
+            let subjectSessions = [];
+            filteredWeeks.forEach(week => {
+                for (let i = 1; i <= 3; i++) {
+                    const session = week[`session${i}`];
+                    if (session.subject === selectedSubject) {
+                        subjectSessions.push({
+                            week: week.week,
+                            session: i,
+                            activity: session.activity,
+                            ce: session.ce,
+                            date: weekDates[week.week - 1]
+                        });
+                    }
+                }
+            });
+            
+            if (subjectSessions.length === 0) {
+                alert(`No hay sesiones de ${selectedSubject} en las evaluaciones seleccionadas.`);
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            
+            doc.setFontSize(20);
+            doc.setTextColor(16, 185, 129);
+            doc.text(`Informe de ${selectedSubject}`, 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Plan de Razonamiento Matemático - 3º ESO Diversificación', 105, 28, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setTextColor(120, 120, 120);
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+            doc.text(`Generado el: ${dateStr}`, 20, 40);
+            
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Total de sesiones: ${subjectSessions.length}`, 20, 50);
+            
+            let evaluationsIncluded = [];
+            if (includeEval1) evaluationsIncluded.push('1ª Evaluación');
+            if (includeEval2) evaluationsIncluded.push('2ª Evaluación');
+            if (includeEval3) evaluationsIncluded.push('3ª Evaluación');
+            doc.text(`Evaluaciones incluidas: ${evaluationsIncluded.join(', ')}`, 20, 56);
+            
+            let yPosition = 70;
+            doc.setFillColor(16, 185, 129);
+            doc.setTextColor(255, 255, 255);
+            doc.rect(20, yPosition, 170, 8, 'F');
+            doc.text('Semana', 25, yPosition + 6);
+            doc.text('Fecha', 45, yPosition + 6);
+            doc.text('Sesión', 80, yPosition + 6);
+            doc.text('Actividad', 100, yPosition + 6);
+            
+            yPosition += 8;
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(9);
+            
+            subjectSessions.forEach((session, index) => {
+                if (yPosition > 270) {
+                    doc.addPage();
+                    yPosition = 20;
+                    doc.setFillColor(16, 185, 129);
+                    doc.setTextColor(255, 255, 255);
+                    doc.rect(20, yPosition, 170, 8, 'F');
+                    doc.text('Semana', 25, yPosition + 6);
+                    doc.text('Fecha', 45, yPosition + 6);
+                    doc.text('Sesión', 80, yPosition + 6);
+                    doc.text('Actividad', 100, yPosition + 6);
+                    yPosition += 8;
+                }
+                
+                if (index % 2 === 0) {
+                    doc.setFillColor(245, 245, 245);
+                    doc.rect(20, yPosition, 170, 10, 'F');
+                }
+                
+                doc.text(session.week.toString(), 25, yPosition + 7);
+                const dateStr = `${session.date.start.getDate()}/${session.date.start.getMonth() + 1}`;
+                doc.text(dateStr, 45, yPosition + 7);
+                doc.text(`Sesión ${session.session}`, 80, yPosition + 7);
+                
+                const activityLines = doc.splitTextToSize(session.activity, 80);
+                const activityHeight = activityLines.length * 5;
+                doc.text(activityLines, 100, yPosition + 7);
+                
+                yPosition += Math.max(10, activityHeight + 2);
+            });
+            
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Plan de Razonamiento Matemático - 3º ESO Diversificación', 105, 290, { align: 'center' });
+            
+            const filename = `Informe_${selectedSubject.replace(/ /g, '_')}_${dateStr.replace(/ /g, '_')}.pdf`;
+            doc.save(filename);
+        }
+        
+        function generateTrimestrePDF() {
+            const trimestre1 = document.getElementById('trimestre1').checked;
+            const trimestre2 = document.getElementById('trimestre2').checked;
+            const trimestre3 = document.getElementById('trimestre3').checked;
+            
+            if (!trimestre1 && !trimestre2 && !trimestre3) {
+                alert('Por favor, selecciona al menos un trimestre.');
+                return;
+            }
+            
+            let weeksToInclude = [];
+            if (trimestre1) weeksToInclude = weeksToInclude.concat(
+                [...Array(config.trim1.weeks).keys()].map(i => i + 1)
+            );
+            if (trimestre2) weeksToInclude = weeksToInclude.concat(
+                [...Array(config.trim2.weeks).keys()].map(i => i + config.trim1.weeks + 1)
+            );
+            if (trimestre3) weeksToInclude = weeksToInclude.concat(
+                [...Array(config.trim3.weeks).keys()].map(i => i + config.trim1.weeks + config.trim2.weeks + 1)
+            );
+            
+            let filteredWeeks = scheduleData.filter(week => weeksToInclude.includes(week.week));
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            
+            doc.setFontSize(20);
+            doc.setTextColor(16, 185, 129);
+            let title = 'Informe por ';
+            if (trimestre1 && !trimestre2 && !trimestre3) title += 'Primer Trimestre';
+            else if (!trimestre1 && trimestre2 && !trimestre3) title += 'Segundo Trimestre';
+            else if (!trimestre1 && !trimestre2 && trimestre3) title += 'Tercer Trimestre';
+            else title += 'Trimestre(s) Seleccionado(s)';
+            
+            doc.text(title, 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Plan de Razonamiento Matemático - 3º ESO Diversificación', 105, 28, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setTextColor(120, 120, 120);
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+            doc.text(`Generado el: ${dateStr}`, 20, 40);
+            
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            let trimestresText = [];
+            if (trimestre1) trimestresText.push(`1º Trimestre (S1-S${config.trim1.weeks})`);
+            if (trimestre2) trimestresText.push(`2º Trimestre (S${config.trim1.weeks + 1}-S${config.trim1.weeks + config.trim2.weeks})`);
+            if (trimestre3) trimestresText.push(`3º Trimestre (S${config.trim1.weeks + config.trim2.weeks + 1}-S36)`);
+            
+            doc.text(`Trimestres incluidos: ${trimestresText.join(', ')}`, 20, 50);
+            doc.text(`Total de semanas: ${filteredWeeks.length}`, 20, 56);
+            doc.text(`Total de sesiones: ${filteredWeeks.length * 3}`, 20, 62);
+            
+            let yPosition = 75;
+            filteredWeeks.forEach((week, index) => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                doc.setFillColor(240, 240, 240);
+                doc.rect(20, yPosition, 170, 8, 'F');
+                doc.setFontSize(12);
+                doc.setTextColor(16, 185, 129);
+                const weekDate = weekDates[week.week - 1];
+                const dateRange = `${weekDate.start.getDate()}/${weekDate.start.getMonth() + 1} - ${weekDate.end.getDate()}/${weekDate.end.getMonth() + 1}`;
+                doc.text(`Semana ${week.week} (${dateRange})`, 25, yPosition + 6);
+                
+                yPosition += 10;
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+                
+                for (let i = 1; i <= 3; i++) {
+                    const session = week[`session${i}`];
+                    
+                    if (i % 2 === 0) {
+                        doc.setFillColor(250, 250, 250);
+                        doc.rect(25, yPosition, 165, 8, 'F');
+                    }
+                    
+                    doc.setFillColor(subjectColors[session.subject] || '#6B7280');
+                    doc.rect(25, yPosition, 3, 8, 'F');
+                    
+                    doc.text(`Sesión ${i}: ${session.subject}`, 30, yPosition + 6);
+                    yPosition += 8;
+                }
+                yPosition += 5;
+            });
+            
+            doc.addPage();
+            yPosition = 20;
+            doc.setFontSize(16);
+            doc.setTextColor(16, 185, 129);
+            doc.text('Resumen por Materias', 105, yPosition, { align: 'center' });
+            yPosition += 15;
+            
+            let subjectCounts = {};
+            filteredWeeks.forEach(week => {
+                for (let i = 1; i <= 3; i++) {
+                    const subject = week[`session${i}`].subject;
+                    subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
+                }
+            });
+            
+            const sortedSubjects = Object.keys(subjectCounts).sort((a, b) => subjectCounts[b] - subjectCounts[a]);
+            
+            doc.setFontSize(10);
+            sortedSubjects.forEach((subject, index) => {
+                if (yPosition > 270) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                doc.setTextColor(0, 0, 0);
+                doc.text(`${subject}:`, 30, yPosition + 6);
+                doc.text(`${subjectCounts[subject]} sesiones`, 170, yPosition + 6, { align: 'right' });
+                
+                const maxSessions = Math.max(...Object.values(subjectCounts));
+                const barWidth = (subjectCounts[subject] / maxSessions) * 100;
+                doc.setFillColor(subjectColors[subject] || '#6B7280');
+                doc.rect(80, yPosition + 2, barWidth, 6, 'F');
+                
+                yPosition += 10;
+            });
+            
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Plan de Razonamiento Matemático - 3º ESO Diversificación', 105, 290, { align: 'center' });
+            
+            const filename = `Informe_Trimestre_${dateStr.replace(/ /g, '_')}.pdf`;
+            doc.save(filename);
+        }
+
+        function renderEverything() {
+            const courseLinks = parseCSV(csvContent);
+            
+            const subjectsList = [...new Set(scheduleData.flatMap(w => [w.session1.subject, w.session2.subject, w.session3.subject]))].sort();
+            const ambitosList = [...new Set(scheduleData.flatMap(w => [w.session1.ambito, w.session2.ambito, w.session3.ambito]))].sort();
+            
+            function createFilters(container, items, type) {
+                container.innerHTML = '';
+                items.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.textContent = item;
+                    btn.dataset.filter = item;
+                    btn.dataset.type = type;
+                    btn.className = 'filter-btn px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200';
+                    container.appendChild(btn);
+                });
+            }
+            
+            createFilters(document.getElementById('subject-filters'), subjectsList, 'subject');
+            createFilters(document.getElementById('ambito-filters'), ambitosList, 'ambito');
+            
+            const subjectSelect = document.getElementById('subject-select');
+            subjectSelect.innerHTML = '<option value="">-- Selecciona una materia --</option>';
+            subjectsList.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+            
+            const t1Weeks = config.trim1.weeks;
+            const t2Weeks = config.trim2.weeks;
+            
+            function renderWeeks(weeks, containerId) {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
-                data.forEach(weekData => {
-                    const weekCard = document.createElement('div');
-                    weekCard.className = 'week-card bg-white rounded-2xl shadow-sm p-5';
-                    weekCard.dataset.week = weekData.week;
-
-                    const dates = getDatesForWeek(weekData.week);
-                    const dateRange = `del ${dates.start} al ${dates.end}`;
-
-                    weekCard.innerHTML = `
-                        <h3 class="text-xl font-bold text-green-700 mb-2">Semana ${weekData.week}</h3>
-                        <p class="text-sm text-gray-500 mb-4">${dateRange}</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            ${createSessionCard(weekData.session1, 1, weekData.week)}
-                            ${createSessionCard(weekData.session2, 2, weekData.week)}
-                            ${createSessionCard(weekData.session3, 3, weekData.week)}
+                weeks.forEach(weekData => {
+                    const dates = weekDates[weekData.week - 1];
+                    const dateRange = `del ${dates.start.getDate()}/${dates.start.getMonth() + 1} al ${dates.end.getDate()}/${dates.end.getMonth() + 1}`;
+                    
+                    const weekHTML = `
+                        <div class="week-card bg-white rounded-2xl shadow-sm p-5 mb-4" data-week="${weekData.week}">
+                            <h3 class="text-xl font-bold text-green-700 mb-2">Semana ${weekData.week}</h3>
+                            <p class="text-sm text-gray-500 mb-4">${dateRange}</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                ${renderSession(weekData.session1, 1, weekData.week)}
+                                ${renderSession(weekData.session2, 2, weekData.week)}
+                                ${renderSession(weekData.session3, 3, weekData.week)}
+                            </div>
                         </div>
                     `;
-                    container.appendChild(weekCard);
+                    container.innerHTML += weekHTML;
                 });
             }
-
-            function createSessionCard(session, sessionNumber, weekNumber) {
-                const link = csvLinks[weekNumber] ? csvLinks[weekNumber][`session${sessionNumber}`] : '#';
+            
+            function renderSession(session, num, week) {
+                const links = courseLinks[week] || ['#', '#', '#'];
+                const color = subjectColors[session.subject] || '#6B7280';
+                
                 return `
-                    <div class="session-card rounded-xl p-4 border border-gray-200 transition-all duration-300" 
-                         data-subject="${session.subject}" data-ambito="${session.ambito}"
-                         style="border-left: 5px solid ${subjectColors[session.subject] || '#6B7280'};">
-                        <p class="font-semibold text-sm text-gray-500">Sesión ${sessionNumber}</p>
+                    <div class="session-card rounded-xl p-4 border border-gray-200 transition-all duration-300" data-subject="${session.subject}" data-ambito="${session.ambito}" style="border-left: 5px solid ${color};">
+                        <p class="font-semibold text-sm text-gray-500">Sesión ${num}</p>
                         <p class="font-bold text-gray-800">${session.subject}</p>
                         <p class="text-sm text-gray-600 mt-2">${session.activity}</p>
                         <p class="text-xs text-gray-400 mt-3 font-mono">${session.ce}</p>
-                        <div class="mt-4 flex gap-2">
-                           <a href="${link}" target="_blank" class="class-btn">Registrar evidencia 3º Diver</a>
+                        <div class="flex space-x-2 mt-3">
+                            <a href="${links[num-1]}" target="_blank" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">Registrar evidencia 3º Diver</a>
                         </div>
                     </div>
                 `;
             }
             
-            function applyFilter(filterValue, filterType) {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-blue-600', 'text-white', 'hover:bg-blue-700'));
-                const activeButton = document.querySelector(`.filter-btn[data-filter="${filterValue}"][data-type="${filterType}"]`);
-                if (activeButton) {
-                    activeButton.classList.add('active', 'bg-blue-600', 'text-white', 'hover:bg-blue-700');
-                }
-
-                document.querySelectorAll('.week-card').forEach(weekCard => {
-                    let weekHasMatch = false;
-                    weekCard.querySelectorAll('.session-card').forEach(sessionCard => {
-                        const isMatch = sessionCard.dataset[filterType] === filterValue;
-                        if (isMatch) {
-                            sessionCard.classList.remove('opacity-40');
-                            sessionCard.classList.add('highlight');
-                            weekHasMatch = true;
-                        } else {
-                            sessionCard.classList.add('opacity-40');
-                            sessionCard.classList.remove('highlight');
-                        }
-                    });
-                    
-                    if (weekHasMatch) {
-                        weekCard.classList.remove('filtered-out');
-                    } else {
-                        weekCard.classList.add('filtered-out');
-                    }
-                });
-            }
-
-            function resetFilters() {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-blue-600', 'text-white', 'hover:bg-blue-700'));
-                document.querySelectorAll('.week-card').forEach(card => card.classList.remove('filtered-out'));
-                document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
-            }
-
-            function renderChart() {
-                const ctx = document.getElementById('proportionalityChart').getContext('2d');
-                const sessionCounts = {};
-
-                scheduleData.forEach(week => {
-                    if (week.session2.subject !== 'Ámbito Científico-Tecnológico' || week.session2.subject === 'Ámbito Científico-Tecnológico' && week.session1.subject !== week.session2.subject) {
-                        sessionCounts[week.session2.subject] = (sessionCounts[week.session2.subject] || 0) + 1;
-                    }
-                    sessionCounts[week.session3.subject] = (sessionCounts[week.session3.subject] || 0) + 1;
-                });
-                
-                const sortedSubjects = Object.keys(sessionCounts).sort((a, b) => sessionCounts[b] - sessionCounts[a]);
-                const labels = sortedSubjects;
-                const data = sortedSubjects.map(subject => sessionCounts[subject]);
-                const backgroundColors = sortedSubjects.map(subject => subjectColors[subject] || '#6B7280');
-
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Nº de Sesiones',
-                            data: data,
-                            backgroundColor: backgroundColors,
-                            borderColor: '#F8F9FA',
-                            borderWidth: 3,
-                            hoverOffset: 10
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: {
-                                        family: 'Inter',
-                                        size: 12
-                                    },
-                                    boxWidth: 15,
-                                    padding: 15
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        if (context.parsed !== null) {
-                                            label += context.parsed + ' sesiones';
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-
-            createFilterButtons(subjectFiltersContainer, allSubjects, 'subject');
-            createFilterButtons(ambitoFiltersContainer, allAmbitos, 'ambito');
+            renderWeeks(scheduleData.slice(0, t1Weeks), 'evaluation-content-1');
+            renderWeeks(scheduleData.slice(t1Weeks, t1Weeks + t2Weeks), 'evaluation-content-2');
+            renderWeeks(scheduleData.slice(t1Weeks + t2Weeks), 'evaluation-content-3');
             
-            renderSchedule(scheduleData.slice(0, eval1Weeks), 'evaluation-content-1');
-            renderSchedule(scheduleData.slice(eval1Weeks, eval1Weeks + eval2Weeks), 'evaluation-content-2');
-            renderSchedule(scheduleData.slice(eval1Weeks + eval2Weeks, totalWeeks), 'evaluation-content-3');
-
-            renderChart();
+            initializeChart();
             
             document.getElementById('controls').addEventListener('click', (e) => {
                 if (e.target.classList.contains('filter-btn')) {
-                    const { filter, type } = e.target.dataset;
-                    applyFilter(filter, type);
+                    const filter = e.target.dataset.filter;
+                    const type = e.target.dataset.type;
+                    
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-green-600', 'text-white'));
+                    e.target.classList.add('active', 'bg-green-600', 'text-white');
+                    
+                    document.querySelectorAll('.session-card').forEach(card => {
+                        const isMatch = card.dataset[type] === filter;
+                        card.classList.toggle('opacity-40', !isMatch);
+                        card.classList.toggle('highlight', isMatch);
+                    });
+                    
+                    document.querySelectorAll('.week-card').forEach(week => {
+                        const hasMatch = week.querySelector(`.session-card[data-${type}="${filter}"]`);
+                        week.classList.toggle('filtered-out', !hasMatch);
+                    });
                 }
             });
+            
+            document.getElementById('reset-filters').addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-green-600', 'text-white'));
+                document.querySelectorAll('.week-card').forEach(card => card.classList.remove('filtered-out'));
+                document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
+            });
+            
+            document.getElementById('generate-subject-pdf').addEventListener('click', generateSubjectPDF);
+            document.getElementById('generate-trimestre-pdf').addEventListener('click', generateTrimestrePDF);
+        }
 
-            resetBtn.addEventListener('click', resetFilters);
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', () => {
+            ['trim1-weeks', 'trim2-weeks', 'trim3-weeks', 'trim1-start', 'trim2-start', 'trim3-start'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateDatesInRealTime);
+            });
+            
+            generateSchedule();
+            renderEverything();
+            updateDatesInRealTime();
+            
+            window.toggleConfig = toggleConfig;
+            window.toggleReports = toggleReports;
+            window.toggleEvaluation = toggleEvaluation;
+            window.applyConfiguration = applyConfiguration;
+            window.exportToHTML = exportToHTML;
+            window.updateDatesInRealTime = updateDatesInRealTime;
+            window.updateWeeksSummary = updateWeeksSummary;
         });
     </script>
 </body>
