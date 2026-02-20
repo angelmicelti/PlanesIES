@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="manifest" href="./manifest.json" />
+	<link rel="manifest" href="./manifest.json" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Favicon añadido -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <title>Plan de Razonamiento Matemático - 4º ESO</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Plan de Razonamiento Matemático - 4º ESO Diversificación Curricular</title>
+    <script src="https://unpkg.com/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Bibliotecas para PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -43,28 +40,6 @@
         .hidden-week {
             display: none !important;
         }
-        .hidden-content {
-            display: none;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .report-checkbox {
-            accent-color: #4F46E5;
-        }
-        .export-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: all 0.3s ease;
-        }
-        .export-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        .date-preview {
-            font-size: 0.875rem;
-            color: #6B7280;
-            margin-top: 0.25rem;
-        }
     </style>
 </head>
 <body class="antialiased">
@@ -76,77 +51,6 @@
         </header>
 
         <main>
-            <!-- SECCIÓN DE CONFIGURACIÓN (NUEVA) -->
-            <section id="trimestre-config" class="mb-12 bg-white rounded-2xl shadow-sm overflow-hidden">
-                <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleConfig()">
-                    <h2 class="text-2xl font-bold text-gray-800">Configurar Trimestres</h2>
-                    <span id="toggle-config-icon" class="text-2xl font-bold transform transition-transform duration-300">+</span>
-                </button>
-                
-                <div id="config-content" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Primer Trimestre</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
-                                    <input type="date" id="trim1-start" value="2025-09-15" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" onchange="updateDatesInRealTime()">
-                                    <div class="date-preview" id="trim1-dates">15/09 - 19/12</div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Semanas (1-36)</label>
-                                    <input type="number" id="trim1-weeks" min="1" max="34" value="14" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" onchange="updateDatesInRealTime()" oninput="updateWeeksSummary()">
-                                </div>
-                                <div class="text-sm text-gray-500"><span id="trim1-range">Semanas: 1-14</span></div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Segundo Trimestre</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
-                                    <input type="date" id="trim2-start" value="2026-01-12" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" onchange="updateDatesInRealTime()">
-                                    <div class="date-preview" id="trim2-dates">12/01 - 27/03</div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Semanas (1-36)</label>
-                                    <input type="number" id="trim2-weeks" min="1" max="34" value="11" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" onchange="updateDatesInRealTime()" oninput="updateWeeksSummary()">
-                                </div>
-                                <div class="text-sm text-gray-500"><span id="trim2-range">Semanas: 15-25</span></div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Tercer Trimestre</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de inicio</label>
-                                    <input type="date" id="trim3-start" value="2026-04-06" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" onchange="updateDatesInRealTime()">
-                                    <div class="date-preview" id="trim3-dates">06/04 - 19/06</div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Semanas (1-36)</label>
-                                    <input type="number" id="trim3-weeks" min="1" max="34" value="11" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" onchange="updateDatesInRealTime()" oninput="updateWeeksSummary()">
-                                </div>
-                                <div class="text-sm text-gray-500"><span id="trim3-range">Semanas: 26-36</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4 justify-between items-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <div class="text-sm text-blue-800">
-                            <p><strong>Total de semanas:</strong> <span id="total-weeks" class="font-bold">36</span>/36</p>
-                            <p id="weeks-warning" class="text-orange-600 hidden">¡La suma debe ser exactamente 36 semanas!</p>
-                        </div>
-                        <div class="flex gap-3">
-                            <button onclick="applyConfiguration()" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 transition">Aplicar Configuración</button>
-                            <button onclick="exportToHTML()" class="export-btn px-6 py-3 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 transition">Exportar a HTML</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <section id="controls" class="mb-12 p-6 bg-white rounded-2xl shadow-sm">
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-700 mb-3">Filtrar por Asignatura</h3>
@@ -160,111 +64,12 @@
                     <button id="reset-filters" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 transition">Mostrar Todo</button>
                 </div>
             </section>
-
-            <!-- NUEVA SECCIÓN: GENERACIÓN DE INFORMES PDF (DESPLEGABLE) -->
-            <section id="reports" class="mb-12 bg-white rounded-2xl shadow-sm overflow-hidden">
-                <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleReports()">
-                    <h2 class="text-2xl font-bold text-gray-800">Generar Informes PDF</h2>
-                    <span id="toggle-reports-icon" class="text-2xl font-bold transform transition-transform duration-300">+</span>
-                </button>
-                
-                <div id="reports-content" class="p-5 border-t border-gray-200 space-y-6 hidden-content">
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <!-- Informe por Materia -->
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Informe por Materia</h3>
-                            <p class="text-gray-600 mb-4">Genera un informe detallado con todas las sesiones de una materia específica.</p>
-                            
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Seleccionar materia</label>
-                                <select id="subject-select" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                                    <option value="">-- Selecciona una materia --</option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-6">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Incluir evaluaciones</label>
-                                <div class="flex flex-wrap gap-4">
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" id="eval1-report" class="report-checkbox h-5 w-5 rounded border-gray-300" checked>
-                                        <span class="ml-2 text-gray-700">1ª Evaluación</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" id="eval2-report" class="report-checkbox h-5 w-5 rounded border-gray-300" checked>
-                                        <span class="ml-2 text-gray-700">2ª Evaluación</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" id="eval3-report" class="report-checkbox h-5 w-5 rounded border-gray-300" checked>
-                                        <span class="ml-2 text-gray-700">3ª Evaluación</span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <button id="generate-subject-pdf" class="w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 transition flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                Generar Informe por Materia
-                            </button>
-                        </div>
-                        
-                        <!-- Informe por Trimestre -->
-                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-700 mb-4">Informe por Trimestre</h3>
-                            <p class="text-gray-600 mb-4">Genera un informe completo de uno o varios trimestres con todas las materias.</p>
-                            
-                            <div class="mb-6">
-                                <label class="block text-sm font-medium text-gray-700 mb-3">Seleccionar trimestre(s)</label>
-                                <div class="space-y-2">
-                                    <label class="flex items-center p-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                        <input type="checkbox" id="trimestre1" class="report-checkbox h-5 w-5 rounded border-gray-300" checked>
-                                        <span class="ml-3">
-                                            <span class="font-medium text-gray-700">Primer Trimestre</span>
-                                            <span class="block text-sm text-gray-500" id="trim1-info">Semanas 1-14</span>
-                                        </span>
-                                    </label>
-                                    
-                                    <label class="flex items-center p-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                        <input type="checkbox" id="trimestre2" class="report-checkbox h-5 w-5 rounded border-gray-300" checked>
-                                        <span class="ml-3">
-                                            <span class="font-medium text-gray-700">Segundo Trimestre</span>
-                                            <span class="block text-sm text-gray-500" id="trim2-info">Semanas 15-25</span>
-                                        </span>
-                                    </label>
-                                    
-                                    <label class="flex items-center p-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                        <input type="checkbox" id="trimestre3" class="report-checkbox h-5 w-5 rounded border-gray-300" checked>
-                                        <span class="ml-3">
-                                            <span class="font-medium text-gray-700">Tercer Trimestre</span>
-                                            <span class="block text-sm text-gray-500" id="trim3-info">Semanas 26-36</span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <button id="generate-trimestre-pdf" class="w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 transition flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                Generar Informe por Trimestre
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p class="text-sm text-blue-800">
-                            <strong>Nota:</strong> Los informes se generarán en formato PDF y se descargarán automáticamente. 
-                            Cada informe incluye fecha de generación, resumen de sesiones y cronograma detallado.
-                        </p>
-                    </div>
-                </div>
-            </section>
             
             <section id="summary" class="mb-12">
                  <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Distribución Proporcional de Sesiones (36 Semanas)</h2>
+                    <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Distribución Proporcional de Sesiones</h2>
                     <p class="text-center text-gray-600 mb-6 max-w-2xl mx-auto">
-                        Este gráfico ilustra la distribución de las 72 sesiones a lo largo del ciclo completo de 36 semanas.
+                        Este gráfico ilustra la distribución de las sesiones adicionales a lo largo del ciclo completo de 36 semanas. La asignación es directamente proporcional a la carga horaria semanal de cada materia, garantizando un reparto equitativo del trabajo interdisciplinar de razonamiento matemático.
                     </p>
                     <div class="chart-container relative w-full max-w-lg mx-auto h-80 md:h-96">
                         <canvas id="proportionalityChart"></canvas>
@@ -274,27 +79,36 @@
 
             <section id="schedule">
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Cronograma del Curso Escolar Completo</h2>
-                <div id="evaluaciones-container" class="space-y-6">
+                <div id="evaluations-container" class="space-y-6">
+                    <!-- Primera Evaluación: del 15 de septiembre de 2025 al 12 de diciembre (14 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(1)">
-                            <h3 class="text-xl font-bold text-gray-800" id="eval1-title">Primera Evaluación (Semanas 1-14: 15/09 - 19/12)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Primera Evaluación (Semanas 1-14)</h3>
                             <span id="toggle-icon-1" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden"></div>
+                        <div id="evaluation-content-1" class="p-5 border-t border-gray-200 space-y-6 hidden">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
                     </div>
+                    <!-- Segunda Evaluación: del 12 de enero de 2026 al 28 de marzo (11 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(2)">
-                            <h3 class="text-xl font-bold text-gray-800" id="eval2-title">Segunda Evaluación (Semanas 15-25: 12/01 - 27/03)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Segunda Evaluación (Semanas 15-25)</h3>
                             <span id="toggle-icon-2" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden"></div>
+                        <div id="evaluation-content-2" class="p-5 border-t border-gray-200 space-y-6 hidden">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
                     </div>
+                    <!-- Tercera Evaluación: del 6 de abril al 19 de junio (11 semanas) -->
                     <div class="evaluation-section bg-white rounded-2xl shadow-sm overflow-hidden">
                         <button class="w-full text-left p-6 flex justify-between items-center cursor-pointer focus:outline-none" onclick="toggleEvaluation(3)">
-                            <h3 class="text-xl font-bold text-gray-800" id="eval3-title">Tercera Evaluación (Semanas 26-36: 06/04 - 19/06)</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Tercera Evaluación (Semanas 26-36)</h3>
                             <span id="toggle-icon-3" class="text-2xl font-bold transform transition-transform duration-300">+</span>
                         </button>
-                        <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden"></div>
+                        <div id="evaluation-content-3" class="p-5 border-t border-gray-200 space-y-6 hidden">
+                            <!-- Las semanas se renderizarán aquí -->
+                        </div>
                     </div>
                 </div>
             </section>
@@ -302,27 +116,15 @@
     </div>
 
     <script>
-        // CONFIGURACIONES GLOBALES
-        const config = {
-            trim1: { weeks: 14, startDate: '2025-09-15' },
-            trim2: { weeks: 11, startDate: '2026-01-12' },
-            trim3: { weeks: 11, startDate: '2026-04-06' }
-        };
-        
+        // --- Configuraciones ajustadas a 36 semanas ---
         const TOTAL_WEEKS = 36;
-        const WEEKS_EVAL1 = 14;
-        const WEEKS_EVAL2 = 11;
-        const WEEKS_EVAL3 = 11;
-        
-        console.assert(WEEKS_EVAL1 + WEEKS_EVAL2 + WEEKS_EVAL3 === TOTAL_WEEKS, "Error en la suma de semanas de evaluación.");
-
         const EVALUATION_WEEKS = {
-            1: { start: 1, end: 14 },
-            2: { start: 15, end: 25 },
-            3: { start: 26, end: TOTAL_WEEKS }
+            1: { start: 1, end: 14 }, // 14 semanas: 15/sep al 12/dic
+            2: { start: 15, end: 25 }, // 11 semanas: 12/ene al 28/mar
+            3: { start: 26, end: TOTAL_WEEKS } // 11 semanas: 6/abr al 19/jun
         };
 
-        // Datos del CSV con enlaces de evidencia
+        // Datos del CSV con enlaces de evidencia (CORREGIDO EL TYPO 'httpss' en Semana 16)
         const csvData = `,Sesión 1,Sesión 2,Sesión 3
 Semana 1,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=B5,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=E5,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=H5
 Semana 2,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=B10,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=E10,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsvclR-lf_vBhkqA/edit?gid=1960089933#gid=1960089933&range=H10
@@ -365,6 +167,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
         const evidenceLinks = {};
         const csvLines = csvData.split('\n');
         
+        // Ignorar la primera línea (cabecera)
         for (let i = 1; i < csvLines.length; i++) {
             const line = csvLines[i].trim();
             if (!line) continue;
@@ -380,7 +183,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             }
         }
 
-        // Distribución de horas semanales para el cálculo proporcional
+        // Distribución de horas semanales para el cálculo proporcional (no cambia)
         const horasSemanales = {
             'Ámbito Socio-Lingüístico': 9,
             'Religión': 1,
@@ -392,7 +195,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             'Dibujo Técnico': 2
         };
 
-        // Asignación de asignaturas a los ámbitos
+        // Asignación de asignaturas a los ámbitos - CORREGIDO
         const ambitoMaterias = {
             'Ámbito Socio-Lingüístico': 'SL',
             'Religión': 'SL',
@@ -402,13 +205,6 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             'Música': 'AR',
             'Educación Física': 'AR',
             'Dibujo Técnico': 'AR'
-        };
-
-        const subjectColors = {
-            'Ámbito Socio-Lingüístico': '#F97316', 'Religión': '#6B7280', 
-            'Ámbito Científico-Tecnológico': '#4F46E5', 'Cultura Científica': '#10B981',
-            'Expresión Artística': '#EF4444', 'Música': '#F59E0B', 
-            'Educación Física': '#3B82F6', 'Dibujo Técnico': '#8B5CF6'
         };
 
         // Criterios de Evaluación Reales del Anexo IV (Segundo Curso - 4º ESO)
@@ -441,7 +237,7 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             { id: "SL.10.1", text: "Identificar y analizar de forma crítica el entorno desde una perspectiva sistémica e integradora, a través del concepto de paisaje y sus elementos, reflexionando sobre la evolución de los ciclos demográficos." }
         ];
 
-        // ACTIVIDADES ESPECÍFICAS PARA MATERIAS NO-ÁMBITO
+        // --- ACTIVIDADES ESPECÍFICAS PARA MATERIAS NO-ÁMBITO (ACTUALIZADAS CON RAZONAMIENTO MATEMÁTICO) ---
         const actividadesPorMateria = {
             'Religión': [
                 "Análisis estadístico de datos demográficos sobre prácticas religiosas: calcular porcentajes, medias y elaborar gráficos comparativos entre diferentes confesiones.",
@@ -491,41 +287,6 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 "Resolución de problemas de tangencias y enlaces: aplicación de propiedades geométricas, teoremas y resolución de sistemas de ecuaciones."
             ]
         };
-
-        // Criterios de evaluación (ejemplos adaptados para 4º ESO Diversificación)
-        const criteriosEvaluacion = {
-            'Expresión Artística': [
-                'AR.C.E.1.4. Analizar la proporción y la estructura geométrica en obras de arte, comprendiendo su impacto estético.',
-                'AR.C.E.2.2. Desarrollar un proceso creativo, aplicando la lógica y la secuencia para la producción de obras artísticas.',
-            ],
-            'Música': [
-                'AR.C.E.3.5. Interpretar patrones rítmicos y estructuras formales en obras musicales, relacionándolos con conceptos numéricos.',
-            ],
-            'Educación Física': [
-                'EF.C.E.1.3. Analizar la estrategia de juego en deportes de equipo, comprendiendo la lógica táctica.',
-                'EF.C.E.2.2. Diseñar un plan de entrenamiento, aplicando el razonamiento para optimizar el rendimiento y la seguridad.',
-                'EF.C.E.3.1. Interpretar la cinemática de los movimientos corporales, utilizando conceptos de física y geometría.',
-            ],
-            'Dibujo Técnico': [
-                'DT.C.E.1.1. Representar objetos en el plano, utilizando el razonamiento espacial y las normas de la representación gráfica.',
-                'DT.C.E.2.3. Resolver problemas geométricos complejos, aplicando los principios de la geometría plana y del espacio.',
-                'DT.C.E.3.4. Emplear el razonamiento lógico para la lectura e interpretación de planos y croquis.',
-            ],
-            'Cultura Científica': [
-                'CC.C.E.1.2. Interpretar datos científicos presentados en gráficos y tablas, extrayendo conclusiones lógicas.',
-                'CC.C.E.2.3. Analizar la argumentación en debates científicos, identificando la validez de las hipótesis y las pruebas.',
-                'CC.C.E.3.1. Utilizar el pensamiento crítico para la evaluación de la información científica de diversas fuentes.'
-            ],
-            'Religión': [
-                'RE.C.E.1.2. Analizar dilemas éticos y morales, aplicando un razonamiento coherente para la toma de decisiones.',
-                'RE.C.E.2.1. Interpretar textos sagrados, identificando la estructura lógica y el mensaje principal.',
-            ]
-        };
-
-        // Variables globales
-        let scheduleData = [];
-        let weekDates = [];
-        let proportionalityChart = null;
 
         // Funciones de utilidad
         function getRandomElement(arr) {
@@ -590,57 +351,110 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             }
         }
 
+        // Criterios de evaluación (ejemplos adaptados para 4º ESO Diversificación)
+        const criteriosEvaluacion = {
+            'Expresión Artística': [
+                'AR.C.E.1.4. Analizar la proporción y la estructura geométrica en obras de arte, comprendiendo su impacto estético.',
+                'AR.C.E.2.2. Desarrollar un proceso creativo, aplicando la lógica y la secuencia para la producción de obras artísticas.',
+            ],
+            'Música': [
+                'AR.C.E.3.5. Interpretar patrones rítmicos y estructuras formales en obras musicales, relacionándolos con conceptos numéricos.',
+            ],
+            'Educación Física': [
+                'EF.C.E.1.3. Analizar la estrategia de juego en deportes de equipo, comprendiendo la lógica táctica.',
+                'EF.C.E.2.2. Diseñar un plan de entrenamiento, aplicando el razonamiento para optimizar el rendimiento y la seguridad.',
+                'EF.C.E.3.1. Interpretar la cinemática de los movimientos corporales, utilizando conceptos de física y geometría.',
+            ],
+            'Dibujo Técnico': [
+                'DT.C.E.1.1. Representar objetos en el plano, utilizando el razonamiento espacial y las normas de la representación gráfica.',
+                'DT.C.E.2.3. Resolver problemas geométricos complejos, aplicando los principios de la geometría plana y del espacio.',
+                'DT.C.E.3.4. Emplear el razonamiento lógico para la lectura e interpretación de planos y croquis.',
+            ],
+            'Cultura Científica': [
+                'CC.C.E.1.2. Interpretar datos científicos presentados en gráficos y tablas, extrayendo conclusiones lógicas.',
+                'CC.C.E.2.3. Analizar la argumentación en debates científicos, identificando la validez de las hipótesis y las pruebas.',
+                'CC.C.E.3.1. Utilizar el pensamiento crítico para la evaluación de la información científica de diversas fuentes.'
+            ],
+            'Religión': [
+                'RE.C.E.1.2. Analizar dilemas éticos y morales, aplicando un razonamiento coherente para la toma de decisiones.',
+                'RE.C.E.2.1. Interpretar textos sagrados, identificando la estructura lógica y el mensaje principal.',
+            ]
+        };
+
         // Función original, ahora solo para materias no-Ámbito
         function seleccionarCriterio(materia) {
             const criterios = criteriosEvaluacion[materia];
             return criterios ? criterios[Math.floor(Math.random() * criterios.length)] : 'Criterio de evaluación no especificado';
         }
+        
+        const totalHoras = Object.values(horasSemanales).reduce((sum, h) => sum + h, 0);
+        // Ajustado a 36 semanas * 2 sesiones/semana = 72 sesiones
+        const totalSesionesAdicionales = TOTAL_WEEKS * 2; 
+        
+        const sesionesProporcionales = Object.keys(horasSemanales).reduce((acc, materia) => {
+            // Utilizamos el total de sesiones adicionales
+            acc[materia] = Math.round((horasSemanales[materia] / totalHoras) * totalSesionesAdicionales);
+            return acc;
+        }, {});
+        
+        // Ajuste fino para asegurar que la suma es exactamente totalSesionesAdicionales (72)
+        const currentSum = Object.values(sesionesProporcionales).reduce((sum, n) => sum + n, 0);
+        const diff = totalSesionesAdicionales - currentSum;
+        if (diff !== 0) {
+            // Añade/resta la diferencia a la materia con más peso para mantener la proporción
+            const primarySubject = 'Ámbito Socio-Lingüístico'; // Mayor peso
+            sesionesProporcionales[primarySubject] = (sesionesProporcionales[primarySubject] || 0) + diff;
+        }
 
-        // DISTRIBUCIÓN UNIFORME POR TRIMESTRES
-        function distribuirMateriasUniformemente() {
-            const totalHoras = Object.values(horasSemanales).reduce((sum, h) => sum + h, 0);
-            const totalSesionesAdicionales = TOTAL_WEEKS * 2; // 72 sesiones
+        // --- ALGORITMO MEJORADO: Distribución por semanas sin repetición y sin consecutivas ---
+        function distribuirMateriasOptimizado() {
+            // Calcular sesiones por evaluación
+            const sesionesPorEvaluacion = {
+                1: 14 * 2, // 28 sesiones
+                2: 11 * 2, // 22 sesiones  
+                3: 11 * 2  // 22 sesiones
+            };
             
-            // Calcular sesiones por materia proporcionalmente
-            const sesionesProporcionales = Object.keys(horasSemanales).reduce((acc, materia) => {
-                acc[materia] = Math.round((horasSemanales[materia] / totalHoras) * totalSesionesAdicionales);
-                return acc;
-            }, {});
+            // Crear arrays separados para cada evaluación
+            const evaluaciones = {
+                1: [],
+                2: [], 
+                3: []
+            };
             
-            // Ajustar para que sume exactamente 72
-            const currentSum = Object.values(sesionesProporcionales).reduce((sum, n) => sum + n, 0);
-            const diff = totalSesionesAdicionales - currentSum;
-            if (diff !== 0) {
-                const primarySubject = 'Ámbito Socio-Lingüístico';
-                sesionesProporcionales[primarySubject] = (sesionesProporcionales[primarySubject] || 0) + diff;
-            }
-            
-            // Distribuir uniformemente por trimestres
-            const evaluaciones = { 1: [], 2: [], 3: [] };
-            
+            // Para cada materia, distribuir sus sesiones entre las evaluaciones
             Object.keys(sesionesProporcionales).forEach(materia => {
                 const totalSesionesMateria = sesionesProporcionales[materia];
                 
-                // Calcular distribución uniforme (redondeando hacia abajo)
-                const basePorTrimestre = Math.floor(totalSesionesMateria / 3);
-                let distribucion = {
-                    1: basePorTrimestre,
-                    2: basePorTrimestre,
-                    3: basePorTrimestre
+                // Calcular distribución ideal entre evaluaciones
+                const distribucionIdeal = {
+                    1: Math.round(totalSesionesMateria * (sesionesPorEvaluacion[1] / totalSesionesAdicionales)),
+                    2: Math.round(totalSesionesMateria * (sesionesPorEvaluacion[2] / totalSesionesAdicionales)),
+                    3: totalSesionesMateria // Se ajustará después
                 };
                 
-                // Distribuir el resto
-                const resto = totalSesionesMateria - (basePorTrimestre * 3);
-                if (resto > 0) distribucion[1] += 1;
-                if (resto > 1) distribucion[2] += 1;
+                // Ajustar para que sume el total
+                distribucionIdeal[3] = totalSesionesMateria - distribucionIdeal[1] - distribucionIdeal[2];
                 
-                // Añadir sesiones a cada evaluación
-                for (let i = 0; i < distribucion[1]; i++) evaluaciones[1].push(materia);
-                for (let i = 0; i < distribucion[2]; i++) evaluaciones[2].push(materia);
-                for (let i = 0; i < distribucion[3]; i++) evaluaciones[3].push(materia);
+                // Asegurar que no haya valores negativos
+                if (distribucionIdeal[3] < 0) {
+                    distribucionIdeal[3] = 0;
+                    // Reajustar las otras dos
+                    const sobrante = Math.abs(distribucionIdeal[3]);
+                    if (distribucionIdeal[1] > sobrante) {
+                        distribucionIdeal[1] -= sobrante;
+                    } else if (distribucionIdeal[2] > sobrante) {
+                        distribucionIdeal[2] -= sobrante;
+                    }
+                }
+                
+                // Añadir las sesiones a cada evaluación
+                for (let i = 0; i < distribucionIdeal[1]; i++) evaluaciones[1].push(materia);
+                for (let i = 0; i < distribucionIdeal[2]; i++) evaluaciones[2].push(materia);
+                for (let i = 0; i < distribucionIdeal[3]; i++) evaluaciones[3].push(materia);
             });
             
-            // Mezclar cada evaluación
+            // Mezclar cada evaluación por separado (pero de forma determinista)
             const mezclarDeterminista = (array) => {
                 const nuevoArray = [...array];
                 for (let i = nuevoArray.length - 1; i > 0; i--) {
@@ -650,22 +464,23 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 return nuevoArray;
             };
             
+            // Mezclar cada evaluación
             evaluaciones[1] = mezclarDeterminista(evaluaciones[1]);
             evaluaciones[2] = mezclarDeterminista(evaluaciones[2]);
             evaluaciones[3] = mezclarDeterminista(evaluaciones[3]);
             
-            // Combinar todas las evaluaciones
+            // Combinar todas las evaluaciones en un solo pool
             let poolMaterias = [...evaluaciones[1], ...evaluaciones[2], ...evaluaciones[3]];
             
-            // Convertir a formato de semanas
+            // Convertir a formato de semanas para facilitar el procesamiento
             let semanas = [];
             for (let i = 0; i < TOTAL_WEEKS; i++) {
                 semanas.push([poolMaterias[i * 2], poolMaterias[i * 2 + 1]]);
             }
             
-            // Optimizar distribución para evitar repeticiones
+            // Algoritmo mejorado para evitar repeticiones en la misma semana y sin consecutivas
             let cambiosRealizados = true;
-            let maxIntentos = 100;
+            let maxIntentos = 100; // Límite de intentos para evitar bucles infinitos
             
             while (cambiosRealizados && maxIntentos > 0) {
                 cambiosRealizados = false;
@@ -730,686 +545,153 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 }
             }
             
+            // Convertir de nuevo a pool lineal
             return semanas.flat();
         }
 
-        // FUNCIONES PARA GENERAR EL CRONOGRAMA
-        function generateSchedule() {
-            scheduleData = [];
-            weekDates = [];
-            
-            const t1Weeks = config.trim1.weeks;
-            const t2Weeks = config.trim2.weeks;
-            const t3Weeks = config.trim3.weeks;
-            const totalWeeks = t1Weeks + t2Weeks + t3Weeks;
-            
-            // Generar fechas
-            let currentDate = new Date(config.trim1.startDate);
-            for (let i = 0; i < totalWeeks; i++) {
-                const start = new Date(currentDate);
-                const end = new Date(currentDate);
-                end.setDate(currentDate.getDate() + 4);
-                weekDates.push({ 
-                    start, 
-                    end, 
-                    trimestre: i < t1Weeks ? 1 : i < t1Weeks + t2Weeks ? 2 : 3 
-                });
-                currentDate.setDate(currentDate.getDate() + 7);
-            }
-            
-            // Obtener distribución de materias
-            const poolMaterias = distribuirMateriasUniformemente();
-            
-            // Generar datos para las semanas
-            for (let i = 0; i < totalWeeks; i++) {
-                const materia2 = poolMaterias[i * 2] || 'Ámbito Socio-Lingüístico';
-                const materia3 = poolMaterias[i * 2 + 1] || 'Cultura Científica';
+        const poolMaterias = distribuirMateriasOptimizado();
 
-                // Sesión 1 (Fija: CT)
-                const crit1 = getRandomElement(criteriosCT);
-                const act1 = generateCTActivity(crit1);
-                
-                const session1Data = {
-                    subject: 'Ámbito Científico-Tecnológico', 
-                    ambito: 'CT', 
-                    activity: act1,
-                    ce: crit1.text
-                };
-                
-                // Sesión 2 (Variable)
-                let session2Data = {};
-                if (materia2 === 'Ámbito Científico-Tecnológico') {
-                    const crit = getRandomElement(criteriosCT);
-                    session2Data = {
-                        subject: materia2,
-                        ambito: 'CT',
-                        activity: generateCTActivity(crit),
-                        ce: crit.text
-                    };
-                } else if (materia2 === 'Ámbito Socio-Lingüístico') {
-                    const crit = getRandomElement(criteriosSL);
-                    session2Data = {
-                        subject: materia2,
-                        ambito: 'SL',
-                        activity: generateSLActivity(crit),
-                        ce: crit.text
-                    };
-                } else {
-                    session2Data = {
-                        subject: materia2,
-                        ambito: ambitoMaterias[materia2] || 'XX',
-                        activity: obtenerActividadEspecifica(materia2),
-                        ce: seleccionarCriterio(materia2)
-                    };
-                }
-                
-                // Sesión 3 (Variable)
-                let session3Data = {};
-                if (materia3 === 'Ámbito Científico-Tecnológico') {
-                    const crit = getRandomElement(criteriosCT);
-                    session3Data = {
-                        subject: materia3,
-                        ambito: 'CT',
-                        activity: generateCTActivity(crit),
-                        ce: crit.text
-                    };
-                } else if (materia3 === 'Ámbito Socio-Lingüístico') {
-                    const crit = getRandomElement(criteriosSL);
-                    session3Data = {
-                        subject: materia3,
-                        ambito: 'SL',
-                        activity: generateSLActivity(crit),
-                        ce: crit.text
-                    };
-                } else {
-                    session3Data = {
-                        subject: materia3,
-                        ambito: ambitoMaterias[materia3] || 'XX',
-                        activity: obtenerActividadEspecifica(materia3),
-                        ce: seleccionarCriterio(materia3)
-                    };
-                }
-
-                const weekData = {
-                    week: i + 1,
-                    session1: session1Data,
-                    session2: session2Data,
-                    session3: session3Data
-                };
-                scheduleData.push(weekData);
-            }
-            
-            return scheduleData;
-        }
-
-        // FUNCIONES DE INTERFAZ
-        function formatDateForDisplay(date) {
-            return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
-        }
-
-        function toggleConfig() {
-            const content = document.getElementById('config-content');
-            const icon = document.getElementById('toggle-config-icon');
-            content.classList.toggle('hidden-content');
-            icon.textContent = content.classList.contains('hidden-content') ? '+' : '-';
-            if (!content.classList.contains('hidden-content')) updateWeeksSummary();
-        }
-
-        function toggleReports() {
-            const content = document.getElementById('reports-content');
-            const icon = document.getElementById('toggle-reports-icon');
-            content.classList.toggle('hidden-content');
-            icon.textContent = content.classList.contains('hidden-content') ? '+' : '-';
-        }
-
-        function toggleEvaluation(num) {
-            const content = document.getElementById(`evaluation-content-${num}`);
-            const icon = document.getElementById(`toggle-icon-${num}`);
-            content.classList.toggle('hidden');
-            icon.textContent = content.classList.contains('hidden') ? '+' : '-';
-        }
-
-        function updateWeeksSummary() {
-            const t1 = parseInt(document.getElementById('trim1-weeks').value) || 14;
-            const t2 = parseInt(document.getElementById('trim2-weeks').value) || 11;
-            const t3 = parseInt(document.getElementById('trim3-weeks').value) || 11;
-            const total = t1 + t2 + t3;
-            
-            document.getElementById('total-weeks').textContent = total;
-            document.getElementById('trim1-range').textContent = `Semanas: 1-${t1}`;
-            document.getElementById('trim2-range').textContent = `Semanas: ${t1 + 1}-${t1 + t2}`;
-            document.getElementById('trim3-range').textContent = `Semanas: ${t1 + t2 + 1}-${total}`;
-            
-            document.getElementById('trim1-info').textContent = `Semanas 1-${t1}`;
-            document.getElementById('trim2-info').textContent = `Semanas ${t1 + 1}-${t1 + t2}`;
-            document.getElementById('trim3-info').textContent = `Semanas ${t1 + t2 + 1}-${total}`;
-            
-            const warning = document.getElementById('weeks-warning');
-            warning.classList.toggle('hidden', total === 36);
-        }
-
-        function updateDatesInRealTime() {
-            const t1Start = document.getElementById('trim1-start').value;
-            const t2Start = document.getElementById('trim2-start').value;
-            const t3Start = document.getElementById('trim3-start').value;
-            const t1Weeks = parseInt(document.getElementById('trim1-weeks').value) || 14;
-            const t2Weeks = parseInt(document.getElementById('trim2-weeks').value) || 11;
-            const t3Weeks = parseInt(document.getElementById('trim3-weeks').value) || 11;
-            
-            if (t1Start) {
-                const startDate1 = new Date(t1Start);
-                const endDate1 = new Date(startDate1);
-                endDate1.setDate(startDate1.getDate() + (t1Weeks * 7) - 3);
-                document.getElementById('trim1-dates').textContent = `${formatDateForDisplay(startDate1)} - ${formatDateForDisplay(endDate1)}`;
-            }
-            
-            if (t2Start) {
-                const startDate2 = new Date(t2Start);
-                const endDate2 = new Date(startDate2);
-                endDate2.setDate(startDate2.getDate() + (t2Weeks * 7) - 3);
-                document.getElementById('trim2-dates').textContent = `${formatDateForDisplay(startDate2)} - ${formatDateForDisplay(endDate2)}`;
-            }
-            
-            if (t3Start) {
-                const startDate3 = new Date(t3Start);
-                const endDate3 = new Date(startDate3);
-                endDate3.setDate(startDate3.getDate() + (t3Weeks * 7) - 3);
-                document.getElementById('trim3-dates').textContent = `${formatDateForDisplay(startDate3)} - ${formatDateForDisplay(endDate3)}`;
-            }
-            
-            if (t1Start && t2Start && t3Start) {
-                const trim1EndDate = new Date(t1Start);
-                trim1EndDate.setDate(trim1EndDate.getDate() + (t1Weeks * 7) - 3);
-                const trim2EndDate = new Date(t2Start);
-                trim2EndDate.setDate(trim2EndDate.getDate() + (t2Weeks * 7) - 3);
-                const trim3EndDate = new Date(t3Start);
-                trim3EndDate.setDate(trim3EndDate.getDate() + (t3Weeks * 7) - 3);
-                
-                document.getElementById('eval1-title').textContent = `Primera Evaluación (Semanas 1-${t1Weeks}: ${formatDateForDisplay(new Date(t1Start))} - ${formatDateForDisplay(trim1EndDate)})`;
-                document.getElementById('eval2-title').textContent = `Segunda Evaluación (Semanas ${t1Weeks + 1}-${t1Weeks + t2Weeks}: ${formatDateForDisplay(new Date(t2Start))} - ${formatDateForDisplay(trim2EndDate)})`;
-                document.getElementById('eval3-title').textContent = `Tercera Evaluación (Semanas ${t1Weeks + t2Weeks + 1}-36: ${formatDateForDisplay(new Date(t3Start))} - ${formatDateForDisplay(trim3EndDate)})`;
-            }
-            
-            updateWeeksSummary();
-        }
-
-        function applyConfiguration() {
-            config.trim1.weeks = parseInt(document.getElementById('trim1-weeks').value) || 14;
-            config.trim2.weeks = parseInt(document.getElementById('trim2-weeks').value) || 11;
-            config.trim3.weeks = parseInt(document.getElementById('trim3-weeks').value) || 11;
-            config.trim1.startDate = document.getElementById('trim1-start').value;
-            config.trim2.startDate = document.getElementById('trim2-start').value;
-            config.trim3.startDate = document.getElementById('trim3-start').value;
-            
-            if (config.trim1.weeks + config.trim2.weeks + config.trim3.weeks !== 36) {
-                alert('La suma de semanas debe ser exactamente 36.');
-                return;
-            }
-            
-            generateSchedule();
-            renderEverything();
-            alert('Configuración aplicada correctamente.');
-        }
-
-        // FUNCIÓN DE EXPORTACIÓN A HTML
-        async function exportToHTML() {
-            applyConfiguration();
-            
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            let chartImage = '';
-            if (proportionalityChart && proportionalityChart.canvas) {
-                chartImage = proportionalityChart.toBase64Image();
-            }
-            
-            const exportDoc = document.documentElement.outerHTML;
-            const startMarker = '<!-- SECCIÓN DE CONFIGURACIÓN (NUEVA) -->';
-            const endMarker = '</section>';
-            
-            let startIndex = exportDoc.indexOf(startMarker);
-            let endIndex = exportDoc.indexOf(endMarker, startIndex) + endMarker.length;
-            
-            let fixedHTML = exportDoc;
-            
-            if (startIndex !== -1 && endIndex !== -1) {
-                fixedHTML = exportDoc.substring(0, startIndex) + exportDoc.substring(endIndex);
-                
-                if (chartImage) {
-                    const canvasPattern = /<canvas id="proportionalityChart"[^>]*>[\s\S]*?<\/canvas>/i;
-                    const imageHTML = `<div class="text-center"><img src="${chartImage}" alt="Gráfico de distribución proporcional" style="max-width: 100%; height: auto;" /></div>`;
-                    fixedHTML = fixedHTML.replace(canvasPattern, imageHTML);
-                }
-                
-                fixedHTML = fixedHTML.replace(/onchange="updateDatesInRealTime\(\)"/g, '');
-                fixedHTML = fixedHTML.replace(/oninput="updateWeeksSummary\(\)"/g, '');
-                fixedHTML = fixedHTML.replace(/onclick="toggleConfig\(\)"/g, '');
-                fixedHTML = fixedHTML.replace(/onclick="applyConfiguration\(\)"/g, '');
-                fixedHTML = fixedHTML.replace(/onclick="exportToHTML\(\)"/g, '');
-                fixedHTML = fixedHTML.replace(/<button onclick="exportToHTML\(\)"[^>]*>[\s\S]*?<\/button>/g, '');
-                
-                const t1Weeks = config.trim1.weeks;
-                const t2Weeks = config.trim2.weeks;
-                const t1Start = new Date(config.trim1.startDate);
-                const t2Start = new Date(config.trim2.startDate);
-                const t3Start = new Date(config.trim3.startDate);
-                
-                const t1EndDate = new Date(t1Start);
-                t1EndDate.setDate(t1EndDate.getDate() + (t1Weeks * 7) - 3);
-                const t2EndDate = new Date(t2Start);
-                t2EndDate.setDate(t2EndDate.getDate() + (t2Weeks * 7) - 3);
-                const t3EndDate = new Date(t3Start);
-                t3EndDate.setDate(t3EndDate.getDate() + (config.trim3.weeks * 7) - 3);
-                
-                const eval1Title = `Primera Evaluación (Semanas 1-${t1Weeks}: ${formatDateForDisplay(t1Start)} - ${formatDateForDisplay(t1EndDate)})`;
-                const eval2Title = `Segunda Evaluación (Semanas ${t1Weeks + 1}-${t1Weeks + t2Weeks}: ${formatDateForDisplay(t2Start)} - ${formatDateForDisplay(t2EndDate)})`;
-                const eval3Title = `Tercera Evaluación (Semanas ${t1Weeks + t2Weeks + 1}-36: ${formatDateForDisplay(t3Start)} - ${formatDateForDisplay(t3EndDate)})`;
-                
-                fixedHTML = fixedHTML.replace(/id="eval1-title"[^>]*>([^<]*)<\/h3>/, `id="eval1-title">${eval1Title}</h3>`);
-                fixedHTML = fixedHTML.replace(/id="eval2-title"[^>]*>([^<]*)<\/h3>/, `id="eval2-title">${eval2Title}</h3>`);
-                fixedHTML = fixedHTML.replace(/id="eval3-title"[^>]*>([^<]*)<\/h3>/, `id="eval3-title">${eval3Title}</h3>`);
-                
-                fixedHTML = fixedHTML.replace(/id="trim1-info"[^>]*>([^<]*)<\/span>/, `id="trim1-info">Semanas 1-${t1Weeks}</span>`);
-                fixedHTML = fixedHTML.replace(/id="trim2-info"[^>]*>([^<]*)<\/span>/, `id="trim2-info">Semanas ${t1Weeks + 1}-${t1Weeks + t2Weeks}</span>`);
-                fixedHTML = fixedHTML.replace(/id="trim3-info"[^>]*>([^<]*)<\/span>/, `id="trim3-info">Semanas ${t1Weeks + t2Weeks + 1}-36</span>`);
-            }
-            
-            const blob = new Blob([fixedHTML], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'RM4Diver.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            alert('Archivo HTML exportado correctamente. La sección de configuración ha sido eliminada y todas las fechas están fijas.');
-        }
-
-        // FUNCIONES PARA GENERAR INFORMES PDF
-        function generateSubjectPDF() {
-            const subjectSelect = document.getElementById('subject-select');
-            const selectedSubject = subjectSelect.value;
-            
-            if (!selectedSubject) {
-                alert('Por favor, selecciona una materia para generar el informe.');
-                return;
-            }
-            
-            const includeEval1 = document.getElementById('eval1-report').checked;
-            const includeEval2 = document.getElementById('eval2-report').checked;
-            const includeEval3 = document.getElementById('eval3-report').checked;
-            
-            if (!includeEval1 && !includeEval2 && !includeEval3) {
-                alert('Por favor, selecciona al menos una evaluación.');
-                return;
-            }
-            
-            // Filtrar semanas según evaluaciones seleccionadas
-            let filteredWeeks = scheduleData.filter((week, index) => {
-                if (index < config.trim1.weeks) return includeEval1;
-                if (index < config.trim1.weeks + config.trim2.weeks) return includeEval2;
-                return includeEval3;
-            });
-            
-            // Filtrar solo las sesiones de la materia seleccionada
-            let subjectSessions = [];
-            filteredWeeks.forEach(week => {
-                // Verificar cada sesión de la semana
-                for (let i = 1; i <= 3; i++) {
-                    const session = week[`session${i}`];
-                    if (session.subject === selectedSubject) {
-                        subjectSessions.push({
-                            week: week.week,
-                            session: i,
-                            activity: session.activity,
-                            ce: session.ce,
-                            date: weekDates[week.week - 1]
-                        });
-                    }
-                }
-            });
-            
-            if (subjectSessions.length === 0) {
-                alert(`No hay sesiones de ${selectedSubject} en las evaluaciones seleccionadas.`);
-                return;
-            }
-            
-            // Generar PDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-            
-            // Título
-            doc.setFontSize(20);
-            doc.setTextColor(79, 70, 229); // Indigo
-            doc.text(`Informe de ${selectedSubject}`, 105, 20, { align: 'center' });
-            
-            // Subtítulo
-            doc.setFontSize(12);
-            doc.setTextColor(100, 100, 100);
-            let subtitle = 'Plan de Razonamiento Matemático - 4º ESO Diversificación';
-            doc.text(subtitle, 105, 28, { align: 'center' });
-            
-            // Información del informe
-            doc.setFontSize(10);
-            doc.setTextColor(120, 120, 120);
-            const today = new Date();
-            const dateStr = today.toLocaleDateString('es-ES', { 
-                day: '2-digit', 
-                month: 'long', 
-                year: 'numeric' 
-            });
-            doc.text(`Generado el: ${dateStr}`, 20, 40);
-            
-            // Estadísticas
-            doc.setFontSize(11);
-            doc.setTextColor(0, 0, 0);
-            doc.text(`Total de sesiones: ${subjectSessions.length}`, 20, 50);
-            
-            let evaluationsIncluded = [];
-            if (includeEval1) evaluationsIncluded.push('1ª Evaluación');
-            if (includeEval2) evaluationsIncluded.push('2ª Evaluación');
-            if (includeEval3) evaluationsIncluded.push('3ª Evaluación');
-            doc.text(`Evaluaciones incluidas: ${evaluationsIncluded.join(', ')}`, 20, 56);
-            
-            // Tabla de sesiones
-            let yPosition = 70;
-            
-            // Encabezado de tabla
-            doc.setFillColor(79, 70, 229);
-            doc.setTextColor(255, 255, 255);
-            doc.rect(20, yPosition, 170, 8, 'F');
-            doc.text('Semana', 25, yPosition + 6);
-            doc.text('Fecha', 45, yPosition + 6);
-            doc.text('Sesión', 80, yPosition + 6);
-            doc.text('Actividad', 100, yPosition + 6);
-            
-            yPosition += 8;
-            
-            // Filas de la tabla
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(9);
-            
-            subjectSessions.forEach(session => {
-                if (yPosition > 270) {
-                    doc.addPage();
-                    yPosition = 20;
-                    
-                    // Encabezado en nueva página
-                    doc.setFillColor(79, 70, 229);
-                    doc.setTextColor(255, 255, 255);
-                    doc.rect(20, yPosition, 170, 8, 'F');
-                    doc.text('Semana', 25, yPosition + 6);
-                    doc.text('Fecha', 45, yPosition + 6);
-                    doc.text('Sesión', 80, yPosition + 6);
-                    doc.text('Actividad', 100, yPosition + 6);
-                    yPosition += 8;
-                }
-                
-                // Fila con fondo alternado
-                const rowIndex = subjectSessions.indexOf(session);
-                if (rowIndex % 2 === 0) {
-                    doc.setFillColor(245, 245, 245);
-                    doc.rect(20, yPosition, 170, 10, 'F');
-                }
-                
-                // Contenido
-                doc.text(session.week.toString(), 25, yPosition + 7);
-                
-                const dateStr = `${session.date.start.getDate()}/${session.date.start.getMonth() + 1}`;
-                doc.text(dateStr, 45, yPosition + 7);
-                
-                doc.text(`Sesión ${session.session}`, 80, yPosition + 7);
-                
-                // Actividad (texto más largo, con ajuste dinámico)
-                const activityLines = doc.splitTextToSize(session.activity, 80);
-                const activityHeight = activityLines.length * 5;
-                
-                // Dibujar actividad en múltiples líneas
-                doc.text(activityLines, 100, yPosition + 7);
-                
-                yPosition += Math.max(10, activityHeight + 2);
-            });
-            
-            // Pie de página
-            doc.setFontSize(8);
-            doc.setTextColor(150, 150, 150);
-            doc.text('Plan de Razonamiento Matemático - 4º ESO - Itinerario de Diversificación Curricular', 105, 290, { align: 'center' });
-            
-            // Guardar PDF
-            const filename = `Informe_${selectedSubject.replace(/ /g, '_')}_${dateStr.replace(/ /g, '_')}.pdf`;
-            doc.save(filename);
-        }
         
-        function generateTrimestrePDF() {
-            const trimestre1 = document.getElementById('trimestre1').checked;
-            const trimestre2 = document.getElementById('trimestre2').checked;
-            const trimestre3 = document.getElementById('trimestre3').checked;
+        // --- CORRECCIÓN COMPLETA DEL BUCLE DE SCHEDULE ---
+        const scheduleData = [];
+        // Generar datos para las 36 semanas
+        for (let i = 0; i < TOTAL_WEEKS; i++) {
+            const materia2 = poolMaterias[i * 2] || 'Ámbito Socio-Lingüístico';
+            const materia3 = poolMaterias[i * 2 + 1] || 'Cultura Científica';
+
+            // --- Generación de Sesión 1 (Fija: CT) ---
+            const crit1 = getRandomElement(criteriosCT);
+            const act1 = generateCTActivity(crit1);
             
-            if (!trimestre1 && !trimestre2 && !trimestre3) {
-                alert('Por favor, selecciona al menos un trimestre.');
-                return;
+            const session1Data = {
+                subject: 'Ámbito Científico-Tecnológico', 
+                ambito: 'CT', 
+                activity: act1,
+                ce: crit1.text
+            };
+            
+            // --- Generación de Sesión 2 (Variable) ---
+            let session2Data = {};
+            if (materia2 === 'Ámbito Científico-Tecnológico') {
+                const crit = getRandomElement(criteriosCT);
+                session2Data = {
+                    subject: materia2,
+                    ambito: 'CT',
+                    activity: generateCTActivity(crit),
+                    ce: crit.text
+                };
+            } else if (materia2 === 'Ámbito Socio-Lingüístico') {
+                const crit = getRandomElement(criteriosSL);
+                session2Data = {
+                    subject: materia2,
+                    ambito: 'SL',
+                    activity: generateSLActivity(crit),
+                    ce: crit.text
+                };
+            } else {
+                // Para otras materias - CON ACTIVIDADES ESPECÍFICAS
+                session2Data = {
+                    subject: materia2,
+                    ambito: ambitoMaterias[materia2] || 'XX',
+                    activity: obtenerActividadEspecifica(materia2),
+                    ce: seleccionarCriterio(materia2)
+                };
             }
             
-            // Determinar semanas a incluir
-            let weeksToInclude = [];
-            if (trimestre1) weeksToInclude = weeksToInclude.concat([...Array(config.trim1.weeks).keys()].map(i => i + 1));
-            if (trimestre2) weeksToInclude = weeksToInclude.concat([...Array(config.trim2.weeks).keys()].map(i => i + config.trim1.weeks + 1));
-            if (trimestre3) weeksToInclude = weeksToInclude.concat([...Array(config.trim3.weeks).keys()].map(i => i + config.trim1.weeks + config.trim2.weeks + 1));
-            
-            // Filtrar semanas
-            let filteredWeeks = scheduleData.filter(week => weeksToInclude.includes(week.week));
-            
-            // Generar PDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-            
-            // Título
-            doc.setFontSize(20);
-            doc.setTextColor(79, 70, 229);
-            let title = 'Informe por ';
-            if (trimestre1 && !trimestre2 && !trimestre3) title += 'Primer Trimestre';
-            else if (!trimestre1 && trimestre2 && !trimestre3) title += 'Segundo Trimestre';
-            else if (!trimestre1 && !trimestre2 && trimestre3) title += 'Tercer Trimestre';
-            else title += 'Trimestre(s) Seleccionado(s)';
-            
-            doc.text(title, 105, 20, { align: 'center' });
-            
-            // Subtítulo
-            doc.setFontSize(12);
-            doc.setTextColor(100, 100, 100);
-            doc.text('Plan de Razonamiento Matemático - 4º ESO Diversificación', 105, 28, { align: 'center' });
-            
-            // Información del informe
-            doc.setFontSize(10);
-            doc.setTextColor(120, 120, 120);
-            const today = new Date();
-            const dateStr = today.toLocaleDateString('es-ES', { 
-                day: '2-digit', 
-                month: 'long', 
-                year: 'numeric' 
-            });
-            doc.text(`Generado el: ${dateStr}`, 20, 40);
-            
-            // Resumen de trimestres
-            doc.setFontSize(11);
-            doc.setTextColor(0, 0, 0);
-            let trimestresText = [];
-            if (trimestre1) trimestresText.push(`1º Trimestre (S1-S${config.trim1.weeks})`);
-            if (trimestre2) trimestresText.push(`2º Trimestre (S${config.trim1.weeks + 1}-S${config.trim1.weeks + config.trim2.weeks})`);
-            if (trimestre3) trimestresText.push(`3º Trimestre (S${config.trim1.weeks + config.trim2.weeks + 1}-S36)`);
-            
-            doc.text(`Trimestres incluidos: ${trimestresText.join(', ')}`, 20, 50);
-            doc.text(`Total de semanas: ${filteredWeeks.length}`, 20, 56);
-            doc.text(`Total de sesiones: ${filteredWeeks.length * 3}`, 20, 62);
-            
-            // Tabla por semanas - SOLO SESIÓN Y MATERIA
-            let yPosition = 75;
-            
-            filteredWeeks.forEach((week, index) => {
-                if (yPosition > 250) {
-                    doc.addPage();
-                    yPosition = 20;
-                }
-                
-                // Encabezado de semana
-                doc.setFillColor(240, 240, 240);
-                doc.rect(20, yPosition, 170, 8, 'F');
-                doc.setFontSize(12);
-                doc.setTextColor(79, 70, 229);
-                const weekDate = weekDates[week.week - 1];
-                const dateRange = `${weekDate.start.getDate()}/${weekDate.start.getMonth() + 1} - ${weekDate.end.getDate()}/${weekDate.end.getMonth() + 1}`;
-                doc.text(`Semana ${week.week} (${dateRange})`, 25, yPosition + 6);
-                
-                yPosition += 10;
-                
-                // Sesiones de la semana - SOLO SESIÓN Y MATERIA
-                doc.setFontSize(10);
-                doc.setTextColor(0, 0, 0);
-                
-                for (let i = 1; i <= 3; i++) {
-                    const session = week[`session${i}`];
-                    
-                    // Fondo alternado para sesiones
-                    if (i % 2 === 0) {
-                        doc.setFillColor(250, 250, 250);
-                        doc.rect(25, yPosition, 165, 8, 'F');
-                    }
-                    
-                    // Color según materia
-                    doc.setFillColor(subjectColors[session.subject] || '#6B7280');
-                    doc.rect(25, yPosition, 3, 8, 'F');
-                    
-                    doc.text(`Sesión ${i}: ${session.subject}`, 30, yPosition + 6);
-                    
-                    yPosition += 8;
-                }
-                
-                yPosition += 5; // Espacio entre semanas
-            });
-            
-            // Resumen por materias
-            doc.addPage();
-            yPosition = 20;
-            
-            doc.setFontSize(16);
-            doc.setTextColor(79, 70, 229);
-            doc.text('Resumen por Materias', 105, yPosition, { align: 'center' });
-            yPosition += 15;
-            
-            // Contar sesiones por materia
-            let subjectCounts = {};
-            filteredWeeks.forEach(week => {
-                for (let i = 1; i <= 3; i++) {
-                    const subject = week[`session${i}`].subject;
-                    subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
-                }
-            });
-            
-            // Ordenar por número de sesiones
-            const sortedSubjects = Object.keys(subjectCounts).sort((a, b) => subjectCounts[b] - subjectCounts[a]);
-            
-            doc.setFontSize(10);
-            sortedSubjects.forEach((subject, index) => {
-                if (yPosition > 270) {
-                    doc.addPage();
-                    yPosition = 20;
-                }
-                
-                doc.setTextColor(0, 0, 0);
-                doc.text(`${subject}:`, 30, yPosition + 6);
-                doc.text(`${subjectCounts[subject]} sesiones`, 170, yPosition + 6, { align: 'right' });
-                
-                // Barra de progreso
-                const maxSessions = Math.max(...Object.values(subjectCounts));
-                const barWidth = (subjectCounts[subject] / maxSessions) * 100;
-                doc.setFillColor(subjectColors[subject] || '#6B7280');
-                doc.rect(80, yPosition + 2, barWidth, 6, 'F');
-                
-                yPosition += 10;
-            });
-            
-            // Pie de página
-            doc.setFontSize(8);
-            doc.setTextColor(150, 150, 150);
-            doc.text('Plan de Razonamiento Matemático - 4º ESO - Itinerario de Diversificación Curricular', 105, 290, { align: 'center' });
-            
-            // Guardar PDF
-            const filename = `Informe_Trimestre_${dateStr.replace(/ /g, '_')}.pdf`;
-            doc.save(filename);
-        }
-
-        // FUNCIÓN PARA INICIALIZAR EL GRÁFICO
-        function initializeChart() {
-            const ctx = document.getElementById('proportionalityChart');
-            if (!ctx) return;
-            
-            if (proportionalityChart instanceof Chart) {
-                proportionalityChart.destroy();
+            // --- Generación de Sesión 3 (Variable) ---
+            let session3Data = {};
+            if (materia3 === 'Ámbito Científico-Tecnológico') {
+                const crit = getRandomElement(criteriosCT);
+                session3Data = {
+                    subject: materia3,
+                    ambito: 'CT',
+                    activity: generateCTActivity(crit),
+                    ce: crit.text
+                };
+            } else if (materia3 === 'Ámbito Socio-Lingüístico') {
+                const crit = getRandomElement(criteriosSL);
+                session3Data = {
+                    subject: materia3,
+                    ambito: 'SL',
+                    activity: generateSLActivity(crit),
+                    ce: crit.text
+                };
+            } else {
+                // Para otras materias - CON ACTIVIDADES ESPECÍFICAS
+                session3Data = {
+                    subject: materia3,
+                    ambito: ambitoMaterias[materia3] || 'XX',
+                    activity: obtenerActividadEspecifica(materia3),
+                    ce: seleccionarCriterio(materia3)
+                };
             }
-            
-            const sessionCounts = {};
-            scheduleData.forEach(week => {
-                // Solo contamos las sesiones rotativas (2 y 3) para el gráfico
-                [week.session2, week.session3].forEach(session => {
-                    sessionCounts[session.subject] = (sessionCounts[session.subject] || 0) + 1;
-                });
-            });
-            
-            const sortedSubjects = Object.keys(sessionCounts).sort((a, b) => sessionCounts[b] - sessionCounts[a]);
-            const labels = sortedSubjects;
-            const data = sortedSubjects.map(subject => sessionCounts[subject]);
-            const backgroundColors = sortedSubjects.map(subject => subjectColors[subject] || '#6B7280');
-            
-            proportionalityChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Nº de Sesiones',
-                        data: data,
-                        backgroundColor: backgroundColors,
-                        borderColor: '#FDFBF8',
-                        borderWidth: 3,
-                        hoverOffset: 10
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: {
-                                    family: 'Inter',
-                                    size: 12
-                                },
-                                boxWidth: 15,
-                                padding: 15
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed + ' sesiones';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+
+            const weekData = {
+                week: i + 1,
+                session1: session1Data,
+                session2: session2Data,
+                session3: session3Data
+            };
+            scheduleData.push(weekData);
         }
 
-        // FUNCIÓN PRINCIPAL PARA RENDERIZAR TODO
-        function renderEverything() {
+        const subjectColors = {
+            'Ámbito Socio-Lingüístico': '#F97316', 'Religión': '#6B7280', 
+            'Ámbito Científico-Tecnológico': '#4F46E5', 'Cultura Científica': '#10B981',
+            'Expresión Artística': '#EF4444', 'Música': '#F59E0B', 
+            'Educación Física': '#3B82F6', 'Dibujo Técnico': '#8B5CF6'
+        };
+        
+        // Función para generar fechas - CORREGIDA
+        function generateDates() {
+            const dates = [];
+            // Fecha de inicio: 15 de septiembre de 2025 (lunes)
+            let currentDay = new Date('2025-09-15T00:00:00'); 
+            
+            // Fechas de inicio de los periodos tras vacaciones (lunes)
+            const INICIO_SEGUNDA = new Date('2026-01-12T00:00:00'); 
+            const INICIO_TERCERA = new Date('2026-04-06T00:00:00'); 
+
+            for (let weekCount = 0; weekCount < TOTAL_WEEKS; weekCount++) {
+                let start = new Date(currentDay);
+                let end = new Date(currentDay);
+                // El fin de la semana hábil es el viernes (4 días después del lunes)
+                end.setDate(currentDay.getDate() + 4); 
+
+                dates.push({ start, end });
+
+                // Preparamos el inicio de la siguiente semana (saltando sábado y domingo)
+                currentDay.setDate(currentDay.getDate() + 7);
+
+                // Verificamos si acabamos de terminar la última semana de una evaluación
+                if (weekCount === EVALUATION_WEEKS[1].end - 1) {
+                    currentDay = INICIO_SEGUNDA;
+                } else if (weekCount === EVALUATION_WEEKS[2].end - 1) {
+                    currentDay = INICIO_TERCERA;
+                }
+            }
+            return dates;
+        }
+
+        const weekDates = generateDates();
+
+        function toggleEvaluation(evaluationNumber) {
+            const content = document.getElementById(`evaluation-content-${evaluationNumber}`);
+            const icon = document.getElementById(`toggle-icon-${evaluationNumber}`);
+            content.classList.toggle('hidden');
+            if (content.classList.contains('hidden')) {
+                icon.textContent = '+';
+            } else {
+                icon.textContent = '-';
+            }
+        }
+        window.toggleEvaluation = toggleEvaluation;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const subjectFiltersContainer = document.getElementById('subject-filters');
+            const ambitoFiltersContainer = document.getElementById('ambito-filters');
+            const resetBtn = document.getElementById('reset-filters');
+            
             // Obtener todas las materias únicas
             const subjects = [...new Set([
                 'Ámbito Científico-Tecnológico',
@@ -1425,72 +707,67 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
             // Obtener todos los ámbitos únicos
             const ambitos = [...new Set(Object.values(ambitoMaterias))].sort();
 
-            // Crear filtros
-            function createFilters(container, items, type) {
-                container.innerHTML = '';
+            function createFilterButtons(container, items, type) {
                 items.forEach(item => {
-                    const btn = document.createElement('button');
-                    btn.textContent = item;
-                    btn.dataset.filter = item;
-                    btn.dataset.type = type;
-                    btn.className = 'filter-btn px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200';
-                    container.appendChild(btn);
+                    const button = document.createElement('button');
+                    button.textContent = item;
+                    button.dataset.filter = item;
+                    button.dataset.type = type;
+                    button.className = 'filter-btn px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200';
+                    container.appendChild(button);
                 });
             }
-            
-            createFilters(document.getElementById('subject-filters'), subjects, 'subject');
-            createFilters(document.getElementById('ambito-filters'), ambitos, 'ambito');
-            
-            // Rellenar el select de materias para informes
-            const subjectSelect = document.getElementById('subject-select');
-            subjectSelect.innerHTML = '<option value="">-- Selecciona una materia --</option>';
-            subjects.forEach(subject => {
-                const option = document.createElement('option');
-                option.value = subject;
-                option.textContent = subject;
-                subjectSelect.appendChild(option);
-            });
-            
-            const t1Weeks = config.trim1.weeks;
-            const t2Weeks = config.trim2.weeks;
-            
-            // Función para renderizar semanas
-            function renderWeeks(weeks, containerId) {
+
+            function renderSchedule(data, containerId) {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
-                weeks.forEach(weekData => {
-                    const dates = weekDates[weekData.week - 1];
-                    const dateRange = `del ${dates.start.getDate()}/${dates.start.getMonth() + 1} al ${dates.end.getDate()}/${dates.end.getMonth() + 1}`;
-                    
-                    const weekHTML = `
-                        <div class="week-card bg-white rounded-2xl shadow-sm p-5 mb-4" data-week="${weekData.week}">
-                            <h3 class="text-xl font-bold text-indigo-700 mb-2">Semana ${weekData.week}</h3>
-                            <p class="text-sm text-gray-500 mb-4">${dateRange}</p>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                ${renderSession(weekData.session1, 1, weekData.week)}
-                                ${renderSession(weekData.session2, 2, weekData.week)}
-                                ${renderSession(weekData.session3, 3, weekData.week)}
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += weekHTML;
+                
+                const evaluationNumber = parseInt(containerId.split('-').pop());
+                const weekRange = EVALUATION_WEEKS[evaluationNumber];
+
+                data.forEach(weekData => {
+                    // Solo renderizar semanas dentro del rango de la evaluación
+                    if (weekData.week >= weekRange.start && weekData.week <= weekRange.end) {
+                        const weekCard = document.createElement('div');
+                        weekCard.className = 'week-card bg-white rounded-2xl shadow-sm p-5';
+                        weekCard.dataset.week = weekData.week;
+
+                        const dateIndex = weekData.week - 1;
+                        if (dateIndex < weekDates.length) {
+                            const dateOptions = { day: 'numeric', month: 'long' }; 
+                            const startDate = weekDates[dateIndex].start.toLocaleDateString('es-ES', dateOptions);
+                            const endDate = weekDates[dateIndex].end.toLocaleDateString('es-ES', dateOptions);
+                            
+                            const dateRange = `del ${startDate} al ${endDate}`;
+
+                            weekCard.innerHTML = `
+                                <h3 class="text-xl font-bold text-indigo-700 mb-2">Semana ${weekData.week}</h3>
+                                <p class="text-sm text-gray-500 mb-4">${dateRange}</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    ${createSessionCard(weekData.session1, 1, weekData.week)}
+                                    ${createSessionCard(weekData.session2, 2, weekData.week)}
+                                    ${createSessionCard(weekData.session3, 3, weekData.week)}
+                                </div>
+                            `;
+                            container.appendChild(weekCard);
+                        }
+                    }
                 });
             }
-            
-            // Función para renderizar una sesión
-            function renderSession(session, num, week) {
-                const evidenceLink = evidenceLinks[week] ? 
-                    evidenceLinks[week][`session${num}`] : 
+
+            function createSessionCard(session, sessionNumber, weekNumber) {
+                // Obtener el enlace correspondiente del CSV
+                const evidenceLink = evidenceLinks[weekNumber] ? 
+                    evidenceLinks[weekNumber][`session${sessionNumber}`] : 
                     '#';
-                const color = subjectColors[session.subject] || '#6B7280';
                 
                 return `
                     <div class="session-card rounded-xl p-4 border border-gray-200 transition-all duration-300 flex flex-col justify-between" 
                          data-subject="${session.subject}" data-ambito="${session.ambito}"
-                         style="border-left: 5px solid ${color};">
+                         style="border-left: 5px solid ${subjectColors[session.subject] || '#6B7280'};">
                         
                         <div>
-                            <p class="font-semibold text-sm text-gray-500">Sesión ${num}</p>
+                            <p class="font-semibold text-sm text-gray-500">Sesión ${sessionNumber}</p>
                             <p class="font-bold text-gray-800">${session.subject}</p>
                             <p class="text-sm text-gray-600 mt-2">${session.activity}</p>
                             <p class="text-xs text-gray-400 mt-3 font-mono break-words">${session.ce}</p>
@@ -1507,83 +784,125 @@ Semana 36,https://docs.google.com/spreadsheets/d/1QEYC3Hy4nR0dzS8Uil6-c7JkNtDdsv
                 `;
             }
             
-            // Renderizar semanas por evaluación
-            renderWeeks(scheduleData.slice(0, t1Weeks), 'evaluation-content-1');
-            renderWeeks(scheduleData.slice(t1Weeks, t1Weeks + t2Weeks), 'evaluation-content-2');
-            renderWeeks(scheduleData.slice(t1Weeks + t2Weeks), 'evaluation-content-3');
-            
-            // Inicializar gráfico
-            initializeChart();
-            
-            // Configurar eventos de filtros
-            document.getElementById('controls').addEventListener('click', (e) => {
-                if (e.target.classList.contains('filter-btn')) {
-                    const filterValue = e.target.dataset.filter;
-                    const filterType = e.target.dataset.type;
-                    
-                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700'));
-                    const activeButton = document.querySelector(`.filter-btn[data-filter="${filterValue}"][data-type="${filterType}"]`);
-                    if (activeButton) {
-                        activeButton.classList.add('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700');
-                    }
+            function applyFilter(filterValue, filterType) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700'));
+                const activeButton = document.querySelector(`.filter-btn[data-filter="${filterValue}"][data-type="${filterType}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700');
+                }
 
-                    document.querySelectorAll('.week-card').forEach(weekCard => {
-                        let weekHasMatch = false;
-                        weekCard.querySelectorAll('.session-card').forEach(sessionCard => {
-                            const isMatch = sessionCard.dataset[filterType] === filterValue;
-                            if (isMatch) {
-                                sessionCard.classList.remove('opacity-40');
-                                sessionCard.classList.add('highlight');
-                                weekHasMatch = true;
-                            } else {
-                                sessionCard.classList.add('opacity-40');
-                                sessionCard.classList.remove('highlight');
-                            }
-                        });
-                        
-                        // Mostrar/ocultar semanas según si tienen match
-                        if (weekHasMatch) {
-                            weekCard.classList.remove('filtered-out', 'hidden-week');
+                document.querySelectorAll('.week-card').forEach(weekCard => {
+                    let weekHasMatch = false;
+                    weekCard.querySelectorAll('.session-card').forEach(sessionCard => {
+                        const isMatch = sessionCard.dataset[filterType] === filterValue;
+                        if (isMatch) {
+                            sessionCard.classList.remove('opacity-40');
+                            sessionCard.classList.add('highlight');
+                            weekHasMatch = true;
                         } else {
-                            weekCard.classList.add('hidden-week');
+                            sessionCard.classList.add('opacity-40');
+                            sessionCard.classList.remove('highlight');
                         }
                     });
+                    
+                    // Mostrar/ocultar semanas según si tienen match
+                    if (weekHasMatch) {
+                        weekCard.classList.remove('filtered-out', 'hidden-week');
+                    } else {
+                        weekCard.classList.add('hidden-week');
+                    }
+                });
+            }
+
+            function resetFilters() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700'));
+                document.querySelectorAll('.week-card').forEach(card => {
+                    card.classList.remove('filtered-out', 'hidden-week');
+                });
+                document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
+            }
+
+            function renderChart() {
+                const ctx = document.getElementById('proportionalityChart').getContext('2d');
+                const sessionCounts = {};
+
+                // Solo contamos las sesiones rotativas (2 y 3) para el gráfico
+                scheduleData.forEach(week => {
+                    [week.session2, week.session3].forEach(session => {
+                        sessionCounts[session.subject] = (sessionCounts[session.subject] || 0) + 1;
+                    });
+                });
+                
+                const sortedSubjects = Object.keys(sessionCounts).sort((a, b) => sessionCounts[b] - sessionCounts[a]);
+                const labels = sortedSubjects;
+                const data = sortedSubjects.map(subject => sessionCounts[subject]);
+                const backgroundColors = sortedSubjects.map(subject => subjectColors[subject] || '#6B7280');
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Nº de Sesiones',
+                            data: data,
+                            backgroundColor: backgroundColors,
+                            borderColor: '#FDFBF8',
+                            borderWidth: 3,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: 'Inter',
+                                        size: 12
+                                    },
+                                    boxWidth: 15,
+                                    padding: 15
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' sesiones';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createFilterButtons(subjectFiltersContainer, subjects, 'subject');
+            createFilterButtons(ambitoFiltersContainer, ambitos, 'ambito');
+            
+            // Renderizar el calendario
+            renderSchedule(scheduleData, 'evaluation-content-1');
+            renderSchedule(scheduleData, 'evaluation-content-2');
+            renderSchedule(scheduleData, 'evaluation-content-3');
+
+            renderChart();
+            
+            document.getElementById('controls').addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    const { filter, type } = e.target.dataset;
+                    applyFilter(filter, type);
                 }
             });
 
-            // Configurar botón de reset
-            document.getElementById('reset-filters').addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'hover:bg-indigo-700'));
-                document.querySelectorAll('.week-card').forEach(card => card.classList.remove('filtered-out', 'hidden-week'));
-                document.querySelectorAll('.session-card').forEach(card => card.classList.remove('opacity-40', 'highlight'));
-            });
-            
-            // Configurar eventos para botones de PDF
-            document.getElementById('generate-subject-pdf').addEventListener('click', generateSubjectPDF);
-            document.getElementById('generate-trimestre-pdf').addEventListener('click', generateTrimestrePDF);
-        }
-
-        // INICIALIZACIÓN
-        document.addEventListener('DOMContentLoaded', () => {
-            // Configurar event listeners para inputs de configuración
-            ['trim1-weeks', 'trim2-weeks', 'trim3-weeks', 'trim1-start', 'trim2-start', 'trim3-start'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener('input', updateDatesInRealTime);
-            });
-            
-            // Generar y renderizar todo
-            generateSchedule();
-            renderEverything();
-            updateDatesInRealTime();
-            
-            // Hacer funciones disponibles globalmente
-            window.toggleConfig = toggleConfig;
-            window.toggleReports = toggleReports;
-            window.toggleEvaluation = toggleEvaluation;
-            window.applyConfiguration = applyConfiguration;
-            window.exportToHTML = exportToHTML;
-            window.updateDatesInRealTime = updateDatesInRealTime;
-            window.updateWeeksSummary = updateWeeksSummary;
+            resetBtn.addEventListener('click', resetFilters);
         });
     </script>
 </body>
