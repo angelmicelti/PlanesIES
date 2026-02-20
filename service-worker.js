@@ -1,5 +1,5 @@
 ///asignar un nombre y versión al cache
-const CACHE_NAME = 'xamplepwa',
+const CACHE_NAME = 'xamplepwa2',
     urlsToCache = [
         '.',
         './index.html',
