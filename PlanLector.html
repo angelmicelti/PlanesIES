@@ -11,18 +11,42 @@
     <script src="https://unpkg.com/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8ZgA8+95Q3P+RzF/h0rY5C9g8rE/sF/X2O+j14+LpYn34W53j44G5/4n1TzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* Estilos adicionales para asegurar que el contenido principal ocupe la pantalla */
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-        }
-        /* Efecto de sombra en el texto para mejor legibilidad */
-        .text-shadow {
-            text-shadow: 0 2px 4px rgba(0,0,0,0.10);
-        }
     </style>
+    <script>
+        // Función para detectar dispositivos iOS
+        function isIOS() {
+            return [
+                'iPad Simulator',
+                'iPhone Simulator',
+                'iPod Simulator',
+                'iPad',
+                'iPhone',
+                'iPod'
+            ].includes(navigator.platform)
+            // iPad en iOS 13+
+            || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+        }
+
+        // Función para ajustar enlaces para iOS
+        function adjustLinkForiOS(link) {
+            if (isIOS()) {
+                // Asegurar que las URLs de Google Sheets tengan /u/0/ para forzar apertura en navegador
+                if (link.includes('docs.google.com/spreadsheets') && !link.includes('/u/0/')) {
+                    return link.replace('docs.google.com/spreadsheets/d/', 'docs.google.com/spreadsheets/u/0/d/');
+                }
+            }
+            return link;
+        }
+
+        // Aplicar ajuste a todos los enlaces de la página al cargar
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('a').forEach(a => {
+                if (a.href.includes('docs.google.com/spreadsheets')) {
+                    a.href = adjustLinkForiOS(a.href);
+                }
+            });
+        });
+    </script>
 </head>
 <body class="font-sans bg-gradient-to-br from-blue-100 to-green-200 min-h-screen flex items-center justify-center p-4">
 
