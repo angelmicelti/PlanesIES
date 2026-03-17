@@ -88,41 +88,6 @@
         .button-asl { background-color: #9b3642; }
         .button-asl:hover { background-color: #7c2b35; } /* Tono más oscuro */
     </style>
-    <script>
-        // Función para detectar dispositivos iOS
-        function isIOS() {
-            return [
-                'iPad Simulator',
-                'iPhone Simulator',
-                'iPod Simulator',
-                'iPad',
-                'iPhone',
-                'iPod'
-            ].includes(navigator.platform)
-            // iPad en iOS 13+
-            || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
-        }
-
-        // Función para ajustar enlaces para iOS
-        function adjustLinkForiOS(link) {
-            if (isIOS()) {
-                // Asegurar que las URLs de Google Sheets tengan /u/0/ para forzar apertura en navegador
-                if (link.includes('docs.google.com/spreadsheets') && !link.includes('/u/0/')) {
-                    return link.replace('docs.google.com/spreadsheets/d/', 'docs.google.com/spreadsheets/u/0/d/');
-                }
-            }
-            return link;
-        }
-
-        // Aplicar ajuste a todos los enlaces de la página al cargar
-        window.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('a').forEach(a => {
-                if (a.href.includes('docs.google.com/spreadsheets')) {
-                    a.href = adjustLinkForiOS(a.href);
-                }
-            });
-        });
-    </script>
 </head>
 <body class="font-sans min-h-screen flex items-start justify-center p-4 sm:p-8">
 
@@ -188,15 +153,15 @@
                     </div>
 
                     <div class="flex flex-col space-y-2">
-                        <a href="https://docs.google.com/spreadsheets/u/0/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=205459971#gid=205459971" target="_blank" title="Área Artística"
+                        <a href="https://docs.google.com/spreadsheets/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=205459971#gid=205459971" target="_blank" title="Área Artística"
                            class="small-action-button button-aar font-bold py-2 px-4 rounded-full text-sm">
                            AAR
                         </a>
-                        <a href="https://docs.google.com/spreadsheets/u/0/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=0#gid=0" target="_blank" title="Área Científico-Tecnológica"
+                        <a href="https://docs.google.com/spreadsheets/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=0#gid=0" target="_blank" title="Área Científico-Tecnológica"
                            class="small-action-button button-act font-bold py-2 px-4 rounded-full text-sm">
                            ACT
                         </a>
-                        <a href="https://docs.google.com/spreadsheets/u/0/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=1234000189#gid=1234000189" target="_blank" title="Área Socio-Lingüística"
+                        <a href="https://docs.google.com/spreadsheets/d/1e8lkjHpMVBWR3EzVzZt6DBFbx3rzGAQGPp_Kr0h-do0/edit?gid=1234000189#gid=1234000189" target="_blank" title="Área Socio-Lingüística"
                            class="small-action-button button-asl font-bold py-2 px-4 rounded-full text-sm">
                            ASL
                         </a>
